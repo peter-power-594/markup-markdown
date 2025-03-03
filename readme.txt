@@ -1,7 +1,7 @@
 === Markup Markdown ===
 Tags: Editor, Markdown
-Stable Tag: 3.13.0
-Version: 3.13.0
+Stable Tag: 3.14.0
+Version: 3.14.0
 Requires at least: 4.9
 Tested up to: 6.7.1
 Requires PHP: 5.6.0
@@ -19,6 +19,7 @@ The content is saved with the markdown syntax in the database and is rendered on
 
 
 This extension rocks:
+- v3.14: Adding responsive attributes for WP assets and disable media iframe converter for text links
 - v3.13: Adding a new filter to toggle on/off Gutenberg in the admin screen and new autoplug for Code Snippets
 - v3.12: Adding support for LaTeX via Katex or MathJax
 - v3.11: Bug fix with code block fences, compatible with plugins like Prismatic and new autoplug for CodeMirror Blocks (Syntax Highlighter)

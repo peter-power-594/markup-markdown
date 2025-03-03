@@ -48,8 +48,9 @@ class Vimeo extends \MarkupMarkdown\Abstracts\OEmbedTinyAPI {
 	public function vimeo2html( $content = '' ) {
 		return $this->oembed_service([
 			'content'  => $content,
+			'provider' => 'vimeo',
 			'endpoint' => 'http://vimeo.com/api/oembed.json',
-			'regexp'   => '#[a-zA-Z\/\/:\.]*vimeo.com/[^\"\n\<]+#u',
+			'regexp'   => '#([^"a-zA-Z\/\/:\.]{1}|\n)[a-zA-Z\/\/:\.]*vimeo.com/[^\"\n\<]+#u',
 		]);
 	}
 

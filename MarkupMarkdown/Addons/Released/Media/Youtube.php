@@ -49,8 +49,9 @@ class Youtube extends \MarkupMarkdown\Abstracts\OEmbedTinyAPI {
 	public function youtube2html( $content = '' ) {
 		return $this->oembed_service([
 			'content'  => $content,
+			'provider' => 'youtube',
 			'endpoint' => 'https://www.youtube.com/oembed',
-			'regexp'   => '#[a-zA-Z\/\/:\.]*youtu(be.com\/watch\?v=|.be\/)([a-zA-Z0-9\-_]+)([a-zA-Z0-9\/\*\-\_\?\&\;\%\=\.]*)#u'
+			'regexp'   => '#[^"a-zA-Z\/\/:\.]{1}[a-zA-Z\/\/:\.]*youtu(be.com\/watch\?v=|.be\/)([a-zA-Z0-9\-_]+)([a-zA-Z0-9\/\*\-\_\?\&\;\%\=\.]*)#u'
 		]);
 	}
 
