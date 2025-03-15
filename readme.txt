@@ -1,7 +1,7 @@
 === Markup Markdown ===
 Tags: Editor, Markdown
-Stable Tag: 3.14.0
-Version: 3.14.0
+Stable Tag: 3.14.1
+Version: 3.14.1
 Requires at least: 4.9
 Tested up to: 6.7.1
 Requires PHP: 5.6.0
@@ -98,6 +98,34 @@ The current version is based on components that are not compatible with assistiv
 
 
 == Changelog ==
+
+=3.14.1=
+
+Bug fixes:
+- Render content and excerpt from markdown posts embedded with the "Query Loop" block
+- Warning removed when the image's array keys are not found inside the render filter
+
+=3.14.0=
+
+Improvement:
+- Adding responsive attributes for WP assets
+
+Bug fix:
+- Disable media iframe converter for text links
+
+
+=3.13.0=
+
+Improvements :
+- New filter:  "mmd_disable_gutenberg" added to toggle force Gutenberg on the admin screen even if the markdown editor is disabled
+- New plug: Compatibility layer for the plugin _Code Snippets_ added
+
+
+= 3.12.0 =
+
+Improvement:
+- Adding support for LaTeX via Katex or MathJax
+
 
 = 3.10.2 =
 

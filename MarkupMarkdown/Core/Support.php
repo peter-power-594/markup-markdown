@@ -60,8 +60,8 @@ class Support {
 			# Check first if the request is related to the REST api
 			add_action( 'rest_api_init', array( $this, 'whitelist_wp_api' ) );
 			# With recent block editors / json theme :
-			# - **get_header** hook is not fired
-			# - **wp_head** hook is fired too late to trigger content filters
+			# - **get_header** hook is sometimes not fired at all
+			# - **wp_head** hook is fired too late to trigger our custom content filters
 			$this->prepare_proxy_filters(); 
 			add_action( 'mmd_addons_loaded', array( $this, 'add_extra_proxy_filters' ) );
 			# Then check if the request is related to a front page / post.
@@ -185,6 +185,24 @@ class Support {
 
 
 	/**
+	 * Check if the custom post type can be used with the markdown syntax
+	 *
+	 * @since 3.14.1
+	 * @access public
+	 *
+	 * @return Boolean TRUE if markdown can be used with the target post type, FALSE otherwise
+	 */
+	public function post_type_support_markdown( $my_post_type = '' ) {
+		if ( ! isset( $my_post_type ) || empty( $my_post_type ) ) :
+			return false;
+		elseif ( ! post_type_supports( $my_post_type, 'markup-markdown' ) && ! post_type_supports( $my_post_type, 'markup_markdown' ) ) :
+			return false;
+		endif;
+		return true;
+	}
+
+
+	/**
 	 * Prepare the Markdown editor
 	 *
 	 * @since 1.7.0
@@ -198,7 +216,7 @@ class Support {
 		endif;
 		# Classic request with a post type defined. Backend or Frontend follow the rules defined
 		$my_post_type = $this->get_current_post_type();
-		if ( isset( $my_post_type ) && ! empty( $my_post_type ) && ! post_type_supports( $my_post_type, 'markup-markdown' ) && ! post_type_supports( $my_post_type, 'markup_markdown' ) ) :
+		if ( ! $this->post_type_support_markdown( $my_post_type ) ) :
 			# Warning: Keep empty fonction, we DO NOT DISABLE markdown in case it's not with post related template / edit screen
 			$this->mmd_syntax = 0;
 		endif;
@@ -441,6 +459,45 @@ class Support {
 		add_filter( 'category_description', array( $this, 'description_field_mmd2html' ), 9, 1 );
 		add_filter( 'term_description', array( $this, 'description_field_mmd2html' ), 9, 1 );
 		add_filter( 'mmd_proxy_filters', array( $this, 'push_proxy_filters' ), 9, 1);
+		add_filter( 'render_block', array( $this, 'filter_render_block' ), 9, 3 );
+	}
+
+
+	/**
+	 * Text used in loop
+	 *
+	 * @since 3.14.1
+	 * @access public
+	 * 
+	 * @param string $block_content HTML content of the block
+	 * @param array $block The full block, including name and attributes.
+	 * @param \WP_Bloc $instance The block instance.
+	 * 
+	 */
+	public function filter_render_block( $block_content, $block, $instance ) {
+		if ( ! isset( $block ) || ! isset( $block[ 'blockName' ] ) ) :
+			return $block_content;
+		elseif ( strpos( $block[ 'blockName' ], 'content' ) !== false || strpos( $block[ 'blockName' ], 'excerpt' ) !== false ) :
+			if ( ! isset( $instance->context ) || ! isset( $instance->context[ 'postId' ] ) || ! function_exists( 'get_post_type' ) ) :
+				return $block_content;
+			endif;
+			$my_post_type = get_post_type( $instance->context[ 'postId' ] );
+			if ( ! $this->post_type_support_markdown( $my_post_type ) ) :
+				return $block_content;
+			endif;
+			$my_block_content = array();
+			preg_match_all( '#^<div([^>]+)>(.*?)</div>$#s', $block_content, $my_block_content );
+			if ( ! isset( $my_block_content ) || ! is_array( $my_block_content ) || ! isset( $my_block_content[ 0 ] ) || count( $my_block_content[ 0 ] ) !== 1 ) :
+				return $block_content;
+			endif;
+			# Reverse autop if enabled
+			$new_content = preg_replace( '#</p>[\n]*<p[^>]*>#', "\n\n", html_entity_decode( $my_block_content[ 2 ][ 0 ] ) );
+			$new_content = preg_replace( '#</p>|<p[^>]*>#', "\n", $new_content );
+			$new_content = preg_replace( '#<br[\s/]*>#', '', $new_content );
+			$new_content = preg_replace( '#\n– #', "\n- ", $new_content );
+			return '<div' . $my_block_content[ 1 ][ 0 ] . '>' . mmd()->markdown2html( $new_content ) . '</div>';
+		endif;
+		return $block_content;
 	}
 
 

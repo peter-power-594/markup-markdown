@@ -38,6 +38,9 @@ abstract class ImageTinyAPI {
 		$attachment_id = 0;
 		foreach ( $query->posts as $post_id ) :
 			$meta = \wp_get_attachment_metadata( $post_id );
+			if ( ! isset( $meta ) || ! $meta || ! isset( $meta[ 'file' ] ) || ! isset( $meta[ 'sizes' ] ) ) :
+				continue;
+			endif;
 			$original_file = preg_replace( '#-scaled\.([a-z0-9]+)$#i', '.$1', basename( $meta[ 'file' ] ) );
 			$cropped_image_files = \wp_list_pluck( $meta[ 'sizes' ], 'file' );
 			if ( $original_file === $file || in_array( $file, $cropped_image_files ) ) :
