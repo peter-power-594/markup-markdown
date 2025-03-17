@@ -15,8 +15,8 @@
 			<tr class="site-plug-<?php echo $slug_class; ?>">
 				<th scope="row">
 				<?php
-					if ( isset( $default_plugs ) && isset( $default_plugs[ $slug ] ) && is_array( $default_plugs[ $slug ][ 0 ] ) ) :
-						echo '<a href="' . esc_attr( default_plugs[ $slug ][ 0 ] ) . '">' . esc_html( $slug )  . '</a>';
+					if ( isset( $default_plugs ) && isset( $default_plugs[ $slug ] ) && is_array( $default_plugs[ $slug ] ) ) :
+						echo '<a href="' . esc_attr( $default_plugs[ $slug ][ 0 ] ) . '" target="_blank" rel="nofollow">' . esc_html( isset( $default_plugs[ $slug ][ 2 ] ) ? $default_plugs[ $slug ][ 2 ] : $default_plugs[ $slug ][ 1 ] )  . '</a>';
 					else:
 						echo esc_html( $slug );
 					endif;

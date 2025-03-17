@@ -35,7 +35,7 @@ class CodeBlocks {
 			return $content;
 		endif;
 		$code_blocks = [];
-		preg_match_all( '#<pre><code class=\"lang-([a-z0-9]+)\">(.*?)<\/code><\/pre>#is', $content, $code_blocks );
+		preg_match_all( '#<pre><code class=\"lang-([a-z0-9]+).*?\">(.*?)<\/code><\/pre>#is', $content, $code_blocks );
 		if ( ! isset( $code_blocks ) || ! is_array( $code_blocks ) || ! count( $code_blocks ) ) :
 			return $content;
 		endif;

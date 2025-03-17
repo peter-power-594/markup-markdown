@@ -1,7 +1,7 @@
 === Markup Markdown ===
 Tags: Editor, Markdown
-Stable Tag: 3.14.1
-Version: 3.14.1
+Stable Tag: 3.14.2
+Version: 3.14.2
 Requires at least: 4.9
 Tested up to: 6.7.1
 Requires PHP: 5.6.0
@@ -17,8 +17,9 @@ This plugin replaces the Gutenberg block editor (or the classic TinyMCE) on the 
 
 The content is saved with the markdown syntax in the database and is rendered on the frontend via wordpress native filters thanks to the [Parsedown](https://parsedown.org) PHP library.
 
+That's pretty all you should know. It's under active development, keep in touch and feel free [to drop a line on the forum](https://wordpress.org/support/plugin/markup-markdown/), [to let a rating](https://wordpress.org/support/plugin/markup-markdown/reviews/) or even support me by buying a coffee !
 
-This extension rocks:
+This extension rocks ! Recent activities:
 - v3.14: Adding responsive attributes for WP assets and disable media iframe converter for text links
 - v3.13: Adding a new filter to toggle on/off Gutenberg in the admin screen and new autoplug for Code Snippets
 - v3.12: Adding support for LaTeX via Katex or MathJax
@@ -48,7 +49,6 @@ This extension rocks:
 - v1.2: Autoconvert Youtube & Vimeo links to iframes
 - v1.1: Support with lightbox and masonry for the gallery layout
 
-That's pretty all you should know. It's under active development, keep in touch and feel free [to drop a line on the forum](https://wordpress.org/support/plugin/markup-markdown/), [to let a rating](https://wordpress.org/support/plugin/markup-markdown/reviews/) or even support me by buying a coffee !
 
 == Frequently Asked Questions ==
 
@@ -99,13 +99,19 @@ The current version is based on components that are not compatible with assistiv
 
 == Changelog ==
 
-=3.14.1=
+= 3.14.2 =
+
+Bug fix:
+- Fixing code block fences regular expression and admin panel
+
+
+= 3.14.1 =
 
 Bug fixes:
 - Render content and excerpt from markdown posts embedded with the "Query Loop" block
 - Warning removed when the image's array keys are not found inside the render filter
 
-=3.14.0=
+= 3.14.0 =
 
 Improvement:
 - Adding responsive attributes for WP assets
@@ -114,7 +120,7 @@ Bug fix:
 - Disable media iframe converter for text links
 
 
-=3.13.0=
+= 3.13.0 =
 
 Improvements :
 - New filter:  "mmd_disable_gutenberg" added to toggle force Gutenberg on the admin screen even if the markdown editor is disabled

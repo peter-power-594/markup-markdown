@@ -35,7 +35,7 @@ class WPGeshi {
 	public function trigger_wp_geshi( $content ) {
 		# Replace <pre><code class="language-php">...</code></pre> by <pre lang="php">...</pre>
 		$pre_friendly = preg_replace(
-			"#<pre><code class=\"lang-([a-z0-9]+)\">#",
+			"#<pre><code class=\"lang-([a-z0-9]+).*?\">#",
 			"<pre lang=\"$1\" escaped=\"true\" line=\"1\">",
 			str_replace( '</code></pre>', '</pre>', $content )
 		);

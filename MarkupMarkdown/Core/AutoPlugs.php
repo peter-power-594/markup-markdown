@@ -10,15 +10,15 @@ class AutoPlugs {
 
 
 	private $plugs = array(
-		'BBPress' => [ 0, 'https://wordpress.org/plugins/bbpress/' ],
-		'BuddyPress' => [ 0, 'https://wordpress.org/plugins/buddypress/' ],
-		'BuddyPressDocs' => [ 0, 'https://wordpress.org/plugins/buddypress-docs/' ],
-		'CodeSnippets' => [ 0, 'https://wordpress.org/plugins/code-snippets/' ],
-		'DisableEmojis' => [ 1, 'https://wordpress.org/plugins/disable-emojis/' ],
-		'O2' => [ 0, 'https://github.com/Automattic/o2' ],
-		'Woocommerce' => [ 0, 'https://wordpress.org/plugins/woocommerce/' ],
-		'WPCodeBlocks' => [ 0, 'https://wordpress.org/plugins/wp-codemirror-block/' ],
-		'WPGeshi' => [ 0, 'https://wordpress.org/plugins/wp-geshi-highlight/' ]
+		'BBPress' => [ 0, 'https://wordpress.org/plugins/bbpress/', 'bbPress' ],
+		'BuddyPress' => [ 0, 'https://wordpress.org/plugins/buddypress/', 'BuddyPress' ],
+		'BuddyPressDocs' => [ 0, 'https://wordpress.org/plugins/buddypress-docs/', 'BuddyPress Docs' ],
+		'CodeSnippets' => [ 0, 'https://wordpress.org/plugins/code-snippets/', 'Code Snippets' ],
+		'DisableEmojis' => [ 1, 'https://wordpress.org/plugins/disable-emojis/', 'Disable Emojis (GDPR friendly)' ],
+		'O2' => [ 0, 'https://github.com/Automattic/o2', 'o2' ],
+		'Woocommerce' => [ 0, 'https://wordpress.org/plugins/woocommerce/', 'WooCommerce' ],
+		'WPCodeBlocks' => [ 0, 'https://wordpress.org/plugins/wp-codemirror-block/', 'CodeMirror Blocks' ],
+		'WPGeshi' => [ 0, 'https://wordpress.org/plugins/wp-geshi-highlight/', 'WP-GeSHi-Highlight' ]
 	);
 
 
