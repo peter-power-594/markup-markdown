@@ -138,7 +138,7 @@ class Support {
 	 * @since 1.7.0
 	 * @access public
 	 *
-	 * @return String Post type in use or FALSE
+	 * @return String Post type in use or NULL
 	 */
 	private function get_current_post_type() {
 		global $post, $typenow, $current_screen;
@@ -153,7 +153,7 @@ class Support {
 		elseif ( isset( $_REQUEST[ 'post' ] ) && function_exists( 'get_post_type' ) ) :
 			return get_post_type( (int)$_REQUEST[ 'post' ] );
 		else :
-			return false;
+			return NULL;
 		endif;
 	}
 
@@ -216,7 +216,7 @@ class Support {
 		endif;
 		# Classic request with a post type defined. Backend or Frontend follow the rules defined
 		$my_post_type = $this->get_current_post_type();
-		if ( ! $this->post_type_support_markdown( $my_post_type ) ) :
+		if ( isset( $my_post_type ) && ! $this->post_type_support_markdown( $my_post_type ) ) :
 			# Warning: Keep empty fonction, we DO NOT DISABLE markdown in case it's not with post related template / edit screen
 			$this->mmd_syntax = 0;
 		endif;
