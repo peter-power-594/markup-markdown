@@ -345,7 +345,7 @@ class Support {
 			# @since 3.6.4
 			return $field_content;
 		endif;
-		if ( wp_is_rest_endpoint() || ( ( is_home() || is_front_page() || is_singular() || is_archive() ) && in_the_loop() && is_main_query() ) ) :
+		if ( wp_is_rest_endpoint() || ( is_singular() && is_main_query() ) || ( ( is_home() || is_front_page() || is_singular() || is_archive() ) && in_the_loop() ) ) :
 			if ( post_type_supports( get_post_type(), 'markup-markdown' ) || post_type_supports( get_post_type(), 'markup_markdown' ) ) :
 				# Filters removed since 3.8.0
 				remove_filter( 'the_content', 'wpautop' );
