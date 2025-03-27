@@ -64,7 +64,7 @@ class Image extends \MarkupMarkdown\Abstracts\ImageTinyAPI {
 
 	private function parse_img_tags( $content = '' ) {
 		$html_imgs = [];
-		if ( ! preg_match_all( '#<img src="(.*?)"[^>]*>#', $content, $html_imgs ) ) :
+		if ( ! preg_match_all( '#<img.*?src="(.*?)"[^>]*>#', $content, $html_imgs ) ) :
 			return $content;
 		endif;
 		if ( ! isset( $html_imgs ) || ! isset( $html_imgs[ 0 ] ) || ! is_array( $html_imgs[ 0 ] ) ) :
