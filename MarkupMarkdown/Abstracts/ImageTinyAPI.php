@@ -30,7 +30,7 @@ abstract class ImageTinyAPI {
 			return 0;
 		endif;
 		$file = basename( $url );
-		$query_args = [ 'post_type' => 'attachment','post_status' => 'inherit', 'fields' => 'ids', 'meta_key' => '_wp_attachment_metadata', 'meta_compare' => 'LIKE', 'meta_value' => \esq_sql( $file ) ];
+		$query_args = [ 'post_type' => 'attachment','post_status' => 'inherit', 'fields' => 'ids', 'meta_key' => '_wp_attachment_metadata', 'meta_compare' => 'LIKE', 'meta_value' => \esc_sql( $file ) ];
 		$query = new \WP_Query( $query_args );
 		if ( ! $query->have_posts() ) :
 			\wp_reset_postdata();
