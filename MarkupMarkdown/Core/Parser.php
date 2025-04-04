@@ -174,7 +174,7 @@ class Parser {
 		endif;
 		$safe = preg_replace( '#((<\/\w+>)(<\w+>))#', "$2\n$3", isset( $content ) ? $content : '' );
 		if ( defined( 'MMD_USE_HEADINGS' ) && ! in_array( '1', MMD_USE_HEADINGS ) && ! defined( 'WP_MMD_O2_PLUG' ) ) :
-			$safe = $this->custom_list_filter( $content );
+			$safe = $this->custom_list_filter( $safe );
 		endif;
 		if ( defined( 'MMD_KEEP_SPACES' ) && MMD_KEEP_SPACES > 0 ) : # Since 3.7.1
 			$safe_spaces = preg_replace( '#\n\s#m', "\n{-SPACE-}", $safe );
