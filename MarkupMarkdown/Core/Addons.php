@@ -125,8 +125,8 @@ class Addons {
 
 
 	private function load_acf() {
-		require_once $this->addon_dir  . 'Unsupported/AdvancedCustomField.php';
-		$tmp_addon = new \MarkupMarkdown\Addons\Unsupported\AdvancedCustomField();
+		require_once $this->addon_dir  . 'Unsupported/AdvancedCustomFields.php';
+		$tmp_addon = new \MarkupMarkdown\Addons\Unsupported\AdvancedCustomFields();
 		$this->prop[ 'setup' ][] = $tmp_addon->slug;
 		$this->prop[ 'inst' ][ $tmp_addon->slug ] = $tmp_addon;
 		unset( $tmp_addon );

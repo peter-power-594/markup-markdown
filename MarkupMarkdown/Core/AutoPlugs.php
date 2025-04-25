@@ -15,6 +15,7 @@ class AutoPlugs {
 		'BuddyPressDocs' => [ 0, 'https://wordpress.org/plugins/buddypress-docs/', 'BuddyPress Docs' ],
 		'CodeSnippets' => [ 0, 'https://wordpress.org/plugins/code-snippets/', 'Code Snippets' ],
 		'DisableEmojis' => [ 1, 'https://wordpress.org/plugins/disable-emojis/', 'Disable Emojis (GDPR friendly)' ],
+		'FrontendAdmin' => [ 0, 'https://wordpress.org/plugins/acf-frontend-form-element/', 'Frontend Admin by DynamiApps' ],
 		'O2' => [ 0, 'https://github.com/Automattic/o2', 'o2' ],
 		'Woocommerce' => [ 0, 'https://wordpress.org/plugins/woocommerce/', 'WooCommerce' ],
 		'WPCodeBlocks' => [ 0, 'https://wordpress.org/plugins/wp-codemirror-block/', 'CodeMirror Blocks' ],

@@ -136,11 +136,11 @@ class mmd_acf_field_markdown extends \acf_field {
 	 * @return void
 	 */
 	public function input_admin_enqueue_scripts() {
-		$url     = mmd()->plugin_uri . 'MarkupMarkdown/Addons/Unsupported/AdvancedCustomField/';
+		$url     = mmd()->plugin_uri . 'assets/advanced-custom-fields/';
 		$version = $this->env['version'];
 
-		wp_register_script( 'mmd-markupmarkdown', $url . 'field.min.js', array( 'acf-input' ), $version );
-		wp_register_style( 'mmd-markupmarkdown', $url . 'field.min.css', array( 'acf-input' ), $version );
+		wp_register_script( 'mmd-markupmarkdown', $url . 'js/field.min.js', array( 'acf-input' ), $version );
+		wp_register_style( 'mmd-markupmarkdown', $url . 'css/field.min.css', array( 'acf-input' ), $version );
 
 		wp_enqueue_script( 'mmd-markupmarkdown' );
 		wp_enqueue_style( 'mmd-markupmarkdown' );

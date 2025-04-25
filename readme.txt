@@ -1,13 +1,13 @@
 === Markup Markdown ===
 Tags: Editor, Markdown
-Stable Tag: 3.14.7
-Version: 3.14.7
+Stable Tag: 3.15.0
+Version: 3.15.0
 Requires at least: 4.9
-Tested up to: 6.7.1
+Tested up to: 6.8.0
 Requires PHP: 5.6.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html#license-text
-Donate Link: https://ko-fi.com/peterpower594
+Donate Link: https://buymeacoffee.com/peterpower594
 
 Disable Wordpress's native Gutenberg or TinyMCE editor in favor of a Markdown editor.
 
@@ -68,6 +68,11 @@ The current version is based on components that are not compatible with assistiv
 
 
 == Changelog ==
+
+= 3.15.0 =
+
+Improvement:
+- [_Frontend Admin by DynamiApps_](https://wordpress.org/plugins/acf-frontend-form-element/) added as an autoplug
 
 = 3.14.7 =
 
