@@ -1,7 +1,7 @@
 === Markup Markdown ===
 Tags: Editor, Markdown
-Stable Tag: 3.15.0
-Version: 3.15.0
+Stable Tag: 3.15.1
+Version: 3.15.1
 Requires at least: 4.9
 Tested up to: 6.8.0
 Requires PHP: 5.6.0
@@ -68,6 +68,11 @@ The current version is based on components that are not compatible with assistiv
 
 
 == Changelog ==
+
+= 3.15.1 =
+
+Bug fix :
+- Patch error when saving settings with no selected plugs 
 
 = 3.15.0 =
 

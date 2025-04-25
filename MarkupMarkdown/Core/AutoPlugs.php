@@ -73,6 +73,9 @@ class AutoPlugs {
 	 */
 	public function update_config( $my_cnf ) {
 		$fm_plugs = filter_input( INPUT_POST, 'mmd_plugs', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+		if ( ! isset( $fm_plugs ) || ! is_array( $fm_plugs ) ) :
+			$fm_plugs = [];
+		endif;
 		$my_plugs = array();
 		foreach( $this->plugs as $my_slug => $my_plug ) :
 			$my_plugs[ $my_slug ] = in_array( $my_slug, $fm_plugs ) ? 1 : 0;
