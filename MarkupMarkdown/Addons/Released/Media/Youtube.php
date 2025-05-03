@@ -18,8 +18,6 @@ class Youtube extends \MarkupMarkdown\Abstracts\OEmbedTinyAPI {
 
 
 	public function __construct() {
-		$this->prop[ 'label' ] = esc_html__( 'Youtube', 'markup-markdown' );
-		$this->prop[ 'desc' ] = esc_html__( 'Convert automatically Youtube links to an embedded iframe.', 'markup-markdown' );
 		if ( defined( 'MMD_ADDONS' ) && in_array( $this->prop[ 'slug' ], MMD_ADDONS ) === FALSE ) :
 			$this->prop[ 'active' ] = 0;
 			return FALSE; # Addon has been desactivated
@@ -29,9 +27,13 @@ class Youtube extends \MarkupMarkdown\Abstracts\OEmbedTinyAPI {
 
 
 	public function __get( $name ) {
-		if ( array_key_exists( $name, $this->prop ) ) {
+		if ( array_key_exists( $name, $this->prop ) ) :
 			return $this->prop[ $name ];
-		}
+		elseif ( $name === 'label' ) :
+			return esc_html__( 'Youtube', 'markup-markdown' );
+		elseif ( $name === 'desc' ) :
+			return esc_html__( 'Convert automatically Youtube links to an embedded iframe.', 'markup-markdown' );
+		endif;
 		return 'mmd_undefined';
 	}
 

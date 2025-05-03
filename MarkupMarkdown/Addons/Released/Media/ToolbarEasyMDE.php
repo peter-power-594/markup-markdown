@@ -127,6 +127,9 @@ class ToolbarEasyMDE {
 	);
 
 
+	protected $i18n = array();
+
+
 	private function logger( $str = '' ) {
 		if ( ! empty( $str ) ) :
 			error_log( "\nWP Markup Markdown: " . $str );
@@ -135,62 +138,6 @@ class ToolbarEasyMDE {
 
 
 	public function __construct( $json = '' ) {
-		$this->prop[ 'default_buttons' ][ 'mmd_pipe' ][ 'tooltip' ] = '';
-		$this->prop[ 'default_buttons' ][ 'mmd_pipe' ][ 'label' ] = esc_html__( 'Pipe', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_bold' ][ 'tooltip' ] = esc_html__( 'Bold', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_bold' ][ 'label' ] = esc_html__( 'Bold', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_italic' ][ 'tooltip' ] = esc_html__( 'Italic', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_italic' ][ 'label' ] = esc_html__( 'Italic', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_strikethrough' ][ 'tooltip' ] = esc_html__( 'Strikethrough', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_strikethrough' ][ 'label' ] = esc_html__( 'Strikethrough', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_heading' ][ 'tooltip' ] = esc_html__( 'Heading', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_heading' ][ 'label' ] = esc_html__( 'Heading', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_heading_smaller' ][ 'tooltip' ] = esc_html__( 'Smaller Heading', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_heading_smaller' ][ 'label' ] = esc_html__( 'Smaller Heading', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_heading_bigger' ][ 'tooltip' ] = esc_html__( 'Bigger Heading', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_heading_bigger' ][ 'label' ] = esc_html__( 'Bigger Heading', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_heading_1' ][ 'tooltip' ] = esc_html__( 'Big Heading', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_heading_1' ][ 'label' ] = esc_html__( 'Big Heading', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_heading_2' ][ 'tooltip' ] = esc_html__( 'Medium Heading', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_heading_2' ][ 'label' ] = esc_html__( 'Medium Heading', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_heading_3' ][ 'tooltip' ] = esc_html__( 'Small Heading', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_heading_3' ][ 'label' ] = esc_html__( 'Small Heading', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_code' ][ 'tooltip' ] = esc_html__( 'Code', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_code' ][ 'label' ] = esc_html__( 'Code', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_quote' ][ 'tooltip' ] = esc_html__( 'Quote', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_quote' ][ 'label' ] = esc_html__( 'Quote', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_unordered_list' ][ 'tooltip' ] = esc_html__( 'Generic List', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_unordered_list' ][ 'label' ] = esc_html__( 'List', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_ordered_list' ][ 'tooltip' ] = esc_html__( 'Numbered List', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_ordered_list' ][ 'label' ] = esc_html__( 'List', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_clean_block' ][ 'tooltip' ] = esc_html__( 'Clean block', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_clean_block' ][ 'label' ] = esc_html__( 'Clean', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_link' ][ 'tooltip' ] = esc_html__( 'Create Link', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_link' ][ 'label' ] = esc_html__( 'Link', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_wpsimage' ][ 'tooltip' ] = esc_html__( 'Insert or Upload Media', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_wpsimage' ][ 'label' ] = esc_html__( 'Media Library', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_table' ][ 'tooltip' ] = esc_html__( 'Insert Table', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_table' ][ 'label' ] = esc_html__( 'Table', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_horizontal_rule' ][ 'tooltip' ] = esc_html__( 'Insert Horizontal Line', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_horizontal_rule' ][ 'label' ] = esc_html__( 'Horizontal Line', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_preview' ][ 'tooltip' ] = esc_html__( 'Toggle Preview', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_preview' ][ 'label' ] = esc_html__( 'Preview', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_side_by_side' ][ 'tooltip' ] = esc_html__( 'Toggle Side by Side', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_side_by_side' ][ 'label' ] = esc_html__( 'Side by Side', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_fullscreen' ][ 'tooltip' ] = esc_html__( 'Toggle Fullscreen', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_fullscreen' ][ 'label' ] = esc_html__( 'Fullscreen', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_guide' ][ 'tooltip' ] = esc_html__( 'Markdown Guide', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_guide' ][ 'label' ] = esc_html__( 'Guide', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_undo' ][ 'tooltip' ] = esc_html__( 'Undo', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_undo' ][ 'label' ] = esc_html__( 'Undo', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_redo' ][ 'tooltip' ] = esc_html__( 'Redo', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_redo' ][ 'label' ] = esc_html__( 'Redo', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_spell_check' ][ 'tooltip' ] = esc_html__( 'Spellchecker', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_spell_check' ][ 'label' ] = esc_html__( 'Spellchecker', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_rtltextdir' ][ 'tooltip' ] = esc_html__( 'Switch text direction to right', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_rtltextdir' ][ 'label' ] = esc_html__( 'Right to Left text direction', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_ltrtextdir' ][ 'tooltip' ] = esc_html__( 'Switch text direction to left', 'markup-markdown' );
-		$this->prop[ 'default_buttons' ][ 'mmd_ltrtextdir' ][ 'label' ] = esc_html__( 'Left to Right text direction', 'markup-markdown' );
 		if ( empty( $json ) ) :
 			return false;
 		endif;
@@ -202,7 +149,7 @@ class ToolbarEasyMDE {
 		$toolbar_conf = json_decode( file_get_contents( $json ) );
 		$this->logger( ( ! isset( $toolbar_conf ) || ! $toolbar_conf ) ? "Unable to read the json file " . $json : '' );
 		foreach ( $toolbar_conf->my_buttons as $idx => $button_slug ) :
-			if ( strpos( $button_slug, "mmd_" ) === FALSE ) :
+			if ( strpos( $button_slug, "mmd_" ) === false ) :
 				$toolbar_conf->my_buttons[ $idx ] = "mmd_" . $button_slug;
 			endif;
 		endforeach;
@@ -223,8 +170,85 @@ class ToolbarEasyMDE {
 	}
 
 
+
+	private function make_translations() {
+		if ( ! isset( $this->i18n ) || ! is_array( $this->i18n ) || count( $this->i18n ) > 0 ) :
+			return false;
+		endif;
+		$this->i18n[ 'mmd_pipe' ][ 'tooltip' ] = '';
+		$this->i18n[ 'mmd_pipe' ][ 'label' ] = esc_html__( 'Pipe', 'markup-markdown' );
+		$this->i18n[ 'mmd_bold' ][ 'tooltip' ] = esc_html__( 'Bold', 'markup-markdown' );
+		$this->i18n[ 'mmd_bold' ][ 'label' ] = esc_html__( 'Bold', 'markup-markdown' );
+		$this->i18n[ 'mmd_italic' ][ 'tooltip' ] = esc_html__( 'Italic', 'markup-markdown' );
+		$this->i18n[ 'mmd_italic' ][ 'label' ] = esc_html__( 'Italic', 'markup-markdown' );
+		$this->i18n[ 'mmd_strikethrough' ][ 'tooltip' ] = esc_html__( 'Strikethrough', 'markup-markdown' );
+		$this->i18n[ 'mmd_strikethrough' ][ 'label' ] = esc_html__( 'Strikethrough', 'markup-markdown' );
+		$this->i18n[ 'mmd_heading' ][ 'tooltip' ] = esc_html__( 'Heading', 'markup-markdown' );
+		$this->i18n[ 'mmd_heading' ][ 'label' ] = esc_html__( 'Heading', 'markup-markdown' );
+		$this->i18n[ 'mmd_heading_smaller' ][ 'tooltip' ] = esc_html__( 'Smaller Heading', 'markup-markdown' );
+		$this->i18n[ 'mmd_heading_smaller' ][ 'label' ] = esc_html__( 'Smaller Heading', 'markup-markdown' );
+		$this->i18n[ 'mmd_heading_bigger' ][ 'tooltip' ] = esc_html__( 'Bigger Heading', 'markup-markdown' );
+		$this->i18n[ 'mmd_heading_bigger' ][ 'label' ] = esc_html__( 'Bigger Heading', 'markup-markdown' );
+		$this->i18n[ 'mmd_heading_1' ][ 'tooltip' ] = esc_html__( 'Big Heading', 'markup-markdown' );
+		$this->i18n[ 'mmd_heading_1' ][ 'label' ] = esc_html__( 'Big Heading', 'markup-markdown' );
+		$this->i18n[ 'mmd_heading_2' ][ 'tooltip' ] = esc_html__( 'Medium Heading', 'markup-markdown' );
+		$this->i18n[ 'mmd_heading_2' ][ 'label' ] = esc_html__( 'Medium Heading', 'markup-markdown' );
+		$this->i18n[ 'mmd_heading_3' ][ 'tooltip' ] = esc_html__( 'Small Heading', 'markup-markdown' );
+		$this->i18n[ 'mmd_heading_3' ][ 'label' ] = esc_html__( 'Small Heading', 'markup-markdown' );
+		$this->i18n[ 'mmd_code' ][ 'tooltip' ] = esc_html__( 'Code', 'markup-markdown' );
+		$this->i18n[ 'mmd_code' ][ 'label' ] = esc_html__( 'Code', 'markup-markdown' );
+		$this->i18n[ 'mmd_quote' ][ 'tooltip' ] = esc_html__( 'Quote', 'markup-markdown' );
+		$this->i18n[ 'mmd_quote' ][ 'label' ] = esc_html__( 'Quote', 'markup-markdown' );
+		$this->i18n[ 'mmd_unordered_list' ][ 'tooltip' ] = esc_html__( 'Generic List', 'markup-markdown' );
+		$this->i18n[ 'mmd_unordered_list' ][ 'label' ] = esc_html__( 'List', 'markup-markdown' );
+		$this->i18n[ 'mmd_ordered_list' ][ 'tooltip' ] = esc_html__( 'Numbered List', 'markup-markdown' );
+		$this->i18n[ 'mmd_ordered_list' ][ 'label' ] = esc_html__( 'List', 'markup-markdown' );
+		$this->i18n[ 'mmd_clean_block' ][ 'tooltip' ] = esc_html__( 'Clean block', 'markup-markdown' );
+		$this->i18n[ 'mmd_clean_block' ][ 'label' ] = esc_html__( 'Clean', 'markup-markdown' );
+		$this->i18n[ 'mmd_link' ][ 'tooltip' ] = esc_html__( 'Create Link', 'markup-markdown' );
+		$this->i18n[ 'mmd_link' ][ 'label' ] = esc_html__( 'Link', 'markup-markdown' );
+		$this->i18n[ 'mmd_wpsimage' ][ 'tooltip' ] = esc_html__( 'Insert or Upload Media', 'markup-markdown' );
+		$this->i18n[ 'mmd_wpsimage' ][ 'label' ] = esc_html__( 'Media Library', 'markup-markdown' );
+		$this->i18n[ 'mmd_table' ][ 'tooltip' ] = esc_html__( 'Insert Table', 'markup-markdown' );
+		$this->i18n[ 'mmd_table' ][ 'label' ] = esc_html__( 'Table', 'markup-markdown' );
+		$this->i18n[ 'mmd_horizontal_rule' ][ 'tooltip' ] = esc_html__( 'Insert Horizontal Line', 'markup-markdown' );
+		$this->i18n[ 'mmd_horizontal_rule' ][ 'label' ] = esc_html__( 'Horizontal Line', 'markup-markdown' );
+		$this->i18n[ 'mmd_preview' ][ 'tooltip' ] = esc_html__( 'Toggle Preview', 'markup-markdown' );
+		$this->i18n[ 'mmd_preview' ][ 'label' ] = esc_html__( 'Preview', 'markup-markdown' );
+		$this->i18n[ 'mmd_side_by_side' ][ 'tooltip' ] = esc_html__( 'Toggle Side by Side', 'markup-markdown' );
+		$this->i18n[ 'mmd_side_by_side' ][ 'label' ] = esc_html__( 'Side by Side', 'markup-markdown' );
+		$this->i18n[ 'mmd_fullscreen' ][ 'tooltip' ] = esc_html__( 'Toggle Fullscreen', 'markup-markdown' );
+		$this->i18n[ 'mmd_fullscreen' ][ 'label' ] = esc_html__( 'Fullscreen', 'markup-markdown' );
+		$this->i18n[ 'mmd_guide' ][ 'tooltip' ] = esc_html__( 'Markdown Guide', 'markup-markdown' );
+		$this->i18n[ 'mmd_guide' ][ 'label' ] = esc_html__( 'Guide', 'markup-markdown' );
+		$this->i18n[ 'mmd_undo' ][ 'tooltip' ] = esc_html__( 'Undo', 'markup-markdown' );
+		$this->i18n[ 'mmd_undo' ][ 'label' ] = esc_html__( 'Undo', 'markup-markdown' );
+		$this->i18n[ 'mmd_redo' ][ 'tooltip' ] = esc_html__( 'Redo', 'markup-markdown' );
+		$this->i18n[ 'mmd_redo' ][ 'label' ] = esc_html__( 'Redo', 'markup-markdown' );
+		$this->i18n[ 'mmd_spell_check' ][ 'tooltip' ] = esc_html__( 'Spellchecker', 'markup-markdown' );
+		$this->i18n[ 'mmd_spell_check' ][ 'label' ] = esc_html__( 'Spellchecker', 'markup-markdown' );
+		$this->i18n[ 'mmd_rtltextdir' ][ 'tooltip' ] = esc_html__( 'Switch text direction to right', 'markup-markdown' );
+		$this->i18n[ 'mmd_rtltextdir' ][ 'label' ] = esc_html__( 'Right to Left text direction', 'markup-markdown' );
+		$this->i18n[ 'mmd_ltrtextdir' ][ 'tooltip' ] = esc_html__( 'Switch text direction to left', 'markup-markdown' );
+		$this->i18n[ 'mmd_ltrtextdir' ][ 'label' ] = esc_html__( 'Left to Right text direction', 'markup-markdown' );
+		return true;
+	}
+
+
 	public function __get( $name ) {
-		return array_key_exists( $name, $this->prop ) ? $this->prop[ $name ] : 'mmd_undefined';
+		if ( array_key_exists( $name, $this->prop ) ) :
+			if ( strpos( $name, 'button' ) !== false ) :
+				$this->make_translations();
+				foreach( $this->prop[ $name ] as $button_idx => $button_meta ) :
+					if ( isset( $button_meta[ 'slug' ] ) && array_key_exists( $button_meta[ 'slug' ], $this->i18n ) ) :
+						$this->prop[ $name ][ $button_idx ][ 'tooltip' ] = $this->i18n[ $button_meta[ 'slug' ] ][ 'tooltip' ];
+						$this->prop[ $name ][ $button_idx ][ 'label' ] = $this->i18n[ $button_meta[ 'slug' ] ][ 'label' ];
+					endif;
+				endforeach;
+			endif;
+			return $this->prop[ $name ];
+		endif;
+		return 'mmd_undefined';
 	}
 
 }

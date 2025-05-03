@@ -16,8 +16,6 @@ class OPCache {
 
 
 	public function __construct() {
-		$this->prop[ 'label' ] = __( 'Disable Static Cache', 'markup-markdown' );
-		$this->prop[ 'desc' ] = __( 'Static html files can be generated to speed up the rendering if the default PHP OPCache if available. Uncheck to enable.', 'markup-markdown' );
 		if ( defined( 'WP_MMD_OPCACHE' ) ) :
 			 # Disable in wp-config.php or somewhere else
 			$this->prop[ 'active' ] = ! WP_MMD_OPCACHE ? 1 : 0;
@@ -40,9 +38,13 @@ class OPCache {
 
 
 	public function __get( $name ) {
-		if ( array_key_exists( $name, $this->prop ) ) {
+		if ( array_key_exists( $name, $this->prop ) ) :
 			return $this->prop[ $name ];
-		}
+		elseif ( $name === 'label' ) :
+			return esc_html__( 'Disable Static Cache', 'markup-markdown' );
+		elseif ( $name === 'desc' ) :
+			return esc_html__( 'Static html files can be generated to speed up the rendering if the default PHP OPCache if available. Uncheck to enable.', 'markup-markdown' );
+		endif;
 		return 'mmd_undefined';
 	}
 

@@ -18,8 +18,6 @@ class AdvancedCustomFields {
 
 
 	public function __construct() {
-		$this->prop[ 'label' ] = 'Advanced Custom Fields';
-		$this->prop[ 'desc' ] = __( 'This addon enable a new content type so you can write directly markdown with the "Markup Markdown" custom field from ACF.', 'markup-markdown' );
 		if ( defined( 'MMD_ADDONS' ) && in_array( $this->prop[ 'slug' ], MMD_ADDONS ) === FALSE ) :
 			$this->prop[ 'active' ] = 0;
 			return FALSE; # Addon has been desactivated
@@ -32,9 +30,13 @@ class AdvancedCustomFields {
 
 
 	public function __get( $name ) {
-		if ( array_key_exists( $name, $this->prop ) ) {
+		if ( array_key_exists( $name, $this->prop ) ) :
 			return $this->prop[ $name ];
-		}
+		elseif ( $name === 'label' ) :
+			return esc_html__( 'Advanced Custom Fields', 'markup-markdown' );
+		elseif ( $name === 'desc' ) :
+			return esc_html__( 'This addon enable a new content type so you can write directly markdown with the "Markup Markdown" custom field from ACF.', 'markup-markdown' );
+		endif;
 		return 'mmd_undefined';
 	}
 

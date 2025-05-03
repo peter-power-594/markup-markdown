@@ -20,8 +20,6 @@ class Latex {
 
 
 	public function __construct() {
-		$this->prop[ 'label' ] = __( 'LaTeX', 'markup-markdown' );
-		$this->prop[ 'desc' ] = __( 'Easily type and render math formulas inside your post.', 'markup-markdown' );
 		if ( defined( 'MMD_ADDONS' ) && in_array( $this->prop[ 'slug' ], MMD_ADDONS ) === FALSE ) :
 			$this->prop[ 'active' ] = 0;
 			return false; # Addon has been desactivated
@@ -48,9 +46,13 @@ class Latex {
 
 
 	public function __get( $name ) {
-		if ( array_key_exists( $name, $this->prop ) ) {
+		if ( array_key_exists( $name, $this->prop ) ) :
 			return $this->prop[ $name ];
-		}
+		elseif ( $name === 'label' ) :
+			return esc_html__( 'LaTeX', 'markup-markdown' );
+		elseif ( $name === 'desc' ) :
+			return esc_html__( 'Easily type and render math formulas inside your post.', 'markup-markdown' );
+		endif;
 		return 'mmd_undefined';
 	}
 

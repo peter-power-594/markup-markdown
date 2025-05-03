@@ -22,8 +22,6 @@ class Layout {
 
 
 	public function __construct() {
-		$this->prop[ 'label' ] = __( 'Layout', 'markup-markdown' );
-		$this->prop[ 'desc' ] = __( 'A few tools to help you enhancing your layout. (Lightbox, Masonry, etc...)', 'markup-markdown' );
 		mmd()->default_conf = array( 'MMD_USE_LIGHTBOX' => 1 );
 		mmd()->default_conf = array( 'MMD_USE_IMAGESLOADED' => 1 );
 		mmd()->default_conf = array( 'MMD_USE_MASONRY' => 1 );
@@ -51,9 +49,13 @@ class Layout {
 
 
 	public function __get( $name ) {
-		if ( array_key_exists( $name, $this->prop ) ) {
+		if ( array_key_exists( $name, $this->prop ) ) :
 			return $this->prop[ $name ];
-		}
+		elseif ( $name === 'label' ) :
+			return esc_html__( 'Layout', 'markup-markdown' );
+		elseif ( $name === 'desc' ) :
+			return esc_html__( 'A few tools to help you enhancing your layout. (Lightbox, Masonry, etc...)', 'markup-markdown' );
+		endif;
 		return 'mmd_undefined';
 	}
 

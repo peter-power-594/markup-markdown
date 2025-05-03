@@ -98,8 +98,6 @@ class SpellChecker {
 
 
 	public function __construct() {
-		$this->prop[ 'label' ] = __( 'Hung Spell Checker', 'markup-markdown' );
-		$this->prop[ 'desc' ] = __( 'Multilingual spell checker for your posts! Enable live spellchecking with multiple languages while writing your articles.', 'markup-markdown' );
 		if ( ! defined( 'MMD_ADDONS' ) || ( defined( 'MMD_ADDONS' ) && in_array( $this->prop[ 'slug' ], MMD_ADDONS ) === FALSE ) ) :
 			$this->prop[ 'active' ] = 0;
 			return FALSE; # Addon has been desactivated
@@ -118,9 +116,13 @@ class SpellChecker {
 
 
 	public function __get( $name ) {
-		if ( array_key_exists( $name, $this->prop ) ) {
+		if ( array_key_exists( $name, $this->prop ) ) :
 			return $this->prop[ $name ];
-		}
+		elseif ( $name === 'label' ) :
+			return esc_html__( 'Hung Spell Checker', 'markup-markdown' );
+		elseif ( $name === 'desc' ) :
+			return esc_html__( 'Multilingual spell checker for your posts! Enable live spellchecking with multiple languages while writing your articles.', 'markup-markdown' );
+		endif;
 		return 'mmd_undefined';
 	}
 
