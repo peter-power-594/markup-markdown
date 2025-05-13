@@ -1,9 +1,9 @@
 === Markup Markdown ===
 Tags: Editor, Markdown
-Stable Tag: 3.15.2
-Version: 3.15.2
+Stable Tag: 3.16.0
+Version: 3.16.0
 Requires at least: 4.9
-Tested up to: 6.8.0
+Tested up to: 6.8.1
 Requires PHP: 5.6.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html#license-text
@@ -68,6 +68,11 @@ The current version is based on components that are not compatible with assistiv
 
 
 == Changelog ==
+
+= 3.16.0 =
+
+Improvement :
+- Adding a "Debug" tab to display information required for the support
 
 = 3.15.2 =
 

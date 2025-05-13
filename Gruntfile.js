@@ -28,6 +28,7 @@ module.exports = function(grunt) {
 				'AA_src/buddypress/js/field.js',
 				'AA_src/buddypress-docs/js/field.js',
 				'AA_src/custom-codemirror-spell-chekcher/js/spell-checker.js',
+				'AA_src/markup-markdown/js/plugin_options.js',
 				'AA_src/markup-markdown/js/wordpress_richedit-easymde.js',
 				'AA_src/markup-markdown/js/wordpress_richedit-media.js',
 				'AA_src/markup-markdown/js/wordpress_richedit-preview.js',
@@ -56,6 +57,10 @@ module.exports = function(grunt) {
 				src: 'AA_src/easy-markdown-editor/js/easymde.min.js',
 				dest: 'assets/easy-markdown-editor/dist/easymde.min.js'
 			},
+			builder_admin_info: {
+				src: 'AA_src/markup-markdown/js/plugin_options.js',
+				dest: 'assets/markup-markdown/js/plugin_options.debug.js'
+			},
 			builder_easymde: {
 				src: 'AA_src/markup-markdown/js/wordpress_richedit-easymde.js',
 				dest: 'assets/markup-markdown/js/wordpress_richedit-easymde.debug.js'
@@ -81,6 +86,7 @@ module.exports = function(grunt) {
 			},
 			build: {
 				files: {
+					'assets/markup-markdown/js/plugin_options.min.js': 'assets/markup-markdown/js/plugin_options.debug.js',
 					'assets/markup-markdown/js/wordpress_richedit-easymde.min.js': 'assets/markup-markdown/js/wordpress_richedit-easymde.debug.js',
 					'assets/markup-markdown/js/wordpress_richedit-media.min.js': 'assets/markup-markdown/js/wordpress_richedit-media.debug.js',
 					'assets/markup-markdown/js/wordpress_richedit-preview.min.js': 'assets/markup-markdown/js/wordpress_richedit-preview.debug.js',

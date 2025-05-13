@@ -68,6 +68,8 @@ class Addons {
 		# Kind of usable addons but I wouldn't bet for extensive use
 		$this->load_spellchecker();
 		$this->load_acf();
+		# End
+		$this->load_debug();
 	}
 
 
@@ -149,5 +151,11 @@ class Addons {
 		unset( $tmp_addon );
 	}
 
+
+	private function load_debug() {
+		require_once $this->addon_dir  . 'Released/Debug.php';
+		$tmp_addon = new \MarkupMarkdown\Addons\Released\Debug();
+		unset( $tmp_addon );
+	}
 
 }
