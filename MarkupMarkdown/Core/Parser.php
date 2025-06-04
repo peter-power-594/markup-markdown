@@ -172,7 +172,7 @@ class Parser {
 		if ( ! isset( $this->parser ) || empty( $this->parser ) ) :
 			$this->custom_parser();
 		endif;
-		$safe = preg_replace( '#((<\/\w+>)(<\w+>))#', "$2\n$3", isset( $content ) ? $content : '' );
+		$safe = preg_replace( '#((<\/\w+>)(<\w+))#', "$2\n$3", isset( $content ) ? $content : '' );
 		if ( defined( 'MMD_USE_HEADINGS' ) && ! in_array( '1', MMD_USE_HEADINGS ) && ! defined( 'WP_MMD_O2_PLUG' ) ) :
 			$safe = $this->custom_list_filter( $safe );
 		endif;

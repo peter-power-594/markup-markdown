@@ -64,6 +64,7 @@ class Addons {
 		$this->load_media_youtube();
 		$this->load_media_vimeo();
 		$this->load_media_image();
+		$this->load_comments();
 		$this->load_latex();
 		# Kind of usable addons but I wouldn't bet for extensive use
 		$this->load_spellchecker();
@@ -135,6 +136,15 @@ class Addons {
 	}
 
 
+	private function load_comments() {
+		require_once $this->addon_dir  . 'Released/Comments.php';
+		$tmp_addon = new \MarkupMarkdown\Addons\Released\Comments();
+		$this->prop[ 'setup' ][] = $tmp_addon->slug;
+		$this->prop[ 'inst' ][ $tmp_addon->slug ] = $tmp_addon;
+		unset( $tmp_addon );
+	}
+
+
 	private function load_latex() {
 		require_once $this->addon_dir  . 'Released/LaTeX.php';
 		$tmp_addon = new \MarkupMarkdown\Addons\Released\Latex();
@@ -142,6 +152,7 @@ class Addons {
 		$this->prop[ 'inst' ][ $tmp_addon->slug ] = $tmp_addon;
 		unset( $tmp_addon );
 	}
+
 
 	private function load_spellchecker() {
 		require_once $this->addon_dir  . 'Unsupported/SpellChecker.php';

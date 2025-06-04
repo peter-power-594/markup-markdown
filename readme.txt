@@ -1,7 +1,7 @@
 === Markup Markdown ===
 Tags: Editor, Markdown
-Stable Tag: 3.16.0
-Version: 3.16.0
+Stable Tag: 3.17.1
+Version: 3.17.1
 Requires at least: 4.9
 Tested up to: 6.8.1
 Requires PHP: 5.6.0
@@ -68,6 +68,20 @@ The current version is based on components that are not compatible with assistiv
 
 
 == Changelog ==
+
+= 3.17.1 =
+
+Bug fix :
+- Patch the bug while editing the form settings from the Frontend Admin plugin screen
+
+= 3.17.0 =
+
+Improvement :
+- New addon "Comments" released !
+
+Bug fix :
+- Embedding posts with oembed repaired
+- Adding a missing javascript dependency for the frontend with custom fields
 
 = 3.16.0 =
 

@@ -4,7 +4,7 @@
  *
  * Plugin Name: Markup Markdown
  * Description: Replaces the Gutenberg Block Editor in favor of pure markdown based markups
- * Version:     3.16.0
+ * Version:     3.17.1
  * Author:      Pierre-Henri Lavigne
  * Author URI:  https://www.markup-markdown.com
  * License:     GPLv2 or later
@@ -32,7 +32,7 @@ if ( ! class_exists( 'Markup_Markdown' ) ) :
 		protected $parser;
 
 		protected $settings = array(
-			'version' => '3.16.0',
+			'version' => '3.17.1',
 			'plugin_uri' => '',
 			'plugin_dir' => '',
 			'plugin_slug' => '',
@@ -99,7 +99,7 @@ if ( ! class_exists( 'Markup_Markdown' ) ) :
 		 *
 		 *  @return String The HTML content
 		 */
-		public function markdown2html( $content ) {
+		final public function markdown2html( $content ) {
 			$filtered = apply_filters( 'field_markdown2html', $content );
 			$html = htmlspecialchars_decode( $filtered, ENT_COMPAT );
 			return do_shortcode( $html );
@@ -114,7 +114,7 @@ if ( ! class_exists( 'Markup_Markdown' ) ) :
 		 *
 		 *  @return Void
 		 */
-		public function clear_cache( $file = '' ) {
+		final public function clear_cache( $file = '' ) {
 			if ( function_exists( 'wp_opcache_invalidate' ) ) :
 				wp_opcache_invalidate( $file );
 			elseif ( function_exists( 'opcache_invalidate' ) ) :
@@ -133,7 +133,7 @@ if ( ! class_exists( 'Markup_Markdown' ) ) :
 		 *
 		 * @return Boolean TRUE if granted or FALSE
 		 */
-		public function user_allowed( $user_id = 0 ) {
+		final public function user_allowed( $user_id = 0 ) {
 			if ( ! $user_id ) :
 				$user_id = get_current_user_id();
 			endif;
@@ -148,6 +148,32 @@ if ( ! class_exists( 'Markup_Markdown' ) ) :
 			endif;
 			return true;
 		}
+
+
+		/**
+		 * Tiny utility to decode json in a custom way
+		 *
+		 * @since 3.17.0
+		 * @access public
+		 *
+		 * @param Boolean TRUE to grant access user with enough premission
+		 *
+		 * @return Boolean TRUE if granted or FALSE
+		 */
+		final public function json_decode( $file, $associative ) {
+			if ( ! isset( $file ) || empty( $file ) ) :
+				return false;
+			endif;
+			$my_data = file_get_contents( $file );
+			if ( ! isset( $my_data ) || empty( $my_data ) ) :
+				return false;
+			endif;
+			if ( substr( $my_data, 0, 3 ) === "\xEF\xBB\xBF" ) :
+		        $my_data = substr( $my_data, 3 );
+			endif;
+			return json_decode( $my_data, ! isset( $associative ) ? false : $associative );
+		}
+
 
 	}
 
