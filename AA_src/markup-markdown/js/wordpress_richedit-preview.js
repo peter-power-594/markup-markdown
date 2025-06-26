@@ -1,4 +1,4 @@
-/* global wp, jQuery, katex, MathJax */
+/* global wp, jQuery, katex, MathJax, mermaid */
 
 /**
  * @preserve The Markup Markdown Preview Module
@@ -76,7 +76,9 @@
 				convertAudio: 'convertAudioShortcode',
 				convertVideo: 'convertVideoShortcode',
 				convertHeading: 'convertHeadingTags',
-				convertLatexFormulas: 'renderLatexSnippets'
+				convertLatexFormulas: 'renderLatexSnippets',
+				convertMermaidFormulas: 'renderMermaidSnippets',
+				convertCodeFences: 'renderCodeFencesSnippets'
 			};
 		return {
 			flushQueue: function() {
@@ -89,7 +91,7 @@
 				}
 				else if ( toolbox && myToolBox[ toolbox ] ) {
 					myQueue.push([ myToolBox[ toolbox ], arg1 || '', arg2 || 0 ]);
-					return '';
+					return toolbox === 'convertCodeFences' ? arg1 : '';
 				}
 			},
 			runQueue: function() {
@@ -773,6 +775,110 @@
 		if ( snippetNode && ! /tmp_ui_ready/.test( snippetNode.className ) ) {
 			snippetNode.className += ' tmp_ui_ready';
 			setTimeout( renderSnippet, 250 );			
+		}
+		return true;
+	};
+
+
+	/**
+	 * Mermaid Snippets rendering
+	 *
+	 * @param {String} wpMermaid The mermaid raw code written in the markdown post
+	 * @param {Integer} formularNumber The number used for the snippet ID in the HTML document
+	 *
+	 * @returns {Boolean} TRUE in case of success or FALSE
+	 */
+	renderEngine.prototype.renderMermaidSnippets = function( wpMermaid, formularNumber ) {
+		var myRenderApp = this,
+			snippetHash = myRenderApp.hashString( wpMermaid ),
+			getSnippetNode = function() {
+				var myNode = $( 'pre[data-pointer="tmp_mermaid-' + formularNumber + '"]' )[ 0 ] || false;
+				return myNode;
+			};
+		if ( tmp_cache && tmp_cache[ snippetHash ] ) {
+			return tmp_cache[ snippetHash ].join( '' );
+		}
+		var mermaidSnippet = wpMermaid.match( /^<[a-z]+[^>]*>([\s\S]+)<\/[a-z]+>$/ );
+		if ( ! mermaidSnippet || ! mermaidSnippet[ 1 ] ) {
+			return false;
+		}
+		var mermaidCode = mermaidSnippet[ 1 ].replace( /<br\s*\/*>/g, '\n' ).replace( /(^\n|\n$)/, '' ),
+			snippetNode = getSnippetNode();
+		if ( ! mermaidCode || ! snippetNode ) {
+			return false;
+		}
+		var renderSnippet = function() {
+			if ( ! snippetNode || ! window.mermaid ) {
+				return false;
+			}
+			var tmp_div = document.createElement( 'div' );
+			tmp_div.setAttribute( 'id', snippetNode.getAttribute( 'id' ) + formularNumber );
+			var mySVG = mermaid.render( tmp_div.id, $( '<textarea></textarea>' ).html( mermaidCode ).text() );
+			mySVG.then(function( result ) {
+				if ( ! tmp_cache[ snippetHash ] ) {
+					tmp_cache[ snippetHash ] = [ result.svg ];
+				}
+				setTimeout(function() {
+					snippetNode.innerHTML = result.svg;
+				}, 50 );
+			}).catch(function( error ) {
+				console.error( 'Mermaid rendering error:', error );
+			});
+		};
+		if ( snippetNode && ! /tmp_ui_ready/.test( snippetNode.className ) ) {
+			snippetNode.className += ' tmp_ui_ready';
+			setTimeout( renderSnippet, 250 );	
+		}
+		return true;
+	};
+
+
+	/**
+	 * Code Snippets rendering
+	 *
+	 * @param {String} wpCodeFences The code fences html will be rendered by Prismjs
+	 * @param {Integer} formularNumber The number used for the snippet ID in the HTML document
+	 *
+	 * @returns {Boolean} TRUE in case of success or FALSE
+	 */
+	renderEngine.prototype.renderCodeFencesSnippets = function( wpCodeFences, formularNumber ) {
+		var myRenderApp = this,
+			snippetHash = myRenderApp.hashString( wpCodeFences ),
+			getSnippetNode = function() {
+				var myNode = $( 'div[data-pointer="tmp_codefences-' + formularNumber + '"]' )[ 0 ] || false;
+				return myNode;
+			};
+		if ( tmp_cache && tmp_cache[ snippetHash ] ) {
+			return tmp_cache[ snippetHash ].join( '' );
+		}
+		var codeSnippet = wpCodeFences.match( /^<pre[^>]*>([\s\S]+)<\/pre>$/ );
+		if ( ! codeSnippet || ! codeSnippet[ 1 ] ) {
+			return false;
+		}
+		var snippetNode = getSnippetNode();
+		if ( ! snippetNode ) {
+			return false;
+		}
+		var retryhighLight = 0,
+			saveHighlighting = function() {
+				if ( ! snippetNode || ! window.Prism ) {
+					return false;
+				}
+				if ( ! snippetNode.firstChild || ! ( snippetNode.firstChild.className || '' ).length ) {
+					retryhighLight++;
+					if ( retryhighLight > 10 ) {
+						return false; // Too many retries, give up
+					}
+					setTimeout( saveHighlighting, 250 );
+					return false;
+				}
+				if ( ! tmp_cache[ snippetHash ] ) {
+					tmp_cache[ snippetHash ] = [ snippetNode.innerHTML ];
+				}
+			};
+		if ( snippetNode && ! /tmp_ui_ready/.test( snippetNode.className ) ) {
+			snippetNode.className += ' tmp_ui_ready';
+			setTimeout( saveHighlighting, 250 );
 		}
 		return true;
 	};

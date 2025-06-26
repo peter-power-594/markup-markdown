@@ -349,7 +349,11 @@ class Support {
 			if ( post_type_supports( get_post_type(), 'markup-markdown' ) || post_type_supports( get_post_type(), 'markup_markdown' ) ) :
 				# Filters removed since 3.8.0
 				remove_filter( 'the_content', 'wpautop' );
+				remove_filter( 'the_content', 'capital_P_dangit', 11 );
+				remove_filter( 'the_content', 'convert_smilies', 20 );
 				remove_filter( 'the_excerpt', 'wpautop' );
+				remove_filter( 'the_excerpt', 'capital_P_dangit', 11 );
+				remove_filter( 'the_excerpt', 'convert_smilies', 20 );
 				$this->load_parser();
 				return apply_filters( 'post_markdown2html', $field_content, $cache_allowed );
 			else :
@@ -491,10 +495,12 @@ class Support {
 				return $block_content;
 			endif;
 			# Reverse autop if enabled
-			$new_content = preg_replace( '#</p>[\n]*<p[^>]*>#', "\n\n", html_entity_decode( $my_block_content[ 2 ][ 0 ] ) );
-			$new_content = preg_replace( '#</p>|<p[^>]*>#', "\n", $new_content );
+			$new_content = preg_replace( '#<pre#', '<tmppre', html_entity_decode( $my_block_content[ 2 ][ 0 ] ) );
+			$new_content = preg_replace( '#</p>[\n]*<p[^>]*>#', "\n\n", $new_content );
+			$new_content = preg_replace( '#</p>|<p[\s]*[^>]*>#', "\n", $new_content );
 			$new_content = preg_replace( '#<br[\s/]*>#', '', $new_content );
 			$new_content = preg_replace( '#\n– #', "\n- ", $new_content );
+			$new_content = preg_replace( '#<tmppre#', '<pre', $new_content );
 			return '<div' . $my_block_content[ 1 ][ 0 ] . '>' . mmd()->markdown2html( $new_content ) . '</div>';
 		endif;
 		return $block_content;

@@ -104,7 +104,8 @@ module.exports = function(grunt) {
 			dist: {
 				src: [
 					'assets/easy-markdown-editor/dist/easymde.min.js',
-					'assets/highlightjs/lib/highlightjs.min.js',
+					'assets/prism/v1/components/prism-core.min.js',
+					'assets/prism/v1/plugins/autoloader/prism-autoloader.min.js',
 					'assets/jquery-waypoints/lib/jquery.waypoints.min.js',
 					'assets/jquery-waypoints/lib/shortcuts/sticky.min.js',
 					'assets/custom-codemirror-spell-checker/dist/spell-checker.min.js',

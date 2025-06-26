@@ -168,11 +168,17 @@ html[dir=rtl] .editor-toolbar {
 		  font-style: italic;
 		}
 	}
+	div[data-pointer] {
+		width: 100%;
+		margin: 0;
+		padding: 1px 0;
+	}
 	pre {
 		margin: 0 0 1.5rem 0;
 		padding: 0.25rem;
 		code {
 		  background: transparent;
+		  display: block;
 		}
 	}
 	table {

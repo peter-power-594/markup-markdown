@@ -219,8 +219,9 @@ class EngineEasyMDE {
 	public function load_engine_stylesheets() {
 		$plugin_uri = mmd()->plugin_uri;
 		wp_enqueue_style( 'markup_markdown__cssengine_editor',  $plugin_uri . 'assets/easy-markdown-editor/dist/easymde.min.css', [], '2.18.1010' );
-		wp_enqueue_style( 'markup_markdown__highlightjs_snippets', $plugin_uri . 'assets/highlightjs/github.css', [ 'markup_markdown__cssengine_editor' ], '8.9.1' );
-		wp_enqueue_style( 'markup_markdown__wordpress_richedit', $plugin_uri . 'assets/markup-markdown/css/wordpress_richedit-easymde.min.css', [ 'markup_markdown__highlightjs_snippets' ], '1.2.4' );
+		# wp_enqueue_style( 'markup_markdown__prism_snippets', $plugin_uri . 'assets/prism/v1/themes/prism.min.css', [ 'markup_markdown__cssengine_editor' ], '1.30.1001' );
+		wp_enqueue_style( 'markup_markdown__prism_theme', $plugin_uri . 'assets/prism/v1/themes/prism-vs.min.css', [ 'markup_markdown__cssengine_editor' ], '1.30.1001' );
+		wp_enqueue_style( 'markup_markdown__wordpress_richedit', $plugin_uri . 'assets/markup-markdown/css/wordpress_richedit-easymde.min.css', [ 'markup_markdown__prism_theme' ], '1.2.5' );
 		wp_enqueue_style( 'markup_markdown__font_awesome_regular', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/regular.min.css', [ 'markup_markdown__wordpress_richedit' ], '5.15.14' );
 		wp_enqueue_style( 'markup_markdown__font_awesome_solid', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/solid.min.css', [ 'markup_markdown__font_awesome_regular' ], '5.15.14' );
 		wp_enqueue_style( 'markup_markdown__font_awesome_icons', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css', [ 'markup_markdown__font_awesome_solid' ], '5.15.14' );
@@ -241,7 +242,8 @@ class EngineEasyMDE {
 		# Debug / Minified version introduced since 3.6
 		if ( ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) || ( defined( 'MMD_SCRIPT_DEBUG' ) && MMD_SCRIPT_DEBUG ) ) :
 			wp_enqueue_script( 'markup_markdown__jsengine_editor', $plugin_uri . 'assets/easy-markdown-editor/dist/easymde.debug.js', [], '2.18.1010', true );
-			wp_enqueue_script( 'markup_markdown__highlightjs_snippets', $plugin_uri . 'assets/highlightjs/lib/highlightjs.min.js', [ 'markup_markdown__jsengine_editor' ], '8.9.1', true );
+			wp_enqueue_script( 'markup_markdown__prism_core', $plugin_uri . 'assets/prism/v1/components/prism-core.js', [ 'markup_markdown__jsengine_editor' ], '1.30.0', true );
+			wp_enqueue_script( 'markup_markdown__prism_autoloader', $plugin_uri . 'assets/prism/v1/plugins/autoloader/prism-autoloader.js', [ 'markup_markdown__prism_core' ], '1.30.0', true );
 			wp_enqueue_script( 'markup_markdown__waypoints', $plugin_uri . 'assets/jquery-waypoints/lib/jquery.waypoints.min.js', [ 'markup_markdown__jsengine_editor' ], '4.0.1', true );
 			wp_enqueue_script( 'markup_markdown__sticky', $plugin_uri . 'assets/jquery-waypoints/lib/shortcuts/sticky.min.js', [ 'markup_markdown__waypoints' ], '4.0.1', true );
 			wp_enqueue_script( 'markup_markdown__codemirror_spellchecker', $plugin_uri . 'assets/custom-codemirror-spell-checker/dist/spell-checker.debug.js', [ 'markup_markdown__sticky' ], '1.1.24', true );
@@ -251,7 +253,8 @@ class EngineEasyMDE {
 			wp_enqueue_script( 'markup_markdown__wordpress_richedit', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-easymde.debug.js', [ 'markup_markdown__wordpress_media' ], '1.6.4', true );
 		elseif ( defined( 'WP_DEBUG' ) && WP_DEBUG ) :
 			wp_enqueue_script( 'markup_markdown__jsengine_editor', $plugin_uri . 'assets/easy-markdown-editor/dist/easymde.min.js', [], '2.18.1010', true );
-			wp_enqueue_script( 'markup_markdown__highlightjs_snippets', $plugin_uri . 'assets/highlightjs/lib/highlightjs.min.js', [ 'markup_markdown__jsengine_editor' ], '8.9.1', true );
+			wp_enqueue_script( 'markup_markdown__prism_core', $plugin_uri . 'assets/prism/v1/compoments/prism-core.min.js', [ 'markup_markdown__jsengine_editor' ], '1.30.0', true );
+			wp_enqueue_script( 'markup_markdown__prism_autoloader', $plugin_uri . 'assets/prism/v1/plugins/autoloader/prism-autoloader.min.js', [ 'markup_markdown__prism_core' ], '1.30.0', true );
 			wp_enqueue_script( 'markup_markdown__waypoints', $plugin_uri . 'assets/jquery-waypoints/lib/jquery.waypoints.min.js', [ 'markup_markdown__jsengine_editor' ], '4.0.1', true );
 			wp_enqueue_script( 'markup_markdown__sticky', $plugin_uri . 'assets/jquery-waypoints/lib/shortcuts/sticky.min.js', [ 'markup_markdown__waypoints' ], '4.0.1', true );
 			wp_enqueue_script( 'markup_markdown__codemirror_spellchecker', $plugin_uri . 'assets/custom-codemirror-spell-checker/dist/spell-checker.min.js', [ 'markup_markdown__sticky' ], '1.1.24', true );
@@ -325,6 +328,7 @@ class EngineEasyMDE {
 		if ( defined( 'MMD_USE_HEADINGS' ) && is_array( MMD_USE_HEADINGS ) && count( MMD_USE_HEADINGS ) > 1 && count( MMD_USE_HEADINGS ) < 6 ) :
 			$js .= "wp.pluginMarkupMarkdown.headingLevels = [ " . implode( ', ', MMD_USE_HEADINGS ) . " ];\n";
 		endif;
+		$js .= "Prism.plugins.autoloader.languages_path = '" . mmd()->plugin_uri . "/assets/prism/v1/components/';\n";
 		return $js;
 	}
 

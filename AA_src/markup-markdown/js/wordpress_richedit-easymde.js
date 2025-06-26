@@ -1,4 +1,4 @@
-/* global wp, mmd_wpr_vars, EasyMDE */
+/* global wp, mmd_wpr_vars, EasyMDE, Prism */
 
 /**
  * @preserve The Markup Markdown's EasyMDE Primary Module
@@ -272,13 +272,16 @@
 			element: $textarea.get( 0 ),
 			toolbar: toolbar,
 			renderingConfig: {
-				codeSyntaxHighlighting: true
+				codeSyntaxHighlighting: false
 			},
 			previewRenderedMarkdown: function( text, preview ) {
 				mediaPreview.flushQueue();
 				text = _self.previewRender( text, preview );
 				setTimeout(function() {
 					mediaPreview.runQueue();
+					if ( window.Prism && typeof window.Prism.highlightAll === 'function' ) {
+						Prism.highlightAll();
+					}
 					$( _win ).trigger( 'resize.mmd_win_sticky_toolbar' );
 				}, 10);
 				return text;
@@ -434,7 +437,7 @@
 			return mediaPreview.processTask( 'convertImage', wpImage, false );
 		});
 		text = text.replace( /<p><figure/, '<figure' ).replace( /<\/figure><\/p>/, '</figure>' );
-		// Render the audio shortcodes
+		// Placeholders for the audio shortcodes
 		var audCounter = 0;
 		text = text.replace( /\[audio([^\]]*)\]\[\/audio\]/g, function( wpAudio ) {
 			return mediaPreview.processTask( 'convertAudio', wpAudio, audCounter++ );
@@ -444,12 +447,26 @@
 		text = text.replace( /\[video([^\]]*)\]\[\/video\]/g, function( wpVideo ) {
 			return mediaPreview.processTask( 'convertVideo', wpVideo, vidCounter++ );
 		});
-		// Render the LaTex formulas
+		// Placeholders for the LaTex formulas
 		var ltxCounter = 0;
 		text = text.replace( /\${1,2}[^\$]+\${1,2}/g, function( wpLatex ) {
 			ltxCounter++;
 			var isBlock = /^\$\$/.test( wpLatex ) ? true : false;
 			return '<span id="' + getRandomNodeID() + '" class="tmp_media tmp_latex tmp_span_' + ( isBlock ? 'block' : 'inline' ) + '" data-pointer="tmp_latex-' + ltxCounter + '">' + mediaPreview.add2Queue( 'convertLatexFormulas', wpLatex, ltxCounter ) + '</span>';
+		});
+		// Placeholders for the Mermaid formulas
+		// @since 3.18
+		var mrmdCounter = 0;
+		text = text.replace( /<[a-z]+ class\=\"mermaid\">[\s\S]+?<\/[a-z]+>/g, function( wpMermaid ) {
+			mrmdCounter++;
+			return '<pre id="' + getRandomNodeID() + '" class="tmp_media tmp_mermaid tmp_span_block" data-pointer="tmp_mermaid-' + mrmdCounter + '">' + mediaPreview.add2Queue( 'convertMermaidFormulas', wpMermaid, mrmdCounter ) + '</pre>';
+		});
+		// Placeholders for Code Fences
+		// @since 3.18
+		var codeCounter = 0;
+		text = text.replace( /<pre><code class\=\".*?\">[\s\S]+?<\/code><\/pre>/g, function( wpCodeFences ) {
+			codeCounter++;
+			return '<div id="' + getRandomNodeID() + '" class="tmp_media tmp_codefences tmp_span_block" data-pointer="tmp_codefences-' + codeCounter + '">' + mediaPreview.add2Queue( 'convertCodeFences', wpCodeFences, codeCounter ) + '</div>';
 		});
 		if ( ! _self.isRendering ) {
 			_self.isRendering = setTimeout(function() {

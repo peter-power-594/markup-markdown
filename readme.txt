@@ -1,7 +1,7 @@
 === Markup Markdown ===
 Tags: Editor, Markdown
-Stable Tag: 3.17.1
-Version: 3.17.1
+Stable Tag: 3.18.1
+Version: 3.18.1
 Requires at least: 4.9
 Tested up to: 6.8.1
 Requires PHP: 5.6.0
@@ -68,6 +68,23 @@ The current version is based on components that are not compatible with assistiv
 
 
 == Changelog ==
+
+= 3.18.1 =
+
+Bug fix:
+- The "Comments", "LaTeX" and "Mermaid" tabs should not be displayed by default with a fresh install as those addons are optional
+
+= 3.18.0 =
+
+Improvements :
+- New addon "Mermaid" released !
+- Switching from Highlight.js to Prism.js on the backend
+
+Bug fixes :
+- Patch a bug with code fences and WP blocks
+- Update a few icons
+- Disable a few unused filters when markdown is enabled
+
 
 = 3.17.1 =
 

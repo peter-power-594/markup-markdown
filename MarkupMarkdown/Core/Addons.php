@@ -66,6 +66,7 @@ class Addons {
 		$this->load_media_image();
 		$this->load_comments();
 		$this->load_latex();
+		$this->load_mermaid();
 		# Kind of usable addons but I wouldn't bet for extensive use
 		$this->load_spellchecker();
 		$this->load_acf();
@@ -148,6 +149,15 @@ class Addons {
 	private function load_latex() {
 		require_once $this->addon_dir  . 'Released/LaTeX.php';
 		$tmp_addon = new \MarkupMarkdown\Addons\Released\Latex();
+		$this->prop[ 'setup' ][] = $tmp_addon->slug;
+		$this->prop[ 'inst' ][ $tmp_addon->slug ] = $tmp_addon;
+		unset( $tmp_addon );
+	}
+
+
+	private function load_mermaid() {
+		require_once $this->addon_dir  . 'Released/Mermaid.php';
+		$tmp_addon = new \MarkupMarkdown\Addons\Released\Mermaid();
 		$this->prop[ 'setup' ][] = $tmp_addon->slug;
 		$this->prop[ 'inst' ][ $tmp_addon->slug ] = $tmp_addon;
 		unset( $tmp_addon );

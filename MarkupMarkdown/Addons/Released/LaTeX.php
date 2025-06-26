@@ -5,7 +5,7 @@ namespace MarkupMarkdown\Addons\Released;
 defined( 'ABSPATH' ) || exit;
 
 
-class Latex {
+final class Latex {
 
 
 	private $prop = array(
@@ -20,7 +20,7 @@ class Latex {
 
 
 	public function __construct() {
-		if ( defined( 'MMD_ADDONS' ) && in_array( $this->prop[ 'slug' ], MMD_ADDONS ) === FALSE ) :
+		if ( ! defined( 'MMD_ADDONS' ) || ( defined( 'MMD_ADDONS' ) && in_array( $this->prop[ 'slug' ], MMD_ADDONS ) === false ) ) :
 			$this->prop[ 'active' ] = 0;
 			return false; # Addon has been desactivated
 		endif;

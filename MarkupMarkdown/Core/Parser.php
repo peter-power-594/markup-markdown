@@ -78,7 +78,7 @@ class Parser {
 				$my_code = isset( $code_blocks[ 2 ][ $id_block ] ) && ! empty( $code_blocks[ 2 ][ $id_block ] ) ? htmlentities( $code_blocks[ 2 ][ $id_block ] ) : '';
 				$final = str_replace( $code_block, '<code' . $my_lang . '>' . $my_code .'</code>', $final );
 			endforeach;
-		endif; 
+		endif;
 		return $final;
 	}
 
