@@ -33,7 +33,7 @@ class DisableEmojis {
 	 * @access public
 	 * @since 3.6.0
 	 *
-	 * @returns Void
+	 * @return Void
 	 */
 	public function disable_front_emojis() {
 		remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
@@ -52,7 +52,7 @@ class DisableEmojis {
 	 * @access public
 	 * @since 3.6.0
 	 *
-	 * @returns Void
+	 * @return Void
 	 */
 	public function disable_back_emojis() {
 		remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
@@ -67,7 +67,7 @@ class DisableEmojis {
 	 * @since 3.6.0
 	 *
 	 * @param Array $plugins  
-	 * @returns Array The difference betwen the two arrays
+	 * @return Array The difference betwen the two arrays
 	 */
 	public function disable_emojis_tinymce( $plugins ) {
 		if ( is_array( $plugins ) ) :
@@ -85,7 +85,7 @@ class DisableEmojis {
 	 *
 	 * @param Array $urls The URLs to print for resource hints.
 	 * @param String $relation_type The relation type the URLs are printed for.
-	 * @returns Array The difference betwen the two arrays.
+	 * @return Array The difference betwen the two arrays.
 	 */
 	public function disable_emojis_remove_dns_prefetch( $urls, $relation_type ) {
 		if ( 'dns-prefetch' == $relation_type ) :

@@ -4,7 +4,7 @@ namespace MarkupMarkdown\Addons\Released\Media;
 
 defined( 'ABSPATH' ) || exit;
 
-class ToolbarEasyMDE {
+final class ToolbarEasyMDE {
 
 
 	protected $prop = array(

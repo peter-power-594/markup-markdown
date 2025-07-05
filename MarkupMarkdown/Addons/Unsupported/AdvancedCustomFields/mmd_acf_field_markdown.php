@@ -2,7 +2,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-class mmd_acf_field_markdown extends \acf_field {
+final class mmd_acf_field_markdown extends \acf_field {
 
 
 	/**

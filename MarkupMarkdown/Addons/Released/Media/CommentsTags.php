@@ -4,7 +4,7 @@ namespace MarkupMarkdown\Addons\Released\Media;
 
 defined( 'ABSPATH' ) || exit;
 
-class CommentsTags {
+final class CommentsTags {
 
 	protected $prop = array(
 		"default_tags" => array(),

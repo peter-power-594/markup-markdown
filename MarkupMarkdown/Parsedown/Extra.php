@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
 #
 #
 
-class Extra extends \MarkupMarkdown\Parsedown\Parsedown
+final class Extra extends \MarkupMarkdown\Parsedown\Parsedown
 {
     # ~
 

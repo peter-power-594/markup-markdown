@@ -188,7 +188,7 @@ class SpellChecker {
 	 * @since 1.9.3
 	 *
 	 * @param Array $my_dict the dictionaries locales list
-	 * @returns Array $my_dict the list updated with different order if need be
+	 * @return Array $my_dict the list updated with different order if need be
 	 */
 	private function check_dict_preferences( $my_dict = [] ) {
 		if ( ! function_exists( 'pll_get_post_language' ) ) : # Polylang Plugin
@@ -235,7 +235,7 @@ class SpellChecker {
 	 * @access public
 	 * @since 1.9.1
 	 *
-	 * @returns string inline easymde configuration tool
+	 * @return string inline easymde configuration tool
 	 */
 	public function add_inline_editor_conf() {
 		$my_dict = $this->check_dict_preferences( defined( 'MMD_SPELL_CHECK' ) ? MMD_SPELL_CHECK : [] );

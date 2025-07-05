@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 require_once mmd()->plugin_dir . '/MarkupMarkdown/Abstracts/OEmbedTinyAPI.php';
 
 
-class Vimeo extends \MarkupMarkdown\Abstracts\OEmbedTinyAPI {
+final class Vimeo extends \MarkupMarkdown\Abstracts\OEmbedTinyAPI {
 
 
 	private $prop = array(
@@ -45,7 +45,7 @@ class Vimeo extends \MarkupMarkdown\Abstracts\OEmbedTinyAPI {
 	 * @since 1.5.3
 	 *
 	 * @param string $content the html to be parsed
-	 * @returns string html with Vimeo iframes embed code
+	 * @return string html with Vimeo iframes embed code
 	 */
 	public function vimeo2html( $content = '' ) {
 		return $this->oembed_service([

@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 require_once mmd()->plugin_dir . '/MarkupMarkdown/Abstracts/OEmbedTinyAPI.php';
 
 
-class Youtube extends \MarkupMarkdown\Abstracts\OEmbedTinyAPI {
+final class Youtube extends \MarkupMarkdown\Abstracts\OEmbedTinyAPI {
 
 
 	private $prop = array(

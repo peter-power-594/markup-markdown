@@ -6,7 +6,7 @@ defined( 'ABSPATH' ) || exit;
 defined( 'MMD_SUPPORT_ENABLED' ) || exit;
 
 
-class Parser {
+final class Parser {
 
 
 	private $parser = '';
@@ -90,7 +90,7 @@ class Parser {
 	 * @since 1.5.4
 	 *
 	 * @param string $content the HTML to be parsed
-	 * @returns string HTML rendered from the markdown
+	 * @return string HTML rendered from the markdown
 	 */
 	public function final_html( $content ) {
 		return apply_filters( 'addon_markdown2html', $this->markdown2html( $content ) );
@@ -126,7 +126,7 @@ class Parser {
 	 * @access private
 	 * @since 1.7.4
 	 *
-	 * @returns Boolean TRUE if the new parser was initialized
+	 * @return Boolean TRUE if the new parser was initialized
 	 * or FALSE in case a parse already exists
 	 */
 	private function custom_parser() {
@@ -166,7 +166,7 @@ class Parser {
 	 * @since 1.0
 	 *
 	 * @param string $content the html to be parsed
-	 * @returns string html rendered from the markdown
+	 * @return string html rendered from the markdown
 	 */
 	public function markdown2html( $content ) {
 		if ( ! isset( $this->parser ) || empty( $this->parser ) ) :

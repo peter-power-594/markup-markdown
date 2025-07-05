@@ -6,7 +6,7 @@ defined( 'ABSPATH' ) || exit;
 ! defined( 'MMD_PLUGIN_ACTIVATED' ) || exit;
 
 
-class Activation {
+final class Activation {
 
 
 	public function __construct() {

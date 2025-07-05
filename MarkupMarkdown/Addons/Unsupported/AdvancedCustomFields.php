@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Registration logic for the new ACF field type.
  */
-class AdvancedCustomFields {
+final class AdvancedCustomFields {
 
 
 	private $prop = array(

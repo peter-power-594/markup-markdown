@@ -5,7 +5,7 @@ namespace MarkupMarkdown\Addons\Released;
 defined( 'ABSPATH' ) || exit;
 
 
-class Layout {
+final class Layout {
 
 
 	private $prop = array(

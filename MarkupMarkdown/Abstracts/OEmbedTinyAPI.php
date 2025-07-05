@@ -20,12 +20,12 @@ abstract class OEmbedTinyAPI {
 	 * @access public
 	 * @since 2.0.0
 	 *
-	 * @param array $ops the options [
+	 * @param Array $ops the options [
 	 *   'content'  => String the content to be parsed
 	 *   'endpoint' => String the target service endpoint
 	 *   'regexp'   => String the regular expression to use
 	 * ]
-	 * @returns string HTML with Vimeo iframes embed code
+	 * @return String HTML with Vimeo iframes embed code
 	 */
 	protected function oembed_service( $ops = [] ) {
 		if ( ! isset( $ops[ 'regexp' ] ) || ! isset( $ops[ 'endpoint' ] ) || ! isset( $ops[ 'content' ] ) || empty( $ops[ 'content' ] ) ) :
@@ -121,9 +121,9 @@ abstract class OEmbedTinyAPI {
 	 * @since 3.14.0
 	 * @access protected
 	 * 
-	 * @param string $content Post content
-	 * @param string $provider_name The oEmbed provider slug
-	 * @return string Updated HTML content
+	 * @param String $content Post content
+	 * @param String $provider_name The oEmbed provider slug
+	 * @return String Updated HTML content
 	 */
 	protected function format_standalone_iframes( $content = '', $provider_name = '' ) {
 		if ( ! isset( $content ) || empty( $content ) ) :
@@ -153,8 +153,8 @@ abstract class OEmbedTinyAPI {
 	 * Format the iframe media retrieved from the target api
 	 * 
 	 * 
-	 * @param array $ops Media options
-	 * @return string Modified HTML contenet
+	 * @param Array $ops Media options
+	 * @return String Modified HTML contenet
 	 */
 	protected function format_medias( $ops ) {
 		$my_content = $ops[ 'content' ];

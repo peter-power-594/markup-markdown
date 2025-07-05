@@ -5,7 +5,7 @@ namespace MarkupMarkdown\Addons\Released;
 defined( 'ABSPATH' ) || exit;
 
 
-class EngineEasyMDE {
+final class EngineEasyMDE {
 
 
 	private $prop = array(
@@ -304,7 +304,7 @@ class EngineEasyMDE {
 	 * @access public
 	 * @since 3.0.0
 	 *
-	 * @returns string inline easymde configuration tool
+	 * @return string inline easymde configuration tool
 	 */
 	public function add_inline_editor_conf() {
 		$home_url = get_home_url() . '/';

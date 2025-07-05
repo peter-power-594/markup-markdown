@@ -4,7 +4,7 @@ namespace MarkupMarkdown\Addons\Released;
 
 defined( 'ABSPATH' ) || exit;
 
-class Debug {
+final class Debug {
 
 
 	private $prop = array(

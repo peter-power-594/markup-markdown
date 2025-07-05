@@ -6,7 +6,7 @@ defined( 'ABSPATH' ) || exit;
 defined( 'MMD_PLUGIN_ACTIVATED' ) || exit;
 
 
-class Support {
+final class Support {
 
 
 	/**

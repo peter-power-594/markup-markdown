@@ -6,7 +6,7 @@ defined( 'ABSPATH' ) || exit;
 defined( 'MMD_PLUGIN_ACTIVATED' ) || exit;
 
 
-class Settings {
+final class Settings {
 
 	/**
 	 * Used when the config file has change
@@ -41,6 +41,8 @@ class Settings {
 			$this->update_config();
 			# Load assets
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_setting_scripts' ) );
+		else:
+			$this->make_conf( FALSE, TRUE );
 		endif;
 	}
 
@@ -51,10 +53,10 @@ class Settings {
 	 * @since 1.7.2
 	 * @access private
 	 *
-	 * @param array $params data as key => val used later as constants
-	 * @param boolean $new to check whether the file already exists
+	 * @param Array $params data as key => val used later as constants
+	 * @param Boolean $new to check whether the file already exists
 	 *
-	 * @returns boolean TRUE if the file already exists or was updated
+	 * @return Boolean TRUE if the file already exists or was updated
 	 */
 	private function make_conf( $params = [], $new = FALSE ) {
 		$conf_file = mmd()->conf_blog_prefix . 'conf.php';
@@ -150,7 +152,7 @@ class Settings {
 	 * @since 2.0.0
 	 * @access public
 	 *
-	 * @returns void
+	 * @return void
 	 */
 	private function setup_options_completed() {
 		if ( $this->updated > -1 ) :

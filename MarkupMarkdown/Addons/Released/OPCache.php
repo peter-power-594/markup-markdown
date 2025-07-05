@@ -5,7 +5,7 @@ namespace MarkupMarkdown\Addons\Released;
 defined( 'ABSPATH' ) || exit;
 
 
-class OPCache {
+final class OPCache {
 
 
 	private $prop = array(

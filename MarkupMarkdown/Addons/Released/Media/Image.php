@@ -6,7 +6,7 @@ defined( 'ABSPATH' ) || exit;
 
 require_once mmd()->plugin_dir . '/MarkupMarkdown/Abstracts/ImageTinyAPI.php';
 
-class Image extends \MarkupMarkdown\Abstracts\ImageTinyAPI {
+final class Image extends \MarkupMarkdown\Abstracts\ImageTinyAPI {
 
 
 	private $prop = array(
