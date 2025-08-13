@@ -16,6 +16,8 @@ class SpellChecker {
 
 	protected $dict_dir = '';
 
+	protected $logs = array();
+
 	/**
 	 * @property Array $dictionaries The languages list for spell checker
 	 * @see https://github.com/titoBouzout/Dictionaries
@@ -260,7 +262,7 @@ class SpellChecker {
 				. ",\n    label: \"" . $lang_label . "\""
 				. ",\n    aff: \"" . $dict_base_uri . md5( $lang_filename ) . ".aff\""
 				. ",\n    dic: \"" . $dict_base_uri . md5( $lang_filename ) . ".dic\"";
-			if ( isset( $this->extra[ $dict ] ) && file_exists( $this->dict_dir . '/' . md5( $lang_filename ) . '_extra.dic' ) ) :
+			if ( isset( $this->extra[ $dict ] ) && mmd()->exists( $this->dict_dir . '/' . md5( $lang_filename ) . '_extra.dic' ) ) :
 				$js .= ",\n    etr: \"" . $dict_base_uri . md5( $lang_filename ) . "_extra.dic\"";
 			endif;
 			$js .= "\n  }";
@@ -290,26 +292,26 @@ class SpellChecker {
 		endif;
 		$dict_dir = $this->dict_dir;
 		$re = 0;
-		if ( file_exists( $dict_dir . '/' . urlencode( $dict_name ) . '.aff' ) ) :
-			$mv = rename( $dict_dir . '/' . urlencode( $dict_name ) . '.aff', $dict_dir . '/' . md5( $dict_name ) . '.aff' );
+		if ( mmd()->exists( $dict_dir . '/' . urlencode( $dict_name ) . '.aff' ) ) :
+			$mv = mmd()->move( $dict_dir . '/' . urlencode( $dict_name ) . '.aff', $dict_dir . '/' . md5( $dict_name ) . '.aff' );
 			if ( ! $mv ) :
-				error_log( "\nWP Markup Markdown: Unable to rename the dictionary file called " . $dict_name . ".aff" );
+				$this->logs[] = 'Unable to rename the dictionary file called ' . $dict_name . '.aff';
 			else :
 				$re++;
 			endif;
 		endif;
-		if ( file_exists( $dict_dir . '/' . urlencode( $dict_name ) . '.dic' ) ) :
-			$mv = rename( $dict_dir . '/' . urlencode( $dict_name ) . '.dic', $dict_dir . '/' . md5( $dict_name ) . '.dic' );
+		if ( mmd()->exists( $dict_dir . '/' . urlencode( $dict_name ) . '.dic' ) ) :
+			$mv = mmd()->move( $dict_dir . '/' . urlencode( $dict_name ) . '.dic', $dict_dir . '/' . md5( $dict_name ) . '.dic' );
 			if ( ! $mv ) :
-				error_log( "\nWP Markup Markdown: Unable to rename the dictionary file called " . $dict_name . ".dic" );
+				$this->logs[] = 'Unable to rename the dictionary file called ' . $dict_name . '.dic';
 			else :
 				$re++;
 			endif;
 		endif;
-		if ( file_exists( $dict_dir . '/' . urlencode( $dict_name ) . '.txt' ) ) :
-			$mv = rename( $dict_dir . '/' . urlencode( $dict_name ) . '.txt', $dict_dir . '/' . md5( $dict_name ) . '.txt' );
+		if ( mmd()->exists( $dict_dir . '/' . urlencode( $dict_name ) . '.txt' ) ) :
+			$mv = mmd()->move( $dict_dir . '/' . urlencode( $dict_name ) . '.txt', $dict_dir . '/' . md5( $dict_name ) . '.txt' );
 			if ( ! $mv ) :
-				error_log( "\nWP Markup Markdown: Unable to rename the dictionary file called " . $dict_name . ".dic" );
+				$this->logs[] = 'Unable to rename the dictionary file called ' . $dict_name . '.dic';
 			else :
 				$re++;
 			endif;
@@ -334,7 +336,7 @@ class SpellChecker {
 			return false;
 		elseif ( ! wp_verify_nonce( $nonce, "spell_checker" ) ) :
 			# Invalide nonce. Might be refresh or cache issue
-			error_log( 'MMD: The spell checker _nonce is not valid' );
+			$this->logs[] = 'The spell checker _nonce is not valid';
 			return false;
 		endif;
 		$dict_id = filter_input( INPUT_GET, 'dict', FILTER_SANITIZE_SPECIAL_CHARS );
@@ -348,12 +350,12 @@ class SpellChecker {
 		$dict_name = $this->dictionaries[ $dict_id ][ 'file_name' ];
 		$dict_dir = $this->dict_dir;
 		$this->check_for_older_names( $dict_name );
-		if ( ! file_exists( $dict_dir . '/' . md5( $dict_name ) . '.aff' ) || ! file_exists( $dict_dir . '/' . md5( $dict_name ) . '.dic' ) ) :
+		if ( ! mmd()->exists( $dict_dir . '/' . md5( $dict_name ) . '.aff' ) || ! mmd()->exists( $dict_dir . '/' . md5( $dict_name ) . '.dic' ) ) :
 			# Dictionary already installed, don't do anything
 			$this->install_dictionary( $dict_name, $dict_dir );
 		endif;
-		if ( isset( $this->extra[ $dic_id ] ) && ! file_exists( $dict_dir . '/' . md5( $dict_name ) . '_extra.dic' ) ) :
-			$this->install_extra( $this->extra[ $dic_id ][ 'file_name' ], $dict_name, $dict_dir );
+		if ( isset( $this->extra[ $dict_id ] ) && ! mmd()->exists( $dict_dir . '/' . md5( $dict_name ) . '_extra.dic' ) ) :
+			$this->install_extra( $this->extra[ $dict_id ][ 'file_name' ], $dict_name, $dict_dir );
 		endif;
 		return true;
 	}
@@ -373,20 +375,20 @@ class SpellChecker {
 		if ( empty( $name ) || empty( $dir ) ) :
 			return false;
 		endif;
-		if ( ! is_dir( $dir ) ) :
-			mkdir( $dir );
-			touch( $dir . '/index.php' );
-			file_put_contents( $dir . '/index.php', "<?php\n// Silence is Gold\n?>", );
+		if ( ! mmd()->exists( $dir ) ) :
+			mmd()->mkdir( $dir );
+			mmd()->touch( $dir . '/index.php' );
+			mmd()->put_contents( $dir . '/index.php', "<?php\n// Silence is Gold\n?>", );
 		endif;
 		$packages = array( 'aff' => 'aff. data', 'dic' => 'dict. data', 'txt' => 'lic. data' );
 		$base = 'https://raw.githubusercontent.com/titoBouzout/Dictionaries/master';
 		foreach ( $packages as $ext => $desc ) :
 			$resp = wp_remote_get( $base . '/' . $name . '.' . $ext  );
 			if ( is_wp_error( $resp ) || ! is_array( $resp ) || ! isset( $resp[ 'body' ] ) ) :
-				error_log( 'WP Markup Markdown: Error while trying to retrieve the ' . $desc . ' for the dictionary ' . $name );
+				$this->logs[] = 'WP Markup Markdown: Error while trying to retrieve the ' . $desc . ' for the dictionary ' . $name;
 				continue;
 			endif;
-			file_put_contents( $dir . '/' . md5( $name ) . '.' . $ext, $resp[ 'body' ] );
+			mmd()->put_contents( $dir . '/' . md5( $name ) . '.' . $ext, $resp[ 'body' ] );
 			unset( $resp ); # Be kind?
 			sleep( 1 ); # With rental server?
 		endforeach;
@@ -413,10 +415,10 @@ class SpellChecker {
 		$base = 'https://raw.githubusercontent.com/peter-power-594/codemirror-spell-checker/dev/src/dict';
 		$resp = wp_remote_get( $base . '/' . $name . '.dic' );
 		if ( is_wp_error( $resp ) || ! is_array( $resp ) || ! isset( $resp[ 'body' ] ) ) :
-			error_log( 'WP Markup Markdown: Error while trying to retrieve the extra data for the dictionary ' . $name );
+			$this->logs[] = 'Error while trying to retrieve the extra data for the dictionary ' . $name;
 			return false;
 		endif;
-		file_put_contents( $dir . '/' . md5( $parent_name ) . '_extra.dic', $resp[ 'body' ] );
+		mmd()->put_contents( $dir . '/' . md5( $parent_name ) . '_extra.dic', $resp[ 'body' ] );
 		unset( $resp );
 		sleep( 1 );
 		return true;
@@ -432,7 +434,7 @@ class SpellChecker {
 	 * @return Void
 	 */
 	public function add_tabmenu() {
-		echo "\t\t\t\t\t\t<li><a href=\"#tab-spellchecker\" class=\"mmd-ico ico-spellcheck\">" . __( 'Spell Checker', 'markup-markdown' ) . "</a></li>\n";
+		echo "\t\t\t\t\t\t<li><a href=\"#tab-spellchecker\" class=\"mmd-ico ico-spellcheck\">" . esc_html__( 'Spell Checker', 'markup-markdown' ) . "</a></li>\n";
 	}
 
 
@@ -450,6 +452,14 @@ class SpellChecker {
 					<div id="tab-spellchecker">
 						<h3><?php esc_html_e( 'Spell Checker', 'markup-markdown' ); ?></h3>
 
+					<?php if ( count( $this->logs ) > 0 ) : ?>
+						<div id="message" class="notice is-dismissible error">
+							<ul>
+								<?php echo wp_kses( '<li>' . implode( '</li><li>', $this->logs ) . '</li>', array( 'li' => array() ) ); ?>
+							</ul>
+							<button type="button" class="notice-dismiss"><span class="screen-reader-text"><?php echo __( 'Dismiss this notice', 'markup-markdown' ); ?></span></button>
+						</div>
+					<?php endif; ?>
 						<p>
 							<?php esc_html_e( 'Dictionaries available from your browser (Firefox, Chrome, Edge, ...) or your operating system (Linux, Macintosh, Windows, etc ...) can\'t be used or accessed as it is, you need to select and install specific dictionaries to be downloaded on your server and used with the markdown editor while you input your text.', 'markup-markdown' ); ?>
 						</p>
@@ -473,7 +483,7 @@ class SpellChecker {
 							1) <em><?php esc_html_e( 'File size matters', 'markup-markdown' ); ?></em>
 						</h4>
 						<p>
-							<?php _e( 'I don\'t recommend to activate more than 2 languages. Please remember that the related files (a few megabytes) will be loaded in the memory of your browser so depending on the weight of the related files AND the specification of your computer, the editor might freeze for a few seconds, especially when accessing the edit screen. Please be gentle and patient... In the worst case well you won\'t be able to use it and will need to disable it. Can\'t do better on my side.', 'markup-markdown' ); ?>
+							<?php esc_html_e( 'I don\'t recommend to activate more than 2 languages. Please remember that the related files (a few megabytes) will be loaded in the memory of your browser so depending on the weight of the related files AND the specification of your computer, the editor might freeze for a few seconds, especially when accessing the edit screen. Please be gentle and patient... In the worst case well you won\'t be able to use it and will need to disable it. Can\'t do better on my side.', 'markup-markdown' ); ?>
 						</p>
 
 						<h4>
@@ -499,31 +509,31 @@ class SpellChecker {
 		$this->check_for_older_names( $dictionary[ 'file_name' ] );
 		$curr_base_filename = $dict_dir . '/' . md5( $dictionary[ 'file_name' ] );
 		echo "\n\t\t\t\t\t\t<tr>";
-		echo "\n\t\t\t\t\t\t\t<th scope=\"row\" class=\"lang-code\">" . $dictionary[ 'code' ] . "</th>";
-		echo "\n\t\t\t\t\t\t\t<th scope=\"row\">" . $dictionary[ 'label' ];
-		if ( file_exists( $curr_base_filename . '.txt' ) ) :
-			echo " (<a href=\"" . $dict_base_uri . md5( $dictionary[ 'file_name' ] ) . ".txt\" target=\"_blank\">Info</a>)";
+		echo "\n\t\t\t\t\t\t\t<th scope=\"row\" class=\"lang-code\">" . esc_html( $dictionary[ 'code' ] ) . "</th>";
+		echo "\n\t\t\t\t\t\t\t<th scope=\"row\">" . esc_html( $dictionary[ 'label' ] );
+		if ( mmd()->exists( $curr_base_filename . '.txt' ) ) :
+			echo " (<a href=\"" . esc_attr( $dict_base_uri . md5( $dictionary[ 'file_name' ] ) ) . ".txt\" target=\"_blank\">Info</a>)";
 		endif;
 		echo "</th>";
-		if ( file_exists( $curr_base_filename . '.dic' ) && file_exists( $curr_base_filename . '.aff' ) ) :
+		if ( mmd()->exists( $curr_base_filename . '.dic' ) && mmd()->exists( $curr_base_filename . '.aff' ) ) :
 			echo "\n\t\t\t\t\t\t\t<td>";
 			$isActive = isset( $my_cnf[ 'spellcheck' ] ) && is_array( $my_cnf[ 'spellcheck' ] ) && in_array( $dict_id, $my_cnf[ 'spellcheck' ] ) ? 1 : 0;
-			echo "\n\t\t\t\t\t\t\t\t<label for=\"mmd_spell_check_" . $dict_id . "\">"
-				. "\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" name=\"mmd_spell_check[]\" id=\"mmd_spell_check_" . $dict_id . "\" value=\"" . $dict_id . "\"" . (  $isActive ? " checked=\"checked\"" : " " ) . "/>"
-				. "\n\t\t\t\t\t\t\t\t\t" . ( $isActive ? __( 'Active', 'markup-markdown' ) : __( 'Active', 'Installed, check to activate', 'markup-markdown' ) );
+			echo "\n\t\t\t\t\t\t\t\t<label for=\"" . esc_attr( 'mmd_spell_check_' . $dict_id ) . "\">"
+				. "\n\t\t\t\t\t\t\t\t\t<input type=\"checkbox\" name=\"mmd_spell_check[]\" id=\"" . esc_attr( 'mmd_spell_check_' . $dict_id ) . "\" value=\"" . esc_attr( $dict_id ) . "\"" . (  $isActive ? " checked=\"checked\"" : " " ) . "/>"
+				. "\n\t\t\t\t\t\t\t\t\t" . ( $isActive ? esc_html__( 'Active', 'markup-markdown' ) : esc_html__( 'Installed, check to activate', 'markup-markdown' ) );
 			echo "\n\t\t\t\t\t\t\t\t</label>";
 			echo "\n\t\t\t\t\t\t\t</td>";
 			echo "\n\t\t\t\t\t\t\t<td>";
 			if ( $isActive ) :
-				echo "\n\t\t\t\t\t\t\t\t<label for=\"mmd_default_" . $dict_id . "\">";
-				echo "\n\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"mmd_default_spell_checker\" id=\"mmd_default_" . $dict_id . "\" value=\"" . $dict_id . "\"";
+				echo "\n\t\t\t\t\t\t\t\t<label for=\"" . esc_attr( 'mmd_default_' . $dict_id ) . "\">";
+				echo "\n\t\t\t\t\t\t\t\t\t<input type=\"radio\" name=\"mmd_default_spell_checker\" id=\"" . esc_attr( 'mmd_default_' . $dict_id ) . "\" value=\"" . esc_attr( $dict_id ) . "\"";
 				if ( array_search( $dict_id, $my_cnf[ 'spellcheck' ] ) === 0 ) :
-					echo " checked=\"checked\" /> " . __( 'Default', 'markup-markdown' );
+					echo " checked=\"checked\" /> " . esc_html__( 'Default', 'markup-markdown' );
 				else :
-					echo " /> " . __( 'Make default', 'markup-markdown' );
+					echo " /> " . esc_html__( 'Make default', 'markup-markdown' );
 				endif;
 				echo "\n\t\t\t\t\t\t\t\t</label>";
-				if ( ! file_exists( $curr_base_filename . '_extra.dic' ) && isset( $this->extra[ $dict_id ] ) ) :
+				if ( ! mmd()->exists( $curr_base_filename . '_extra.dic' ) && isset( $this->extra[ $dict_id ] ) ) :
 					# Trigger here the download othe extra dictionnary
 					$this->install_extra( $this->extra[ $dict_id ][ 'file_name' ], $dictionary[ 'file_name' ], $dict_dir );
 				endif;
@@ -531,7 +541,7 @@ class SpellChecker {
 			echo "\n\t\t\t\t\t\t\t</td>";
 		else :
 			echo "\n\t\t\t\t\t\t\t<td colspan=\"2\">";
-			echo "\n\t\t\t\t\t\t\t\t<a href=\"" . wp_nonce_url( menu_page_url( "markup-markdown-admin", false ), "spell_checker", "_mmd_sc_nonce" ) . "&dict=" . $dict_id . "#tab-spellchecker\">" . __( 'Install', 'markup-markdown' ) . "</a>";
+			echo "\n\t\t\t\t\t\t\t\t<a href=\"" . esc_attr( wp_nonce_url( menu_page_url( "markup-markdown-admin", false ), "spell_checker", "_mmd_sc_nonce" ) . "&dict=" . $dict_id . "#tab-spellchecker" ) . "\">" . esc_html__( 'Install', 'markup-markdown' ) . "</a>";
 		endif;
 		echo "\n\t\t\t\t\t\t\t</td>";
 		echo "\n\t\t\t\t\t\t</tr>";

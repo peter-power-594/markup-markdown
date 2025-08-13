@@ -58,15 +58,15 @@ final class Image extends \MarkupMarkdown\Abstracts\ImageTinyAPI {
 			return FALSE;
 		endif;
 		$this->gutenberg = 1;
-		wp_enqueue_style( 'wp-block-image', '/wp-includes/blocks/image/style.min.css' );
-		wp_enqueue_style( 'wp-block-embed', '/wp-includes/blocks/embed/style.min.css' );
+		wp_enqueue_style( 'wp-block-image', '/wp-includes/blocks/image/style.min.css', array(), get_bloginfo( 'version' ) );
+		wp_enqueue_style( 'wp-block-embed', '/wp-includes/blocks/embed/style.min.css', array(), get_bloginfo( 'version' ) );
 		return TRUE;
 	}
 
 
 	private function parse_img_tags( $content = '' ) {
 		$html_imgs = [];
-		if ( ! preg_match_all( '#<img.*?src="(.*?)"[^>]*>#', $content, $html_imgs ) ) :
+		if ( ! preg_match_all( '#<' . 'img.*?src="(.*?)"[^>]*' . '>#', $content, $html_imgs ) ) :
 			return $content;
 		endif;
 		if ( ! isset( $html_imgs ) || ! isset( $html_imgs[ 0 ] ) || ! is_array( $html_imgs[ 0 ] ) ) :
@@ -114,8 +114,8 @@ final class Image extends \MarkupMarkdown\Abstracts\ImageTinyAPI {
 		endif;
 		if ( empty( $this->asset_cache_dir ) ) :
 			$this->asset_cache_dir = mmd()->cache_dir . '/.assets';
-			if ( ! is_dir( $this->asset_cache_dir ) ) :
-				mkdir( $this->asset_cache_dir );
+			if ( ! mmd()->exists( $this->asset_cache_dir ) ) :
+				mmd()->mkdir( $this->asset_cache_dir );
 			endif;
 		endif;
 		if ( empty( $this->upload_dir ) ) :

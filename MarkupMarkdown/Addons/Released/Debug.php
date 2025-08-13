@@ -38,7 +38,7 @@ final class Debug {
 	 * @return Void
 	 */
 	public function add_tabmenu() {
-		echo "\t\t\t\t\t\t<li><a href=\"#tab-debug\" class=\"mmd-ico ico-file\">" . __( 'Debug', 'markup-markdown' ) . "</a></li>\n";
+		echo "\t\t\t\t\t\t<li><a href=\"#tab-debug\" class=\"mmd-ico ico-file\">" . esc_html__( 'Debug', 'markup-markdown' ) . "</a></li>\n";
 	}
 
 
@@ -53,7 +53,7 @@ final class Debug {
 	public function add_tabcontent() {
 		printf( '<div id="tab-debug">' );
 		$my_tmpl = mmd()->plugin_dir . '/MarkupMarkdown/Addons/Released/Templates/Status.php';
-		if ( file_exists( $my_tmpl ) ) :
+		if ( mmd()->exists( $my_tmpl ) ) :
 			mmd()->clear_cache( $my_tmpl );
 			include $my_tmpl;
 		endif;

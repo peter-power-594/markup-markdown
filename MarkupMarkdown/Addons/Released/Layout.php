@@ -28,7 +28,7 @@ final class Layout {
 		mmd()->default_conf = array( 'MMD_USE_BLOCKSTYLES' => 0 );
 		mmd()->default_conf = array( 'MMD_CUSTOM_TOOLBAR' => 0 );
 		mmd()->default_conf = array( 'MMD_KEEP_SPACES' => 0 );
-		mmd()->default_conf = array( 'MMD_USE_HEADINGS' => [] );
+		mmd()->default_conf = array( 'MMD_USE_HEADINGS' => [ "1", "2", "3", "4", "5", "6" ] );
 		$this->toolbar_conf = mmd()->conf_blog_prefix . 'conf_easymde_toolbar.json';
 		if ( defined( 'MMD_ADDONS' ) && in_array( $this->prop[ 'slug' ], MMD_ADDONS ) === FALSE ) :
 			$this->prop[ 'active' ] = 0;
@@ -86,6 +86,7 @@ final class Layout {
 			endforeach;
 		endif;
 		$my_cnf[ 'keep_spaces' ] = filter_input( INPUT_POST, 'mmd_keepspaces', FILTER_VALIDATE_INT );
+		$my_cnf[ 'super_backslash' ] = filter_input( INPUT_POST, 'mmd_superbackslash', FILTER_VALIDATE_INT );
 		return $my_cnf;
 	}
 	public function create_const( $my_cnf ) {
@@ -100,11 +101,13 @@ final class Layout {
 		$my_cnf[ 'MMD_USE_HEADINGS' ] = isset( $my_cnf[ 'headings' ] ) && count( $my_cnf[ 'headings' ] ) > 1 ? $my_cnf[ 'headings' ] : [];
 		unset( $my_cnf[ 'headings' ] );
 		if ( isset( $my_cnf[ 'toolbar' ] ) > 0 ) :
-			file_put_contents( $this->toolbar_conf, '{"my_buttons":' . json_encode( explode( ",", $my_cnf[ 'toolbar' ] ) ) . '}' );
+			mmd()->put_contents( $this->toolbar_conf, '{"my_buttons":' . json_encode( explode( ",", $my_cnf[ 'toolbar' ] ) ) . '}' );
 			unset( $my_cnf[ 'toolbar' ] );
 		endif;
 		$my_cnf[ 'MMD_KEEP_SPACES' ] = isset( $my_cnf[ 'keep_spaces' ] ) ? $my_cnf[ 'keep_spaces' ] : 0;
 		unset( $my_cnf[ 'keep_spaces' ] );
+		$my_cnf[ 'MMD_SUPER_BACKSLASH' ] = isset( $my_cnf[ 'super_backslash' ] ) ? $my_cnf[ 'super_backslash' ] : 0;
+		unset( $my_cnf[ 'super_backslash' ] );
 		return $my_cnf;
 	}
 
@@ -126,7 +129,7 @@ final class Layout {
 	 * @return Void
 	 */
 	public function add_tabmenu() {
-		echo "\t\t\t\t\t\t<li><a href=\"#tab-layout\" class=\"mmd-ico ico-layout\">" . __( 'Layout', 'markup-markdown' ) . "</a></li>\n";
+		echo "\t\t\t\t\t\t<li><a href=\"#tab-layout\" class=\"mmd-ico ico-layout\">" . esc_html__( 'Layout', 'markup-markdown' ) . "</a></li>\n";
 	}
 
 
@@ -140,11 +143,11 @@ final class Layout {
 	 */
 	public function add_tabcontent() {
 		$conf_file = mmd()->conf_blog_prefix . 'conf.php';
-		if ( file_exists( $conf_file ) ) :
+		if ( mmd()->exists( $conf_file ) ) :
 			require_once $conf_file;
 		endif;
 		$my_tmpl = mmd()->plugin_dir . '/MarkupMarkdown/Addons/Released/Templates/LayoutForm.php';
-		if ( file_exists( $my_tmpl ) ) :
+		if ( mmd()->exists( $my_tmpl ) ) :
 			mmd()->clear_cache( $my_tmpl );
 			$toolbar_conf = $this->toolbar_conf;
 			include $my_tmpl;
@@ -219,18 +222,14 @@ final class Layout {
 	 *
 	 * @param Integer $lightbox_used 1 if the Lightbox framework is used - just for the dependency
 	 *
-	 * @return Integer 1 if the framework is used or 0 if unused
+	 * @return Integer TRUE if the framework was enqueued, FALSE otherwise
 	 */
 	private function load_imagesloaded_framework( $lightbox_used = 0 ) {
-		if ( defined( 'MMD_USE_IMAGESLOADED' ) && MMD_USE_IMAGESLOADED > 0 ) :
-			$plugin_uri = mmd()->plugin_uri;
-			wp_deregister_script( 'imagesloaded' );
-			wp_deregister_script( 'jquery-imagesloaded' );
-			wp_enqueue_script( 'imagesloaded', $plugin_uri . 'assets/imagesloaded/js/imagesloaded.pkgd.min.js', $lightbox_used > 0 ? [ 'lightbox' ] : [], '5.0.0', true );
-			return 1;
-		else :
-			return 0;
+		if ( defined( 'MMD_USE_IMAGESLOADED' ) && MMD_USE_IMAGESLOADED > 0 && ( ! defined( 'MMD_USE_MASONRY' ) || ! MMD_USE_MASONRY ) ) :
+			wp_enqueue_script( 'imagesloaded' );
+			return TRUE;
 		endif;
+		return FALSE;
 	}
 
 
@@ -243,29 +242,27 @@ final class Layout {
 	 * @param Integer $lightbox_used 1 if the Lightbox framework is used - just for the dependency
 	 * @param Integer $imagesloaded_used 1 if the ImagesLoaded framework is used - just for the dependency
 	 *
-	 * @return Integer 1 if the framework is used or 0 if unused
+	 * @return Boolean TRUE if the framework was enqueued, FALSE otherwise
 	 */
 	private function load_masonry_framework( $lightbox_used = 0, $imagesloaded_used = 0 ) {
+		$masonry_used = 0;
 		if ( defined( 'MMD_USE_MASONRY' ) && MMD_USE_MASONRY > 0 ) :
 			if ( is_singular() && get_post_format() === 'gallery' ) :
 				$masonry_used = 1;
 			elseif ( is_archive() || is_category() || is_tag() || is_tax() ) :
 				$masonry_used = 1;
-			else :
-				return 0;
 			endif;
-			wp_deregister_script( 'masonry' );
-			wp_deregister_script( 'jquery-masonry' );
-			$plugin_uri = mmd()->plugin_uri;
-			wp_enqueue_script( 'masonry', $plugin_uri . 'assets/masonry-layout/js/masonry.pkgd.min.js', $imagesloaded_used > 0 ? [ 'imagesloaded' ] : ( $lightbox_used > 0 ? [ 'lightbox' ] : [] ), '4.2.2', true );
-			wp_add_inline_style( 'lightbox', '.lightbox-set { margin: 0 -8px } .grid-sizer, .grid-item { margin: 0 8px 16px 8px; width: calc(50% - 16px) } .grid-item a, .grid-item a img { display: block }' );
-			if ( $imagesloaded_used > 0 ) :
-				wp_add_inline_script( 'masonry', 'jQuery( document ).ready(function() { jQuery( \'.grid\' ).each(function() { var $grid = jQuery( this ); $grid.imagesLoaded().progress(function() { $grid.masonry( \'layout\' ); }); }); });' );
-			endif;
-			return $masonry_used;
-		else :
-			return 0;
 		endif;
+		if ( ! $masonry_used ) :
+			return FALSE;
+		endif;
+		wp_enqueue_script( 'masonry' );
+		wp_enqueue_script( 'jquery-masonry' );
+		if ( $lightbox_used > 0 ) :
+			wp_add_inline_style(  'lightbox', '.lightbox-set { margin: 0 -8px } .grid-sizer, .grid-item { margin: 0 8px 16px 8px; width: calc(50% - 16px) } .grid-item a, .grid-item a img { display: block }' );
+		endif;
+		wp_add_inline_script( 'masonry', 'jQuery( document ).ready(function() { jQuery( \'.grid\' ).each(function() { var $grid = jQuery( this ); $grid.imagesLoaded().progress(function() { $grid.masonry( \'layout\' ); }); }); });' );
+		return TRUE;
 	}
 
 
@@ -279,7 +276,7 @@ final class Layout {
 	 */
 	public function my_plugin_assets() {
 		$config = mmd()->conf_blog_prefix . 'conf.php';
-		if ( ! file_exists( $config ) ) :
+		if ( ! mmd()->exists( $config ) ) :
 			return FALSE;
 		endif;
 		require_once $config;

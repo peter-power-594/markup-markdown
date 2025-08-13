@@ -60,10 +60,10 @@ final class Settings {
 	 */
 	private function make_conf( $params = [], $new = FALSE ) {
 		$conf_file = mmd()->conf_blog_prefix . 'conf.php';
-		if ( $new && file_exists( $conf_file ) ) :
+		if ( $new && mmd()->exists( $conf_file ) ) :
 			return FALSE;
 		endif;
-		touch( $conf_file );
+		mmd()->touch( $conf_file );
 		if ( ! isset( $params ) || ! is_array( $params ) ) :
 			$params = mmd()->default_conf;
 		endif;
@@ -78,7 +78,7 @@ final class Settings {
 			endif;
 		endforeach;
 		$php_code[] = "\n?>";
-		$this->updated = file_put_contents( $conf_file, implode( '', $php_code ) ) > 0 ? 1 : 0;
+		$this->updated = mmd()->put_contents( $conf_file, implode( '', $php_code ) ) ? 1 : 0;
 		mmd()->clear_cache( $conf_file );
 	}
 
@@ -90,12 +90,12 @@ final class Settings {
 			if ( $options_saved === 1 ) :
 				# New settings were saved
 				add_action( 'admin_notices', function() {
-					echo '<div class="updated notice notice-success"><p>' . __( 'Success!' ) . '</p></div>';
+					echo '<div class="updated notice notice-success"><p>' . esc_html__( 'Success!', 'markup-markdown' ) . '</p></div>';
 				});
 			elseif ( $options_saved === 0 ) :
 				# Error while overriding the file
 				add_action( 'admin_notices', function() {
-					echo '<div class="updated notice notice-error"><p>' . __( 'Error while saving the changes.' ) . '</p></div>';
+					echo '<div class="updated notice notice-error"><p>' . esc_html__( 'Error while saving the changes.', 'markup-markdown' ) . '</p></div>';
 				});
 			endif;
 		endif;
@@ -125,8 +125,11 @@ final class Settings {
 		do_action( 'mmd_before_options' );
 ?>
 		<div id="wrap">
-			<h1>Markup Markdown <sup><?php echo mmd()->version; ?></sup> : <?php esc_html_e( 'Settings' ); ?></h1>
-			<p><?php printf( esc_html__( 'Most of the following settings are related to addons. You can globally enable or disable addons from the %1$s screen options %2$s panel.', 'markup-markdown' ), '<a href="#show-settings-link" class="toggler">', '</a>' ); ?></p>
+			<h1>Markup Markdown <sup><?php echo esc_html( mmd()->version ); ?></sup> : <?php esc_html_e( 'Settings', 'markup-markdown' ); ?></h1>
+			<p><?php
+				/* translators: 1: Link opening tag, 2: Link closing tag */
+				printf( esc_html__( 'Most of the following settings are related to addons. You can globally enable or disable addons from the %1$s screen options %2$s panel.', 'markup-markdown' ), '<a href="#show-settings-link" class="toggler">', '</a>' );
+			?></p>
 			<form method="post">
 				<div id="tabs">
 					<ul>
@@ -137,7 +140,7 @@ final class Settings {
 				<p class="submit">
 					<input type="hidden" name="action" value="update">
 					<?php wp_nonce_field( 'update-mmd_settings' ); ?>
-					<input type="submit" name="submit" id="submit" class="button button-primary" value="<?php echo __( 'Update' ); ?>">
+					<input type="submit" name="submit" id="submit" class="button button-primary" value="<?php echo esc_html__( 'Update', 'markup-markdown' ); ?>">
 				</p>
 			</form>
 		</div><!-- .wrap -->
@@ -198,7 +201,7 @@ final class Settings {
 	 * @return Void
 	 */
 	private function mmd_update_screen_options( $submit_button = '' ) {
-		if ( ! $submit_button || empty( $submit_button ) || $submit_button !== __( 'Apply' ) ) :
+		if ( ! $submit_button || empty( $submit_button ) || $submit_button !== esc_html__( 'Apply', 'markup-markdown' ) ) :
 			return FALSE;
 		endif;
 		if ( ! check_admin_referer( 'screen-options-nonce', 'screenoptionnonce' ) ) :
@@ -206,8 +209,8 @@ final class Settings {
 		endif;
 		$my_addons = filter_input( INPUT_POST, 'mmd_addons', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 		$my_cnf_screen = mmd()->conf_blog_prefix . 'conf_screen.php';
-		if ( ! file_exists( $my_cnf_screen ) ) :
-			touch( $my_cnf_screen );
+		if ( ! mmd()->exists( $my_cnf_screen ) ) :
+			mmd()->touch( $my_cnf_screen );
 		endif;
 		$php_code = [ "<?php" ];
 		$php_code[] = "\n\t" . 'defined( \'ABSPATH\' ) || exit;';
@@ -224,7 +227,7 @@ final class Settings {
 				.  ( in_array( 'nopcache', $my_addons ) ? 'false' : 'true' )
 			. ' );'
 			. "\n\t" . 'endif;';
-		if ( file_put_contents( $my_cnf_screen, implode( '', $php_code ) ) ) :
+		if ( mmd()->put_contents( $my_cnf_screen, implode( '', $php_code ) ) ) :
 			mmd()->clear_cache( $my_cnf_screen );
 			$redirect_url = \menu_page_url( 'markup-markdown-admin', false )
 				. '&options_saved=' . ( $this->updated > 0 ? '1' : '0' );
@@ -286,13 +289,13 @@ final class Settings {
 			return $panel;
 		endif;
 		$conf_screen = mmd()->conf_blog_prefix . 'conf_screen.php';
-		if ( file_exists( $conf_screen ) ) :
+		if ( mmd()->exists( $conf_screen ) ) :
 			require_once $conf_screen;
 		endif;
 		$html = '<fieldset class="metabox-prefs">';
-		$html .= '<legend>' . __( 'Addons used', 'markup-markdown' ) . '</legend>';
+		$html .= '<legend>' . esc_html__( 'Addons used', 'markup-markdown' ) . '</legend>';
 		$html .= '<style>.dashicons-mmd-helpers{margin:5px 0 0 5px}.mmd-addon-helper{display:inline}</style>';
-		$html .= '<p>' . __( 'You can manually activate or desactivate specific addons.', 'markup-markdown' ) . ' ' . __( 'Addons marked with <sup>*</sup> should be used with caution.', 'markup-markdown' ) . '</p>';
+		$html .= '<p>' . esc_html__( 'You can manually activate or desactivate specific addons.', 'markup-markdown' ) . ' ' . esc_html__( 'Addons marked with <sup>*</sup> should be used with caution.', 'markup-markdown' ) . '</p>';
 		$html .= '<ul>';
 		foreach ( $this->addons->setup as $slug ) :
 			if ( ! $this->addons->inst[ $slug ] ) :
@@ -322,15 +325,12 @@ final class Settings {
 	 */
 	public function enqueue_setting_scripts() {
 		$plugin_uri = mmd()->plugin_uri;
-		wp_enqueue_style( 'markup_markdown-options', $plugin_uri . '/assets/markup-markdown/css/plugin_options.min.css', [], '1.0.6' );
-		wp_enqueue_style( 'markup_markdown-easymde_editor',  $plugin_uri . 'assets/easy-markdown-editor/dist/easymde.min.css', [], '2.19.102' );
-		wp_enqueue_style( 'markup_markdown-font_awesome_regular', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/regular.min.css', [ 'markup_markdown-easymde_editor' ], '5.15.14' );
-		wp_enqueue_style( 'markup_markdown-font_awesome_solid', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/solid.min.css', [ 'markup_markdown-font_awesome_regular' ], '5.15.14' );
-		wp_enqueue_style( 'markup_markdown-font_awesome_icons', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css', [ 'markup_markdown-font_awesome_solid' ], '5.15.14' );
+		wp_enqueue_style( 'markup_markdown-options', $plugin_uri . '/assets/markup-markdown/css/plugin_options.min.css', [], '1.0.7' );
+		wp_enqueue_style( 'markup_markdown-easymde_editor',  $plugin_uri . 'assets/easy-markdown-editor/dist/easymde.min.css', [], '2.19.1011' );
 		foreach ( [ 'core', 'tabs', 'draggable', 'droppable', 'sortable', 'button' ] as $jq_component ) :
 			wp_enqueue_script( 'jquery-ui-' . $jq_component );
 		endforeach;
-		wp_enqueue_script( 'markup_markdown-options', $plugin_uri . '/assets/markup-markdown/js/plugin_options.min.js', [ 'jquery-ui-tabs' ], '1.0.6', true );
+		wp_enqueue_script( 'markup_markdown-options', $plugin_uri . '/assets/markup-markdown/js/plugin_options.min.js', [ 'jquery-ui-tabs' ], '1.0.7', true );
 	}
 
 

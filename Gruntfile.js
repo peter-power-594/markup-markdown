@@ -32,7 +32,8 @@ module.exports = function(grunt) {
 				'AA_src/markup-markdown/js/wordpress_richedit-easymde.js',
 				'AA_src/markup-markdown/js/wordpress_richedit-media.js',
 				'AA_src/markup-markdown/js/wordpress_richedit-preview.js',
-				'AA_src/markup-markdown/js/wordpress_richedit-spellchecker.js'
+				'AA_src/markup-markdown/js/wordpress_richedit-spellchecker.js',
+				'AA_src/qtranslate-xt/js/bridge.js'
 			]
 		},
 		browserify: {
@@ -76,6 +77,10 @@ module.exports = function(grunt) {
 			builder_spellchecker: {
 				src: 'AA_src/markup-markdown/js/wordpress_richedit-spellchecker.js',
 				dest: 'assets/markup-markdown/js/wordpress_richedit-spellchecker.debug.js'
+			},
+			build_qtranslatebridge: {
+				src: 'AA_src/qtranslate-xt/js/bridge.js',
+				dest: 'assets/qtranslate-xt/js/bridge.debug.js'
 			}
 		},
 		uglify: {
@@ -96,7 +101,8 @@ module.exports = function(grunt) {
 					'assets/advanced-custom-fields/js/field.min.js': 'AA_src/advanced-custom-fields/js/field.js',
 					'assets/bbpress/js/field.min.js': 'AA_src/bbpress/js/field.js',
 					'assets/buddypress/js/field.min.js': 'AA_src/buddypress/js/field.js',
-					'assets/buddypress-docs/js/field.min.js': 'AA_src/buddypress-docs/js/field.js'
+					'assets/buddypress-docs/js/field.min.js': 'AA_src/buddypress-docs/js/field.js',
+					'assets/qtranslate-xt/js/bridge.min.js': 'AA_src/qtranslate-xt/js/bridge.js'
 				}
 			}
 		},

@@ -9,7 +9,7 @@ class CodeBlocks {
 
 
 	public function __construct() {
-		if ( file_exists( WP_PLUGIN_DIR . '/wp-codemirror-block/index.php' ) ) :
+		if ( mmd()->exists( WP_PLUGIN_DIR . '/wp-codemirror-block/index.php' ) ) :
 			define( 'MMD_CODEMIRRORBLOCK_PLUG', true );
 			add_action( 'after_setup_theme', array( $this, 'mmd_wp_codemirror_plug' ) );
 		endif;

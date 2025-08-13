@@ -2,7 +2,6 @@
 (function( _win, $, acf ) {
 
 	function mmd_initialize_field( field ) {
-		console.log( field );
 		if ( ! field || ! _win.MarkupMarkdown || typeof _win.MarkupMarkdown !== "function" ) {
 			return false;
 		}

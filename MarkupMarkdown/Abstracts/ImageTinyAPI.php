@@ -21,8 +21,8 @@ abstract class ImageTinyAPI {
 	 * @access protected
 	 * @link https://gist.github.com/wpscholar/3b00af01863c9dc562e5#file-get-attachment-id-php
 	 * 
-	 * @param string $url
-	 * @return int Attachment ID on success, 0 on failure 
+	 * @param String $url
+	 * @return Integer Attachment ID on success, 0 on failure 
 	 */
 	protected function get_attachment_id( $url ) {
 		if ( strpos( $url, $this->upload_dir[ 'baseurl' ] . '/' ) === false ) :
@@ -60,7 +60,7 @@ abstract class ImageTinyAPI {
 	 * @since 3.14
 	 * @access protected
 	 * 
-	 * @param string $img_src The image source URL
+	 * @param String $img_src The image source URL
 	 * @return Integer The attachment ID
 	 */
 	protected function get_cached_asset_id( $img_src = '' ) {
@@ -70,14 +70,16 @@ abstract class ImageTinyAPI {
 			return 0;
 		endif;
 		$asset_cached_id = $this->asset_cache_dir . '/' . md5( $img_src ) . '.txt';
-		if ( file_exists( $asset_cached_id ) ) :
-			return (int)file_get_contents( $asset_cached_id );
-		endif;
-		$img_src = $this->home_url . str_replace( $this->home_url, '', preg_replace( '#-(\d+)x(\d+)\.(\w+)$#', '.$3', $img_src ) ); # Wordpress images
-		$img_id = $this->get_attachment_id( $img_src );
-		if ( (int)$img_id > 0 ) :
-			touch( $asset_cached_id );
-			file_put_contents( $asset_cached_id, $img_id );
+		$img_id = 0;
+		if ( mmd()->exists( $asset_cached_id ) ) :
+			$img_id = mmd()->get_contents( $asset_cached_id );
+		else :
+			$img_src = $this->home_url . str_replace( $this->home_url, '', preg_replace( '#-(\d+)x(\d+)\.(\w+)$#', '.$3', $img_src ) ); # Wordpress images
+			$img_id = $this->get_attachment_id( $img_src );
+			if ( (int)$img_id > 0 ) :
+				mmd()->touch( $asset_cached_id );
+				mmd()->put_contents( $asset_cached_id, $img_id );
+			endif;
 		endif;
 		return (int)$img_id;
 	}
@@ -89,8 +91,8 @@ abstract class ImageTinyAPI {
 	 * @since 3.14
 	 * @access protected
 	 * 
-	 * @param string|undefined $caption Current image alternative text
-	 * @return array Text used for the image's alternative text and its related caption
+	 * @param String|undefined $caption Current image alternative text
+	 * @return Array Text used for the image's alternative text and its related caption
 	 */
 	protected function check_alt_attribute( $caption ) {
 		if ( ! isset( $caption ) && empty( $caption ) ) :
@@ -116,8 +118,8 @@ abstract class ImageTinyAPI {
 	 * @since 3.14
 	 * @access protected
 	 * 
-	 * @param string
-	 * @return array WP valide align value
+	 * @param String
+	 * @return Array WP valide align value
 	 */
 	protected function check_align_attribute( $align = '' ) {
 		if ( ! isset( $align ) || empty( $align ) ) :
@@ -137,9 +139,9 @@ abstract class ImageTinyAPI {
 	 * @since 3.14
 	 * @access protected
 	 * 
-	 * @param array $width Extracted values of the image's width attribute
-	 * @param string $src Extracted value of the image's source
-	 * @return array Requested width number
+	 * @param Array $width Extracted values of the image's width attribute
+	 * @param String $src Extracted value of the image's source
+	 * @return Array Requested width number
 	 */
 	protected function check_width_attribute( $width = [], $src = '' ) {
 		if ( isset( $width ) && is_array( $width ) && isset( $width[ 1 ] ) && is_numeric( $width[ 1 ] ) && (int)$width[ 1 ] > 0  ) :
@@ -167,9 +169,9 @@ abstract class ImageTinyAPI {
 	 * @since 3.14
 	 * @access protected
 	 * 
-	 * @param array $height Extracted value of the image's height attribute
-	 * @param string $src Extracted value of the image's source
-	 * @return array Requested height number
+	 * @param Array $height Extracted value of the image's height attribute
+	 * @param String $src Extracted value of the image's source
+	 * @return Array Requested height number
 	 */
 	protected function check_height_attribute( $height = [], $src = '' ) {
 		if ( !isset( $height ) && is_array( $height ) && isset( $height[ 1 ] ) && is_numeric( $height[ 1 ] ) && (int)$height[ 1 ] > 0 ) :
@@ -194,11 +196,12 @@ abstract class ImageTinyAPI {
 	/**
 	 * Following latest Gutenberg / Theme specification, the image is wrapped by a *figure* with a *figcaption* if need be
 	 * 
-	 * @param integer $img_id WP Attachment ID
-	 * @param array $img_attrs Image related attribute
-	 * @return string Modified image tag
+	 * @param Integer $img_id WP Attachment ID
+	 * @param Array $img_attrs Image related attribute
+	 * @param String $img_fallback Original img tag as fallback
+	 * @return String Modified image tag
 	 */
-	protected function wrap_image( $img_id = 0, $img_attrs = [] ) {
+	protected function wrap_image( $img_id = 0, $img_attrs = [], $img_fallback = '' ) {
 		if ( ! isset( $img_id ) || ! (int)$img_id || ! isset( $img_attrs ) || ! is_array( $img_attrs ) ) :
 			return '';
 		endif;
@@ -212,10 +215,14 @@ abstract class ImageTinyAPI {
 			$img_caption = trim( $img_attrs[ 'caption' ] );
 			unset( $img_attrs[ 'caption' ] );
 		endif;
+		$img_html = \wp_get_attachment_image( $img_id, $img_size, false, $img_attrs );
+		if ( ( ! isset( $img_html ) || ! $img_html || empty( $img_html ) ) && ( isset( $img_fallback ) && ! empty( $img_fallback ) ) ) :
+			$img_html = function_exists( 'wp_kses_post' ) ? wp_kses_post( $img_fallback ) : '';
+		endif;
 		return '<figure id="attachment_mmd_' . $img_id . '" '
 			. ( ! empty( $img_caption ) ? 'aria-describedby="caption-attachment-mmd' . $img_id . '" class="wp-block-image wp-caption ' : 'class="wp-block-image ' )
 			. ( isset( $img_attrs[ 'align' ] ) ? 'align' . $img_attrs[ 'align' ] : '' )
-			. '">' . \wp_get_attachment_image( $img_id, $img_size, false, $img_attrs )
+			. '">' . $img_html
 			. ( ! empty( $img_caption ) ? '<figcaption id="caption-attachment-mmd' . $img_id . '" class="wp-caption-text wp-element-caption">' . trim( $img_caption ) . '</figcaption>' : '' )
 			. '</figure>';
 	}
@@ -227,9 +234,9 @@ abstract class ImageTinyAPI {
 	 * @since 3.14
 	 * @access protected
 	 * 
-	 * @param string $html Target HTML snippet to parse
-	 * @param string $img_src Image original source
-	 * @return string Modified html image
+	 * @param String $html Target HTML snippet to parse
+	 * @param String $img_src Image original source
+	 * @return String Modified html image
 	 */
 	protected function native_wp_image( $img_id = 0, $img_src = '', $img_html = '' ) {
 		if ( ! isset( $img_id ) || ! (int)$img_id || ! isset( $img_html ) || empty( $img_html ) || ! isset( $img_src ) || empty( $img_src ) ) :
@@ -251,7 +258,7 @@ abstract class ImageTinyAPI {
 		# Check for a height value
 		preg_match( '#height="(.*?)"#', $img_html, $tmp_args );
 		$img_attrs = array_merge( $img_attrs, $this->check_height_attribute( $tmp_args, $img_src ) );
-		$new_img = $this->wrap_image( $img_id, $img_attrs );
+		$new_img = $this->wrap_image( $img_id, $img_attrs, $img_html );
 		return preg_replace( '#<img[^>]+>#', $new_img, $img_html );
 	}
 

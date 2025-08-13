@@ -41,6 +41,16 @@ final class Support {
 	);
 
 
+	/**
+	 * @property Integer $show_post_id
+	 * ID of the post being displayed at the screen
+	 *
+	 * @since 3.20.0
+	 * @access public
+	 */
+	public $show_post_id = 0;
+
+
 	public function __construct() {
 		# Add Support. When possible we let developers take benefit of the default 10 priority
 		add_action( 'init', array( $this, 'add_markdown_support' ) );
@@ -62,7 +72,8 @@ final class Support {
 			# With recent block editors / json theme :
 			# - **get_header** hook is sometimes not fired at all
 			# - **wp_head** hook is fired too late to trigger our custom content filters
-			$this->prepare_proxy_filters(); 
+			$this->prepare_proxy_filters();
+			add_action( 'wp', array( $this, 'prepare_post_parser_filters' ), 9 );
 			add_action( 'mmd_addons_loaded', array( $this, 'add_extra_proxy_filters' ) );
 			# Then check if the request is related to a front page / post.
 			# We need the latest hook wp_head to keep compatibility with plugin like ACF
@@ -148,13 +159,26 @@ final class Support {
 			return $typenow;
 		elseif ( $current_screen && $current_screen->post_type ) :
 			return $current_screen->post_type;
-		elseif ( isset( $_REQUEST[ 'post_type' ] ) ) :
-			return sanitize_key( $_REQUEST[ 'post_type' ] );
-		elseif ( isset( $_REQUEST[ 'post' ] ) && function_exists( 'get_post_type' ) ) :
-			return get_post_type( (int)$_REQUEST[ 'post' ] );
-		else :
-			return NULL;
 		endif;
+		$my_post_type = filter_input( INPUT_GET, 'post_type', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+		if ( isset( $my_post_type ) && ! empty( $my_post_type ) ) :
+			return $my_post_type;
+		endif;
+		$my_post_type = filter_input( INPUT_POST, 'post_type', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+		if ( isset( $my_post_type ) && ! empty( $my_post_type ) ) :
+			return $my_post_type;
+		endif;
+		if ( function_exists( 'get_post_type' ) ) :
+			$my_post = filter_input( INPUT_GET, 'post', FILTER_VALIDATE_INT );
+			if ( isset( $my_post ) && is_numeric( $my_post ) && (int)$my_post > 0 ) :
+				return get_post_type( (int)$my_post );
+			endif;
+			$my_post = filter_input( INPUT_POST, 'post', FILTER_VALIDATE_INT );
+			if ( isset( $my_post ) && is_numeric( $my_post ) && (int)$my_post > 0 ) :
+				return get_post_type( (int)$my_post );
+			endif;
+		endif;
+		return NULL;
 	}
 
 
@@ -259,9 +283,9 @@ final class Support {
 
 	public function clear_post_cache( $post_ID, $post, $update ) {
 		# If a modification was made, we must clear the cache to refresh it
-		$cache_content = WP_CONTENT_DIR . '/mmd-cache/.' . get_current_network_id() . '_' . get_current_blog_id() . '_' . $post_ID . '.html';
-		if ( file_exists( $cache_content ) ) :
-			@unlink( $cache_content );
+		$cache_content = mmd()->cache_blog_prefix . $post_ID . '.html';
+		if ( mmd()->exists( $cache_content ) && function_exists( 'wp_delete_file' ) ) :
+			wp_delete_file( $cache_content );
 		endif;
 		mmd()->clear_cache( $cache_content );
 	}
@@ -345,7 +369,7 @@ final class Support {
 			# @since 3.6.4
 			return $field_content;
 		endif;
-		if ( wp_is_rest_endpoint() || ( is_singular() && is_main_query() ) || ( ( is_home() || is_front_page() || is_singular() || is_archive() ) && in_the_loop() ) ) :
+		if ( wp_is_rest_endpoint() || ( is_singular() && is_main_query() ) || ( ( is_home() || is_front_page() || is_singular() || is_archive() || is_search() ) && in_the_loop() ) ) :
 			if ( post_type_supports( get_post_type(), 'markup-markdown' ) || post_type_supports( get_post_type(), 'markup_markdown' ) ) :
 				# Filters removed since 3.8.0
 				remove_filter( 'the_content', 'wpautop' );
@@ -452,6 +476,23 @@ final class Support {
 	/**
 	 * Prepare in advanced content related filters
 	 *
+	 * @since 3.20.0
+	 * @access public
+	 *
+	 * @return String the content with the backslash used as escaped character for HTML tags and shortcodes	
+	 */
+	public function filter_backslash( $content ) {
+		$content = str_replace( array( '\&lt;', '\<' ), '&lt;', $content );
+		$content = str_replace( array( '\&gt;', '\>' ), '&gt;', $content );
+		$content = str_replace( array( '\&lsqb;', '\[' ), '&lsqb;', $content );
+		$content = str_replace( array( '\&rsqb;', '\]', ), '&rsqb;', $content );
+		return $content;
+	}
+
+
+	/**
+	 * Prepare in advanced content related filters
+	 *
 	 * @since 3.6.4
 	 * @access public
 	 *
@@ -462,8 +503,29 @@ final class Support {
 		add_filter( 'the_excerpt', array( $this, 'post_excerpt_mmd2html' ), 9, 1 );
 		add_filter( 'category_description', array( $this, 'description_field_mmd2html' ), 9, 1 );
 		add_filter( 'term_description', array( $this, 'description_field_mmd2html' ), 9, 1 );
-		add_filter( 'mmd_proxy_filters', array( $this, 'push_proxy_filters' ), 9, 1);
+		add_filter( 'mmd_proxy_filters', array( $this, 'push_proxy_filters' ), 9, 1 );
 		add_filter( 'render_block', array( $this, 'filter_render_block' ), 9, 3 );
+	}
+
+
+	/**
+	 * Additional filters to handle special characters
+	 *
+	 * @since 3.20.0
+	 * @access public
+	 *
+	 * @return Void
+	 */
+	public function prepare_post_parser_filters() {
+		if ( is_singular() ) :
+			$this->show_post_id = (int)get_the_ID();
+		endif;
+		if ( defined( 'MMD_SUPER_BACKSLASH' ) && MMD_SUPER_BACKSLASH ) :
+			add_filter( 'the_content', array( $this, 'filter_backslash' ), 100, 1 );
+			add_filter( 'the_excerpt', array( $this, 'filter_backslash' ), 100, 1 );
+			add_filter( 'category_description', array( $this, 'filter_backslash' ), 100, 1 );
+			add_filter( 'term_description', array( $this, 'filter_backslash' ), 100, 1 );
+		endif;
 	}
 
 
@@ -481,29 +543,41 @@ final class Support {
 	public function filter_render_block( $block_content, $block, $instance ) {
 		if ( ! isset( $block ) || ! isset( $block[ 'blockName' ] ) ) :
 			return $block_content;
-		elseif ( strpos( $block[ 'blockName' ], 'content' ) !== false || strpos( $block[ 'blockName' ], 'excerpt' ) !== false ) :
-			if ( ! isset( $instance->context ) || ! isset( $instance->context[ 'postId' ] ) || ! function_exists( 'get_post_type' ) ) :
-				return $block_content;
-			endif;
-			$my_post_type = get_post_type( $instance->context[ 'postId' ] );
-			if ( ! $this->post_type_support_markdown( $my_post_type ) ) :
-				return $block_content;
-			endif;
-			$my_block_content = array();
-			preg_match_all( '#^<div([^>]+)>(.*?)</div>$#s', $block_content, $my_block_content );
-			if ( ! isset( $my_block_content ) || ! is_array( $my_block_content ) || ! isset( $my_block_content[ 0 ] ) || count( $my_block_content[ 0 ] ) !== 1 ) :
-				return $block_content;
-			endif;
-			# Reverse autop if enabled
-			$new_content = preg_replace( '#<pre#', '<tmppre', html_entity_decode( $my_block_content[ 2 ][ 0 ] ) );
-			$new_content = preg_replace( '#</p>[\n]*<p[^>]*>#', "\n\n", $new_content );
-			$new_content = preg_replace( '#</p>|<p[\s]*[^>]*>#', "\n", $new_content );
-			$new_content = preg_replace( '#<br[\s/]*>#', '', $new_content );
-			$new_content = preg_replace( '#\n– #', "\n- ", $new_content );
-			$new_content = preg_replace( '#<tmppre#', '<pre', $new_content );
-			return '<div' . $my_block_content[ 1 ][ 0 ] . '>' . mmd()->markdown2html( $new_content ) . '</div>';
+		elseif ( strpos( $block[ 'blockName' ], 'content' ) === false && strpos( $block[ 'blockName' ], 'excerpt' ) === false ) :
+			return $block_content;
+		elseif ( ! isset( $instance->context ) || ! isset( $instance->context[ 'postId' ] ) || ! function_exists( 'get_post_type' ) ) :
+			return $block_content;
 		endif;
-		return $block_content;
+		$my_post_type = get_post_type( $instance->context[ 'postId' ] );
+		if ( ! $this->post_type_support_markdown( $my_post_type ) ) :
+			return $block_content;
+		endif;
+		$my_post_ID = (int)$instance->context[ 'postId' ];
+		if ( isset( $this->show_post_id ) && $this->show_post_id > 0 && $this->show_post_id === $my_post_ID ) :
+			return $block_content;
+		endif;
+		$my_block_content = array();
+		preg_match_all( '#^<div([^>]+)>(.*?)</div>$#s', $block_content, $my_block_content );
+		if ( ! isset( $my_block_content ) || ! is_array( $my_block_content ) || ! isset( $my_block_content[ 0 ] ) || count( $my_block_content[ 0 ] ) !== 1 ) :
+			return $block_content;
+		endif;
+		$my_post = get_post( $my_post_ID );
+		if ( ! isset( $my_post ) || ! $my_post ) :
+			return $block_content;
+		endif;
+		$excerpt = strpos( $block[ 'blockName' ], 'excerpt' ) !== false ? true : false;
+		if ( $excerpt ) :
+			$my_post_content = apply_filters( 'field_markdown2html', isset( $my_post->post_excerpt ) && ! empty( $my_post->post_excerpt ) ? $my_post_excerpt : $my_post_content );
+		else :
+			$my_post_content = apply_filters( 'field_markdown2html', $my_post->post_content );
+		endif;
+		if ( defined( 'MMD_SUPER_BACKSLASH' ) && MMD_SUPER_BACKSLASH ) :
+			$my_post_content = $this->filter_backslash( $my_post_content );
+		endif;
+		if ( $excerpt ) :
+			$my_post_content = apply_filters( 'get_the_excerpt', wp_kses( $my_post_content, array( 'p', array( 'class' => true, 'id' => true ) ) ), $my_post_ID );
+		endif;
+		return '<div' . $my_block_content[ 1 ][ 0 ] . '>' . $my_post_content . '</div>';
 	}
 
 

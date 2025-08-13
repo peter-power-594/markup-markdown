@@ -15,7 +15,9 @@ final class Parser {
 
 	private $mmd_allowed = 1;
 
-	private $cache_enabled = 0;
+	public $cache_enabled = 0;
+
+	public $post_cache_dir = '';
 
 	public function __construct() {
 		if ( MMD_SUPPORT_ENABLED > 0 ) :
@@ -42,15 +44,21 @@ final class Parser {
 	 * @return String HTML rendered from the markdown
 	 */
 	private function static_html( $content ) {
+		if ( empty( $this->post_cache_dir ) ) :
+			$this->post_cache_dir = mmd()->cache_dir . '/.posts';
+			if ( ! mmd()->exists( $this->post_cache_dir ) ) :
+				mmd()->mkdir( $this->post_cache_dir );
+			endif;
+		endif;
 		$cache_content = mmd()->cache_blog_prefix . get_the_id() . '.html';
-		if ( $this->preview !== 'true' && file_exists( $cache_content ) ) :
+		if ( $this->preview !== 'true' && mmd()->exists( $cache_content ) ) :
 			# Cache file already exists
-			$my_content = file_get_contents( $cache_content );
+			$my_content = mmd()->get_contents( $cache_content );
 			return $my_content;
 		else :
 			# New cache file
 			$my_content = $this->live_html( $content );
-			file_put_contents( $cache_content, $my_content );
+			mmd()->put_contents( $cache_content, $my_content );
 			return $my_content;
 		endif;
 	}
@@ -172,17 +180,32 @@ final class Parser {
 		if ( ! isset( $this->parser ) || empty( $this->parser ) ) :
 			$this->custom_parser();
 		endif;
-		$safe = preg_replace( '#((<\/\w+>)(<\w+))#', "$2\n$3", isset( $content ) ? $content : '' );
+		$content = isset( $content ) ? $content : '';
+		$safe = preg_replace( '#((<\/\w+>)(<\w+))#', "$2\n$3", $content );
+		$safe = preg_replace( '#\n([^<]+)(<\w+>)#', "\n$1\n$2", $safe );
+		if ( defined( 'MMD_SUPER_BACKSLASH' ) && MMD_SUPER_BACKSLASH ) :
+			$safe = preg_replace( '#\\\\<#', "{-BACKSLASHLT-}", $safe );
+			$safe = preg_replace( '#\\\\>#', "{-BACKSLASHGT-}", $safe );
+			$safe = preg_replace( '#\\\\\[#', "{-BACKSLASHOB-}", $safe );
+			$safe = preg_replace( '#\\\\\]#', "{-BACKSLASHCB-}", $safe );
+		endif;
 		if ( defined( 'MMD_USE_HEADINGS' ) && ! in_array( '1', MMD_USE_HEADINGS ) && ! defined( 'WP_MMD_O2_PLUG' ) ) :
 			$safe = $this->custom_list_filter( $safe );
 		endif;
 		if ( defined( 'MMD_KEEP_SPACES' ) && MMD_KEEP_SPACES > 0 ) : # Since 3.7.1
-			$safe_spaces = preg_replace( '#\n\s#m', "\n{-SPACE-}", $safe );
-			$markdown = $this->parser->text( $safe_spaces );
-			return preg_replace( '#\{-SPACE-\}#', " ", $markdown );
-		else :
-			return $this->parser->text( $safe );
+			$safe = preg_replace( '#\n\s#m', "\n{-SPACE-}", $safe );
 		endif;
+		$markdown = $this->parser->text( $safe );
+		if ( defined( 'MMD_SUPER_BACKSLASH' ) && MMD_SUPER_BACKSLASH ) :
+			$markdown = str_replace( '{-BACKSLASHLT-}', '\&lt;', $markdown );
+			$markdown = str_replace( '{-BACKSLASHGT-}', '\&gt;', $markdown );
+			$markdown = str_replace( '{-BACKSLASHOB-}', '\&lsqb;', $markdown );
+			$markdown = str_replace( '{-BACKSLASHCB-}', '\&rsqb;', $markdown );
+		endif;
+		if ( defined( 'MMD_KEEP_SPACES' ) && MMD_KEEP_SPACES > 0 ) :
+			$markdown = preg_replace( '#\{-SPACE-\}#', " ", $markdown );
+		endif;
+		return $markdown;
 	}
 
 }

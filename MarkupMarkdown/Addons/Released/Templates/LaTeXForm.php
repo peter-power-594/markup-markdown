@@ -54,7 +54,7 @@
 					<br />
 					<label for="mmd_latex_front_id">
 						<?php esc_html_e( 'Specify the ID of an HTML node to parse when a page is loaded. (Parse the whole body by default)', 'markup-markdown' ); ?><br />
-						<input type="text" name="mmd_latex_front_id" id="mmd_latex_front_id" value="<?php echo isset( $my_cnf[ 'latex_front_id' ] ) && ! empty( $my_cnf[ 'latex_front_id' ] ) ? $my_cnf[ 'latex_front_id' ] : ''; ?>" class="regular-text">
+						<input type="text" name="mmd_latex_front_id" id="mmd_latex_front_id" value="<?php echo isset( $my_cnf[ 'latex_front_id' ] ) && ! empty( $my_cnf[ 'latex_front_id' ] ) ? esc_attr( $my_cnf[ 'latex_front_id' ] ) : ''; ?>" class="regular-text">
 					</label>
 				</td>
 			</tr>

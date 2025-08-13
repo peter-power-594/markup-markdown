@@ -19,7 +19,7 @@ class BuddyPressDocs {
 
 
 	public function __construct() {
-		if ( file_exists( WP_PLUGIN_DIR . '/buddypress-docs/bp-docs.php' ) ) :
+		if ( mmd()->exists( WP_PLUGIN_DIR . '/buddypress-docs/bp-docs.php' ) ) :
 			if ( function_exists( 'bp_docs_init' ) ) :
 				define( 'MMD_BUDDYPRESSDOCS_PLUG', true );
 			endif;

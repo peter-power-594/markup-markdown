@@ -18,9 +18,9 @@ final class CommentsTags {
 		if ( empty( $json ) ) :
 			return false;
 		endif;
-		if ( ! file_exists( $json ) ) :
+		if ( ! mmd()->exists( $json ) ) :
 			$this->make_default_tags();
-			file_put_contents( $json, json_encode( $this->prop[ 'default_tags' ] ) );
+			mmd()->put_contents( $json, json_encode( $this->prop[ 'default_tags' ] ) );
 			$this->prop[ 'allowed_tags' ] = $this->prop[ 'default_tags' ];
 		endif;
 		mmd()->clear_cache( $json );

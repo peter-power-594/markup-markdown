@@ -11,115 +11,115 @@ final class ToolbarEasyMDE {
 		"default_buttons" => array(
 			"mmd_pipe" => array(
 				"action"  => "none",
-				"icon"    => "<i class=\"fa fa-pipe\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-pipe"
 			),
 			"mmd_bold" => array(
 				"action"  => "toggleBold",
-				"icon"    => "<i class=\"fa fa-bold\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-bold"
 			),
 			"mmd_italic" => array(
 				"action"  => "toggleItalic",
-				"icon"    => "<i class=\"fa fa-italic\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-italic"
 			),
 			"mmd_strikethrough" => array(
 				"action"  => "toggleStrikethrough",
-				"icon"    => "<i class=\"fa fa-strikethrough\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-strikethrough"
 			),
 			"mmd_heading" => array(
 				"action"  => "toggleHeading",
-				"icon"    => "<i class=\"fa fa-header fa-heading\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-header mmd_fa-heading"
 			),
 			"mmd_heading_smaller" => array(
 				"action"  => "toggleHeadingSmaller",
-				"icon"    => "<i class=\"fa fa-header fa-heading\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-header mmd_fa-heading"
 			),
 			"mmd_heading_bigger" => array(
 				"action"  => "toggleHeadingBigger",
-				"icon"    => "<i class=\"fa fa-lg fa-header fa-heading\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-lg mmd_fa-header mmd_fa-heading"
 			),
 			"mmd_heading_1" => array(
 				"action"  => "toggleHeading1",
-				"icon"    => "<i class=\"fa fa-header fa-heading\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-header mmd_fa-heading"
 			),
 			"mmd_heading_2" => array(
 				"action"  => "toggleHeading2",
-				"icon"    => "<i class=\"fa fa-header fa-heading\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-header mmd_fa-heading"
 			),
 			"mmd_heading_3" => array(
 				"action"  => "toggleHeading3",
-				"icon"    => "<i class=\"fa fa-header fa-heading\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-header mmd_fa-heading"
 			),
 			"mmd_code" => array(
 				"action"  => "toggleCodeBlock",
-				"icon"    => "<i class=\"fa fa-code\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-code"
 			),
 			"mmd_quote" => array(
 				"action"  => "toggleBlockquote",
-				"icon"    => "<i class=\"fa fa-quote-left\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-quote-left"
 			),
 			"mmd_unordered_list" => array(
 				"action"  => "toggleGenericList",
-				"icon"    => "<i class=\"fa fa-list-ul\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-list-ul"
 			),
 			"mmd_ordered_list" => array(
 				"action"  => "toggleOrderedList",
-				"icon"    => "<i class=\"fa fa-list-ol\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-list-ol"
 			),
 			"mmd_clean_block" => array(
 				"action"  => "cleanBlock",
-				"icon"    => "<i class=\"fa fa-eraser\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-eraser"
 			),
 			"mmd_link" => array(
 				"action"  => "drawLink",
-				"icon"    => "<i class=\"fa fa-link\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-link"
 			),
 			"mmd_wpsimage" => array( # image
 				"action"  => "WPLibraryHandler",
-				"icon"    => "<i class=\"fa fa-images\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-images"
 			),
 			"mmd_table" => array(
 				"action"  => "drawTable",
-				"icon"    => "<i class=\"fa fa-table\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-table"
 			),
 			"mmd_horizontal_rule" => array(
 				"action"  => "drawHorizontalRule",
-				"icon"    => "<i class=\"fa fa-minus\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-minus"
 			),
 			"mmd_preview" => array(
 				"action"  => "togglePreview",
-				"icon"    => "<i class=\"fa fa-eye no-disable\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-eye no-disable"
 			),
 			"mmd_side_by_side" => array(
 				"action"  => "toggleSideBySide",
-				"icon"    => "<i class=\"fa fa-columns no-disable no-mobile\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-columns no-disable no-mobile"
 			),
 			"mmd_fullscreen" => array(
 				"action"  => "toggleFullScreen",
-				"icon"    => "<i class=\"fa fa-arrows-alt no-disable no-mobile\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-arrows-alt no-disable no-mobile"
 			),
 			"mmd_guide" => array(
 				"action"  => "This link",
-				"icon"    => "<i class=\"fa fa-question-circle\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-question-circle"
 			),
 			"mmd_undo" => array(
 				"action"  => "undo",
-				"icon"    => "<i class=\"fa fa-undo\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-undo"
 			),
 			"mmd_redo" => array(
 				"action"  => "redo",
-				"icon"    => "<i class=\"fa fa-redo\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-redo"
 			),
 			"mmd_spell_check" => array(
 				"action"  => "spellcheck",
-				"icon"    => "<i class=\"fa fa-globe\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-globe"
 			),
 			"mmd_rtltextdir" => array(
 				"action"  => "textdir",
-				"icon"    => "<i class=\"far fa-caret-square-left\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-caret-square-left"
 			),
 			"mmd_ltrtextdir" => array(
 				"action"  => "textdir",
-				"icon"    => "<i class=\"far fa-caret-square-right\" aria-hidden=\"true\"></i>"
+				"class"    => "mmd_fa mmd_fa-caret-square-right"
 			)
 		),
 		"unused_buttons" => array(),
@@ -130,24 +130,16 @@ final class ToolbarEasyMDE {
 	protected $i18n = array();
 
 
-	private function logger( $str = '' ) {
-		if ( ! empty( $str ) ) :
-			error_log( "\nWP Markup Markdown: " . $str );
-		endif;
-	}
-
-
 	public function __construct( $json = '' ) {
 		if ( empty( $json ) ) :
 			return false;
 		endif;
-		if ( ! file_exists( $json ) ) :
+		if ( ! mmd()->exists( $json ) ) :
 			$toolbar_conf = [ "mmd_bold", "mmd_italic", "mmd_heading", "mmd_spell_check", "mmd_pipe", "mmd_quote", "mmd_unordered_list", "mmd_ordered_list", "mmd_pipe", "mmd_link", "mmd_wpsimage", "mmd_table", "mmd_pipe", "mmd_fullscreen", "mmd_side_by_side", "mmd_preview", "mmd_guide" ];
-			file_put_contents( $json, '{"my_buttons":' . json_encode( $toolbar_conf ) . '}' );
+			mmd()->put_contents( $json, '{"my_buttons":' . json_encode( $toolbar_conf ) . '}' );
 		endif;
 		mmd()->clear_cache( $json );
-		$toolbar_conf = json_decode( file_get_contents( $json ) );
-		$this->logger( ( ! isset( $toolbar_conf ) || ! $toolbar_conf ) ? "Unable to read the json file " . $json : '' );
+		$toolbar_conf = mmd()->json_decode( $json, false );
 		foreach ( $toolbar_conf->my_buttons as $idx => $button_slug ) :
 			if ( strpos( $button_slug, "mmd_" ) === false ) :
 				$toolbar_conf->my_buttons[ $idx ] = "mmd_" . $button_slug;

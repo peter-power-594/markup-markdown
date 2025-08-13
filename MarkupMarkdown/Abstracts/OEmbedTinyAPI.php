@@ -75,10 +75,10 @@ abstract class OEmbedTinyAPI {
 
 	/**
 	 * Wrap iframe media elements with Gutenberg / WordPress styles
-	 * 
+	 *
 	 * @since 3.14.0
 	 * @access protected
-	 * 
+	 *
 	 * @param Object $body The oEmbed API response object
 	 * @param String $provider_name The oEmbed provider slug
 	 * @return Object The oEmbed modified reponse object
@@ -117,10 +117,10 @@ abstract class OEmbedTinyAPI {
 
 	/**
 	 * Trigger the iframe wrapper for standalone iframes
-	 * 
+	 *
 	 * @since 3.14.0
 	 * @access protected
-	 * 
+	 *
 	 * @param String $content Post content
 	 * @param String $provider_name The oEmbed provider slug
 	 * @return String Updated HTML content
@@ -151,8 +151,8 @@ abstract class OEmbedTinyAPI {
 
 	/**
 	 * Format the iframe media retrieved from the target api
-	 * 
-	 * 
+	 *
+	 *
 	 * @param Array $ops Media options
 	 * @return String Modified HTML contenet
 	 */
@@ -170,9 +170,8 @@ abstract class OEmbedTinyAPI {
 			if ( isset( $data->html ) ) :
 				$my_content = preg_replace( "#<a href=\"" . preg_quote( $media[ 'original' ], '#' ) . "\">.*?</a>#u", $data->html, $my_content );
 			elseif ( isset( $data->error ) ) :
-				$error_log = "\nWP Markup Markdown: " . $data->error;
-				error_log( $error_log );
-				$my_content = preg_replace( "#(<a href=\"" . preg_quote( $media[ 'original' ], '#' ) . "\">.*?</a>)#u", '$1' . "\n<!-- " . $error_log . " -->", $my_content );
+				$my_error = "WP Markup Markdown: " . $data->error;
+				$my_content = preg_replace( "#(<a href=\"" . preg_quote( $media[ 'original' ], '#' ) . "\">.*?</a>)#u", '$1' . "\n<!-- " . esc_html( $my_error ) . " -->", $my_content );
 			endif;
 		endforeach;
 		return defined( 'MMD_USE_BLOCKSTYLES' ) && MMD_USE_BLOCKSTYLES ? $this->format_standalone_iframes( $my_content ) : $my_content;

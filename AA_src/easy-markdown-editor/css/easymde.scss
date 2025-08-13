@@ -10,11 +10,13 @@
 		position: relative;
 		&:after{
 			font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-			font-size: 65%;
+			font-size: 10px;
 			vertical-align: bottom;
 			position: relative;
 			top: 0px;
 			line-height: 1;
+		    padding-top: 9px;
+			font-weight: 700;
 		}
 		&.heading-1:after,
 		&.mmd_heading-1:after {
@@ -37,7 +39,9 @@
 			content:"▼";
 		}
 		&.mmd_rtltextdir .fa-caret-square-left:after,
-		&.mmd_ltrtextdir .fa-caret-square-right:after {
+		&.mmd_ltrtextdir .fa-caret-square-right:after,
+		&.mmd_rtltextdir.mmd_fa-caret-square-left:after,
+		&.mmd_ltrtextdir.mmd_fa-caret-square-right:after {
 		/*
 			position: absolute;
 			left: -5px;
@@ -55,24 +59,31 @@
 			color: #3c434a;
 			font-family: sans-serif;
 			font-size: 8px;
+			font-style: normal;
 			font-weight: 400;
 			line-height: 1.2;
 			text-align: center;
 			text-transform: uppercase;
 		}
 		&.mmd_rtltextdir .fas.fa-caret-square-left:after,
-		&.mmd_ltrtextdir .fas.fa-caret-square-right:after {
+		&.mmd_ltrtextdir .fas.fa-caret-square-right:after,
+		&.mmd_rtltextdir.mmd_fas.mmd_fa-caret-square-left:after,
+		&.mmd_ltrtextdir.mmd_fas.mmd_fa-caret-square-right:after {
 			color: #eee;
 			background: #3c434a;
 		}
 		&.mmd_rtltextdir .fa-caret-square-left:before,
-		&.mmd_ltrtextdir .fa-caret-square-right:before {
+		&.mmd_ltrtextdir .fa-caret-square-right:before,
+		&.mmd_rtltextdir.mmd_fa-caret-square-left:before,
+		&.mmd_ltrtextdir.mmd_fa-caret-square-right:before {
 			display: none;
 		} 
-		&.mmd_rtltextdir .fa-caret-square-left:after {
+		&.mmd_rtltextdir .fa-caret-square-left:after,
+		&.mmd_rtltextdir.mmd_fa-caret-square-left:after {
 			content: "RTL";
 		}
-		&.mmd_ltrtextdir .fa-caret-square-right:after {
+		&.mmd_ltrtextdir .fa-caret-square-right:after,
+		&.mmd_ltrtextdir.mmd_fa-caret-square-right:after {
 			content: "LTR";
 		}
 	}

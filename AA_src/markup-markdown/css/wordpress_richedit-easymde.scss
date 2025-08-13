@@ -1,3 +1,5 @@
+@use 'font-awesome-svg.scss' as *;
+
 /* COMMON
  ------------------------------------------ */
 #post-status-info {
@@ -44,7 +46,9 @@
 
 	button {
 		&.preview:last-child,
-		&.guide:last-child {
+		&.guide:last-child,
+		&.mmd_preview:last-child,
+		&.mmd_guide:last-child {
 			margin-left: auto;
 			margin-right: 0;
 		}
@@ -55,7 +59,9 @@
 html[dir=rtl] .editor-toolbar {
 	button {
 		&.preview:last-child,
-		&.guide:last-child {
+		&.guide:last-child,
+		&.mmd_preview:last-child,
+		&.mmd_guide:last-child {
 			margin-left: 0;
 			margin-right: auto;
 		}
@@ -66,17 +72,24 @@ html[dir=rtl] .editor-toolbar {
 	.editor-toolbar {
 		background: #f1f1f1;
 		color: #000;
+		overflow: auto;
 	}
 	button {
+		min-width: none;
+		width: auto;
 		color: #000;
 		&.mmd_rtltextdir .fa-caret-square-left:after,
-		&.mmd_ltrtextdir .fa-caret-square-right:after {
+		&.mmd_ltrtextdir .fa-caret-square-right:after,
+		&.mmd_rtltextdir.mmd_fa-caret-square-left:after,
+		&.mmd_ltrtextdir.mmd_fa-caret-square-right:after {
 			background: transparent;
 			border: 1px solid #000;
 			color: #000;
 		}
-		&.mmd_rtltextdir .fas.fa-caret-square-left:after,
-		&.mmd_ltrtextdir .fas.fa-caret-square-right:after {
+		&.mmd_rtltextdir .fa-caret-square-left:after,
+		&.mmd_ltrtextdir .fa-caret-square-right:after,
+		&.mmd_rtltextdir.mmd_fa-caret-square-left:after,
+		&.mmd_ltrtextdir.mmd_fa-caret-square-right:after {
 			color: #c3c4c7;
 			background: #000;
 		}

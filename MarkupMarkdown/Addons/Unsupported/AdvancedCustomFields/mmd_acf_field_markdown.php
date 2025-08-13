@@ -62,12 +62,12 @@ final class mmd_acf_field_markdown extends \acf_field {
 		 * ```
 		 */
 		$this->l10n = array(
-			'error'	=> __( 'Error! Please enter a higher value', 'TEXTDOMAIN' ),
+			'error'	=> esc_html__( 'Error! Please enter a higher value', 'markup-markdown' ),
 		);
 
 		$this->env = array(
 			'url'     => site_url( str_replace( ABSPATH, '', __DIR__ ) ), // URL to the acf-FIELD-NAME directory.
-			'version' => '1.0.12', // Replace this with your theme or plugin version constant.
+			'version' => '1.0.14', // Replace this with your theme or plugin version constant.
 		);
 
 		parent::__construct();
@@ -124,7 +124,7 @@ final class mmd_acf_field_markdown extends \acf_field {
 		endif;
 		// Display an input field that uses the 'font_size' setting.
 ?><textarea class="wp-editor-area" style="height: 300px" cols="40" name="<?php echo esc_attr( $field[ 'name' ] ); ?>"><?php
-	echo $field[ 'value' ];
+	echo wp_kses_post( $field[ 'value' ] );
 ?></textarea><?php
 	}
 
@@ -139,8 +139,8 @@ final class mmd_acf_field_markdown extends \acf_field {
 		$url     = mmd()->plugin_uri . 'assets/advanced-custom-fields/';
 		$version = $this->env['version'];
 
-		wp_register_script( 'mmd-markupmarkdown', $url . 'js/field.min.js', array( 'acf-input' ), $version );
-		wp_register_style( 'mmd-markupmarkdown', $url . 'css/field.min.css', array( 'acf-input' ), $version );
+		wp_register_script( 'mmd-markupmarkdown', $url . 'js/field.min.js', array( 'acf-input' ), $version, true );
+		wp_register_style( 'mmd-markupmarkdown', $url . 'css/field.min.css', array( 'acf-input' ), $version, true );
 
 		wp_enqueue_script( 'mmd-markupmarkdown' );
 		wp_enqueue_style( 'mmd-markupmarkdown' );

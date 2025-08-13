@@ -21,7 +21,7 @@ class BBPress {
 
 
 	public function __construct() {
-		if ( file_exists( WP_PLUGIN_DIR . '/bbpress/bbpress.php' ) ) :
+		if ( mmd()->exists( WP_PLUGIN_DIR . '/bbpress/bbpress.php' ) ) :
 			if ( function_exists( 'bbpress' ) ) :
 				define( 'MMD_BBPRESS_PLUG', true );
 			endif;

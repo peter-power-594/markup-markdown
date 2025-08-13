@@ -61,7 +61,7 @@ final class Comments {
 	}
 	public function create_json( $my_cnf ) {
 		if ( isset( $my_cnf[ 'comment_tags' ] ) && is_array( $my_cnf[ 'comment_tags' ] ) && count( $my_cnf[ 'comment_tags' ] ) > 0 ) :
-			file_put_contents( $this->comments_tags_conf, json_encode( $my_cnf[ 'comment_tags' ] ) );
+			mmd()->put_contents( $this->comments_tags_conf, json_encode( $my_cnf[ 'comment_tags' ] ) );
 		endif;
 		unset( $my_cnf[ 'comment_tags' ] );
 		return $my_cnf; # Required
@@ -85,7 +85,7 @@ final class Comments {
 	 * @return Void
 	 */
 	public function add_tabmenu() {
-		echo "\t\t\t\t\t\t<li><a href=\"#tab-comments\" class=\"mmd-ico ico-dialog\">" . __( 'Comments' ) . "</a></li>\n";
+		echo "\t\t\t\t\t\t<li><a href=\"#tab-comments\" class=\"mmd-ico ico-dialog\">" . esc_html__( 'Comments', 'markup-markdown' ) . "</a></li>\n";
 	}
 
 
@@ -99,11 +99,11 @@ final class Comments {
 	 */
 	public function add_tabcontent() {
 		$conf_file = mmd()->conf_blog_prefix . 'conf.php';
-		if ( file_exists( $conf_file ) ) :
+		if ( mmd()->exists( $conf_file ) ) :
 			require_once $conf_file;
 		endif;
 		$my_tmpl = mmd()->plugin_dir . '/MarkupMarkdown/Addons/Released/Templates/CommentsForm.php';
-		if ( file_exists( $my_tmpl ) ) :
+		if ( mmd()->exists( $my_tmpl ) ) :
 			$comments_tags_conf = $this->comments_tags_conf;
 			mmd()->clear_cache( $my_tmpl );
 			include $my_tmpl;
@@ -139,7 +139,7 @@ final class Comments {
 		if ( array_key_exists( $name, $this->prop ) ) :
 			return $this->prop[ $name ];
 		elseif ( $name === 'label' ) :
-			return esc_html__( 'Comments' );
+			return esc_html__( 'Comments', 'markup-markdown' );
 		elseif ( $name === 'desc' ) :
 			return esc_html__( 'Use markdown inside your comments', 'markup-markdown' );
 		endif;

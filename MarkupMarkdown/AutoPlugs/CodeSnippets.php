@@ -9,7 +9,7 @@ class CodeSnippets {
 
 
 	public function __construct() {
-		if ( file_exists( WP_PLUGIN_DIR . '/code-snippets/code-snippets.php' ) ) :
+		if ( mmd()->exists( WP_PLUGIN_DIR . '/code-snippets/code-snippets.php' ) ) :
 			$this->init();
 		endif;
 	}

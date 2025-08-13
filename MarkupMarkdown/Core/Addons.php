@@ -20,7 +20,7 @@ final class Addons {
 
 	public function __construct() {
 		$addon_conf = mmd()->conf_blog_prefix . 'conf_screen.php';
-		if ( file_exists( $addon_conf ) ) :
+		if ( mmd()->exists( $addon_conf ) ) :
 			require_once $addon_conf;
 		endif;
 		$this->load_addons();
@@ -64,6 +64,7 @@ final class Addons {
 		$this->load_media_youtube();
 		$this->load_media_vimeo();
 		$this->load_media_image();
+		$this->load_code_highlighter();
 		$this->load_comments();
 		$this->load_latex();
 		$this->load_mermaid();
@@ -131,6 +132,15 @@ final class Addons {
 	private function load_acf() {
 		require_once $this->addon_dir  . 'Unsupported/AdvancedCustomFields.php';
 		$tmp_addon = new \MarkupMarkdown\Addons\Unsupported\AdvancedCustomFields();
+		$this->prop[ 'setup' ][] = $tmp_addon->slug;
+		$this->prop[ 'inst' ][ $tmp_addon->slug ] = $tmp_addon;
+		unset( $tmp_addon );
+	}
+
+
+	private function load_code_highlighter() {
+		require_once $this->addon_dir  . 'Released/CodeHighlighter.php';
+		$tmp_addon = new \MarkupMarkdown\Addons\Released\CodeHighlighter();
 		$this->prop[ 'setup' ][] = $tmp_addon->slug;
 		$this->prop[ 'inst' ][ $tmp_addon->slug ] = $tmp_addon;
 		unset( $tmp_addon );

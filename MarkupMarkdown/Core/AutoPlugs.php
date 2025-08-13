@@ -17,9 +17,9 @@ final class AutoPlugs {
 		'DisableEmojis' => [ 1, 'https://wordpress.org/plugins/disable-emojis/', 'Disable Emojis (GDPR friendly)' ],
 		'FrontendAdmin' => [ 0, 'https://wordpress.org/plugins/acf-frontend-form-element/', 'Frontend Admin by DynamiApps' ],
 		'O2' => [ 0, 'https://github.com/Automattic/o2', 'o2' ],
+		'QTranslateXT' => [ 0, 'https://github.com/qtranslate/qtranslate-xt', 'qTranslate-XT' ],
 		'Woocommerce' => [ 0, 'https://wordpress.org/plugins/woocommerce/', 'WooCommerce' ],
-		'WPCodeBlocks' => [ 0, 'https://wordpress.org/plugins/wp-codemirror-block/', 'CodeMirror Blocks' ],
-		'WPGeshi' => [ 0, 'https://wordpress.org/plugins/wp-geshi-highlight/', 'WP-GeSHi-Highlight' ]
+		'WPCodeBlocks' => [ 0, 'https://wordpress.org/plugins/wp-codemirror-block/', 'CodeMirror Blocks' ]
 	);
 
 
@@ -101,7 +101,7 @@ final class AutoPlugs {
 			$data .= str_replace( [ '{', '}', ':' ], [ '[', ']', '=>' ], $safe_cnf );
 		endif;
 		$data .= ");\n?>";
-		file_put_contents( $cnf_file, $data );
+		mmd()->put_contents( $cnf_file, $data );
 		mmd()->clear_cache( $cnf_file );
 		return $cnf_file;
 	}
@@ -132,7 +132,7 @@ final class AutoPlugs {
 				continue;
 			endif;
 			$curr_plug = $this->autoplug_dir . $slug . '.php';
-			if ( file_exists( $curr_plug ) ) :
+			if ( mmd()->exists( $curr_plug ) ) :
 				require_once $curr_plug;
 			endif;
 		endforeach;
@@ -150,13 +150,13 @@ final class AutoPlugs {
 	 */
 	private function check_plugs() {
 		$plugs_conf_file = mmd()->conf_blog_prefix . 'plugs.php';
-		if ( file_exists( $plugs_conf_file ) ) :
+		if ( mmd()->exists( $plugs_conf_file ) ) :
 			return $plugs_conf_file;
 		endif;
 		$my_plug_cnf = array();
 		foreach ( $this->plugs as $plug_slug => $plug_setting ) :
 			$curr_plug = $this->autoplug_dir . $plug_slug . '.php';
-			if ( ! file_exists( $curr_plug ) ) :
+			if ( ! mmd()->exists( $curr_plug ) ) :
 				$my_plug_cnf[ $plug_slug ] = 0;
 				continue;
 			endif;
@@ -197,7 +197,7 @@ final class AutoPlugs {
 	 * @return Void
 	 */
 	public function add_tabmenu() {
-		echo "\t\t\t\t\t\t<li><a href=\"#tab-plugs\" class=\"mmd-ico ico-plug\">" . __( 'Autoplugs', 'markup-markdown' ) . "</a></li>\n";
+		echo "\t\t\t\t\t\t<li><a href=\"#tab-plugs\" class=\"mmd-ico ico-plug\">" . esc_html__( 'Autoplugs', 'markup-markdown' ) . "</a></li>\n";
 	}
 
 
@@ -211,11 +211,11 @@ final class AutoPlugs {
 	 */
 	public function add_tabcontent() {
 		$conf_file = mmd()->conf_blog_prefix . 'plugs.php';
-		if ( file_exists( $conf_file ) ) :
+		if ( mmd()->exists( $conf_file ) ) :
 			require_once $conf_file;
 		endif;
 		$my_tmpl = mmd()->plugin_dir . '/MarkupMarkdown/AutoPlugs/Templates/PlugsForm.php';
-		if ( file_exists( $my_tmpl ) ) :
+		if ( mmd()->exists( $my_tmpl ) ) :
 			$default_plugs = $this->plugs;
 			mmd()->clear_cache( $my_tmpl );
 			include $my_tmpl;

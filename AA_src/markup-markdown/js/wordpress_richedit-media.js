@@ -72,6 +72,16 @@
 	};
 
 
+	MmdMedia.prototype.shortURL = function( myURL ) {
+		var _self = this;
+		myURL = ( myURL || '' ).replace( _self.base_url, '' );
+		if ( myURL.charAt( 0 ) !== '/' && myURL.indexOf( 'http' ) === -1 ) {
+			myURL = '/' + myURL;
+		}
+		return myURL;
+	};
+
+
 	MmdMedia.prototype.addMediaFromWidget = function( frameState, callback ) {
 		var _self = this,
 			myFrameState = frameState ? frameState : false;
@@ -140,10 +150,7 @@
 		if ( dpy.size && att.sizes[ dpy.size ] ) {
 			url = att.sizes[ dpy.size ].url;
 		}
-		url = url.replace( _self.base_url, '' );
-		if ( url.charAt( 0 ) !== '/' && url.indexOf( 'http' ) === -1 ) {
-			url = '/' + url;
-		}
+		url = _self.shortURL( url );
 		// Standard markdown image:
 		// ![Alternative text](/images/thumb.png)
 		mkd = '![' + alt + ( cap && cap.length ? ' -- ' + cap.replace( /\r|\n/, '' ) : '' ) + '](' + url + ')';
@@ -159,15 +166,11 @@
 			mkd = '[' + mkd + ']';
 			if ( dpy.link === 'custom' ) {
 				if ( dpy.linkUrl && dpy.linkUrl.length ) {
-					dpy.linkUrl = dpy.linkUrl.replace( _self.base_url, '' );
-					if ( dpy.linkUrl.charAt( 0 ) !== '/' && dpy.linkUrl.indexOf( 'http' ) === -1 ) {
-						dpy.linkUrl = '/' + dpy.linkUrl;
-					}
-					mkd += '(' + dpy.linkUrl;
+					mkd += '(' + _self.shortURL( dpy.linkUrl );
 				}
 			}
 			else {
-				mkd += '(' + ( dpy.link === 'file' ? url : att.link );
+				mkd += '(' + _self.shortURL( dpy.link === 'file' ? att.url : att.link );
 			}
 			if ( dpy.multiple && dpy.multiple > 0 ) {
 				mkd += ' "myset%d ' + ( att.title && att.title.length && /[\w]+[^\w]/.test( att.title ) ? att.title : '' ) + '")';

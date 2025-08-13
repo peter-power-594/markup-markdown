@@ -12,20 +12,26 @@
 	foreach( MMD_AUTOPLUGS as $slug => $active ) :
 		$slug_class = esc_attr( strtolower( $slug ) );
 ?>
-			<tr class="site-plug-<?php echo $slug_class; ?>">
+			<tr class="<?php echo esc_attr( 'site-plug-' . $slug_class ); ?>">
 				<th scope="row">
 				<?php
 					if ( isset( $default_plugs ) && isset( $default_plugs[ $slug ] ) && is_array( $default_plugs[ $slug ] ) ) :
-						echo '<a href="' . esc_attr( $default_plugs[ $slug ][ 0 ] ) . '" target="_blank" rel="nofollow">' . esc_html( isset( $default_plugs[ $slug ][ 2 ] ) ? $default_plugs[ $slug ][ 2 ] : $default_plugs[ $slug ][ 1 ] )  . '</a>';
+						if ( isset( $default_plugs[ $slug ][ 2 ] ) ) :
+							echo '<a href="' . esc_attr( $default_plugs[ $slug ][ 1 ] ) . '" target="_blank" rel="nofollow">' . esc_html( $default_plugs[ $slug ][ 2 ] )  . '</a>';
+						elseif ( isset( $default_plugs[ $slug ][ 1 ] ) ) :
+							echo esc_html( $default_plugs[ $slug ][ 1 ] );
+						else:
+							echo esc_html( $slug );
+						endif;
 					else:
 						echo esc_html( $slug );
 					endif;
 				?>
 				</th>
 				<td>
-					<label for="mmd_plug_<?php echo $slug_class; ?>">
-						<input type="checkbox" name="mmd_plugs[]" id="mmd_plug_<?php echo $slug_class; ?>" value="<?php esc_html_e( $slug ); ?>" <?php echo isset( $active ) && (int)$active > 0  ? 'checked="checked"' : ''; ?> />
-						<?php esc_html_e( 'Activated' ); ?>
+					<label for="<?php echo esc_attr( 'mmd_plug_' . $slug_class ); ?>">
+						<input type="checkbox" name="mmd_plugs[]" id="mmd_plug_<?php echo esc_attr( $slug_class ); ?>" value="<?php echo esc_attr( $slug ); ?>" <?php echo isset( $active ) && (int)$active > 0  ? 'checked="checked"' : ''; ?> />
+						<?php esc_html_e( 'Activated', 'markup-markdown' ); ?>
 					</label>
 				</td>
 			</tr>

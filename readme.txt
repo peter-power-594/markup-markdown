@@ -1,9 +1,9 @@
 === Markup Markdown ===
 Tags: Editor, Markdown
-Stable Tag: 3.18.2
-Version: 3.18.2
+Stable Tag: 3.20.5
+Version: 3.20.5
 Requires at least: 4.9
-Tested up to: 6.8.1
+Tested up to: 6.8
 Requires PHP: 5.6.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html#license-text
@@ -68,6 +68,58 @@ The current version is based on components that are not compatible with assistiv
 
 
 == Changelog ==
+
+= 3.20.5 =
+
+Bug fixes:
+- Patching media metadata null (missing image) with animated webp
+- Adding search template to the markdown filters
+- Updating rendering blocks filters for widgets located in the header / footer /sidebar by themes built for Gutenberg
+
+= 3.20.2 =
+
+Bug fix:
+- Fixing wrong link when inserting media files
+
+= 3.20.1 =
+
+Bug fixes:
+- Patch wrong cache config patch
+- Prefix cache variables can't be overriden anymore
+
+= 3.20.0 =
+
+Improvement:
+- Possible to use the backslash character
+
+Bug fix:
+- Gutenberg render block filter excluded with current post
+
+= 3.19.1 =
+
+Bug fixes:
+- Fixing wrong permission with cache folders
+- Bumping the revision number of a few assets
+
+= 3.19.0 =
+
+Improvements:
+- New autoplug for the plugin QTranslate XT
+- New addon to enable Prismjs syntax highlighting
+- PCP security check passed !
+
+Following recommendations :
+1. Missing escaping functions like `esc_html`, `esc_attr`, and `wp_kses` were added
+2. Unecessary `error_log` and `console.log` were removed
+3. `masonry` and `imagesloaded` dependencies were removed in favor of the ones bundled with WordPress
+4. External `FontAwesome` dependencies were removed in favor of SVG icons
+5. Migrated to WordPress file system methods `exists`, `get_contents`, `mkdir`, `move`, `put_contents`, and `touch` when working with files
+6. All translations were unified with the domain `markup_markdown`
+
+Bug Fixes:
+- Missing link in the autoplug tab
+- Patching a few wrong urls when debug mode was enabled
+- Fixing multiples pipes showing on the toolbar when custom buttons were added
 
 = 3.18.2 =
 

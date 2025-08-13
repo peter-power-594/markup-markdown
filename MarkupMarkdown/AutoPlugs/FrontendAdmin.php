@@ -39,7 +39,7 @@ class FrontendAdmin {
 		$base_dir = mmd()->plugin_uri . 'assets/acf-frontend-form-element/';
 		$ver = $this->env[ 'version' ];
 		# Register and enqueue the plug's script
-		wp_register_script( 'mmd-acf-frontendform', $base_dir . 'js/field.min.js', array( 'jquery' ), $ver );
+		wp_register_script( 'mmd-acf-frontendform', $base_dir . 'js/field.min.js', array( 'jquery' ), $ver, true );
 		wp_enqueue_script( 'mmd-acf-frontendform' );
 		# Register and enqueue the plug's stylesheet
 		wp_register_style( 'mmd-acf-frontendform', $base_dir . 'css/field.min.css', array(), $ver );

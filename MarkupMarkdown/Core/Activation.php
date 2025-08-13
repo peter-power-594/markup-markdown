@@ -24,13 +24,13 @@ final class Activation {
 		$this->prepare_cache();
 		# Get the otions
 		$addon_options = mmd()->conf_blog_prefix . 'conf.php';
-		if ( file_exists( $addon_options ) ) :
+		if ( mmd()->exists( $addon_options ) ) :
 			require_once $addon_options;
 		endif;
 		$core_dir = mmd()->plugin_dir . '/MarkupMarkdown/Core/';
 		# Load the conf.
 		$active_addons = mmd()->conf_blog_prefix . 'conf_screen.php';
-		if ( file_exists( $active_addons ) ) :
+		if ( mmd()->exists( $active_addons ) ) :
 			# If not present, wait for the addons to be loaded !
 			require_once $active_addons;
 		endif;
@@ -60,7 +60,7 @@ final class Activation {
 		if ( 'markup-markdown' === $domain ) :
 			$locale = apply_filters( 'plugin_locale', determine_locale(), $domain );
 			$new_mofile = mmd()->plugin_dir . 'languages/' . $domain . '-' . $locale . '.mo';
-			if ( $new_mofile !== $mofile && file_exists( $new_mofile ) ) :
+			if ( $new_mofile !== $mofile && mmd()->exists( $new_mofile ) ) :
 				return $new_mofile;
 			endif;
 		endif;
@@ -95,13 +95,13 @@ final class Activation {
 	private function prepare_cache() {
 		$mmd_folders = array( mmd()->conf_dir, mmd()->cache_dir );
 		foreach( $mmd_folders as $my_folder ) :
-			if ( is_dir( $my_folder ) ) :
+			if ( mmd()->exists( $my_folder ) ) :
 				continue;
 			endif;
-			mkdir( $my_folder );
-			if ( ! file_exists( $my_folder . '/index.php' ) ) :
-				touch( $my_folder . '/index.php' );
-				file_put_contents( $my_folder . '/index.php', '<?php /* Silence is gold */ ?>' );
+			mmd()->mkdir( $my_folder );
+			if ( ! mmd()->exists( $my_folder . '/index.php' ) ) :
+				mmd()->touch( $my_folder . '/index.php' );
+				mmd()->put_contents( $my_folder . '/index.php', '<?php /* Silence is gold */ ?>' );
 			endif;
 		endforeach;
 		return $this->make_default_conf( get_current_network_id(), get_current_blog_id() );
@@ -123,8 +123,8 @@ final class Activation {
 		$conf_files = array( 'conf.php', 'conf_screen.php', 'conf_easymde_toolbar.json' );
 		$file_prefix = '1_1_';
 		foreach( $conf_files as $my_conf_file ) :
-			if ( file_exists( mmd()->cache_dir . '/' . $my_conf_file ) ):
-				rename( mmd()->cache_dir . '/' . $my_conf_file, mmd()->conf_dir . '/' . $file_prefix . $my_conf_file );
+			if ( mmd()->exists( mmd()->cache_dir . '/' . $my_conf_file ) ):
+				mmd()->move( mmd()->cache_dir . '/' . $my_conf_file, mmd()->conf_dir . '/' . $file_prefix . $my_conf_file );
 			endif;
 		endforeach;
 		return true;
@@ -143,13 +143,13 @@ final class Activation {
 	 */
 	private function make_default_conf( $curr_network_id = 1, $curr_blog_id = 1) {
 		$conf_file = mmd()->conf_dir . '/' . $curr_network_id . '_' . $curr_blog_id . '_conf.php';
-		if ( file_exists( $conf_file ) ) :
+		if ( mmd()->exists( $conf_file ) ) :
 			return true;
 		endif;
 		if ( $curr_network_id === 1 && $curr_blog_id === 1 && $this->migrate_conf( mmd()->ver ) ) :
 			return true;
 		endif;
-		touch( $conf_file );
+		mmd()->touch( $conf_file );
 		$params = mmd()->default_conf;
 		$php_code = [ "<?php" ];
 		$php_code[] = "\n\tdefined( 'ABSPATH' ) || exit;";
@@ -157,7 +157,7 @@ final class Activation {
 			$php_code[] = "\n\tdefine( '" . $const . "', " . ( is_integer( $val ) ? $val : (int)$val ) . " );";
 		endforeach;
 		$php_code[] = "\n?>";
-		return file_put_contents( $conf_file, implode( '', $php_code ) ) > 0 ? true : false;
+		return mmd()->put_contents( $conf_file, implode( '', $php_code ) ) > 0 ? true : false;
 	}
 
 

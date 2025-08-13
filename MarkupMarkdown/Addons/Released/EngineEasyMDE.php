@@ -218,13 +218,9 @@ final class EngineEasyMDE {
 	 */
 	public function load_engine_stylesheets() {
 		$plugin_uri = mmd()->plugin_uri;
-		wp_enqueue_style( 'markup_markdown__cssengine_editor',  $plugin_uri . 'assets/easy-markdown-editor/dist/easymde.min.css', [], '2.18.1010' );
-		# wp_enqueue_style( 'markup_markdown__prism_snippets', $plugin_uri . 'assets/prism/v1/themes/prism.min.css', [ 'markup_markdown__cssengine_editor' ], '1.30.1001' );
+		wp_enqueue_style( 'markup_markdown__cssengine_editor',  $plugin_uri . 'assets/easy-markdown-editor/dist/easymde.min.css', [], '2.18.1011' );
 		wp_enqueue_style( 'markup_markdown__prism_theme', $plugin_uri . 'assets/prism/v1/themes/prism-vs.min.css', [ 'markup_markdown__cssengine_editor' ], '1.30.1001' );
-		wp_enqueue_style( 'markup_markdown__wordpress_richedit', $plugin_uri . 'assets/markup-markdown/css/wordpress_richedit-easymde.min.css', [ 'markup_markdown__prism_theme' ], '1.2.5' );
-		wp_enqueue_style( 'markup_markdown__font_awesome_regular', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/regular.min.css', [ 'markup_markdown__wordpress_richedit' ], '5.15.14' );
-		wp_enqueue_style( 'markup_markdown__font_awesome_solid', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/solid.min.css', [ 'markup_markdown__font_awesome_regular' ], '5.15.14' );
-		wp_enqueue_style( 'markup_markdown__font_awesome_icons', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css', [ 'markup_markdown__font_awesome_solid' ], '5.15.14' );
+		wp_enqueue_style( 'markup_markdown__wordpress_richedit', $plugin_uri . 'assets/markup-markdown/css/wordpress_richedit-easymde.min.css', [ 'markup_markdown__prism_theme' ], '1.2.6' );
 		do_action( 'mmd_load_engine_stylesheets' );
 	}
 
@@ -241,29 +237,29 @@ final class EngineEasyMDE {
 		$plugin_uri = mmd()->plugin_uri;
 		# Debug / Minified version introduced since 3.6
 		if ( ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) || ( defined( 'MMD_SCRIPT_DEBUG' ) && MMD_SCRIPT_DEBUG ) ) :
-			wp_enqueue_script( 'markup_markdown__jsengine_editor', $plugin_uri . 'assets/easy-markdown-editor/dist/easymde.debug.js', [], '2.18.1010', true );
+			wp_enqueue_script( 'markup_markdown__jsengine_editor', $plugin_uri . 'assets/easy-markdown-editor/dist/easymde.debug.js', [], '2.18.1011', true );
 			wp_enqueue_script( 'markup_markdown__prism_core', $plugin_uri . 'assets/prism/v1/components/prism-core.js', [ 'markup_markdown__jsengine_editor' ], '1.30.0', true );
 			wp_enqueue_script( 'markup_markdown__prism_autoloader', $plugin_uri . 'assets/prism/v1/plugins/autoloader/prism-autoloader.js', [ 'markup_markdown__prism_core' ], '1.30.0', true );
 			wp_enqueue_script( 'markup_markdown__waypoints', $plugin_uri . 'assets/jquery-waypoints/lib/jquery.waypoints.min.js', [ 'markup_markdown__jsengine_editor' ], '4.0.1', true );
 			wp_enqueue_script( 'markup_markdown__sticky', $plugin_uri . 'assets/jquery-waypoints/lib/shortcuts/sticky.min.js', [ 'markup_markdown__waypoints' ], '4.0.1', true );
-			wp_enqueue_script( 'markup_markdown__codemirror_spellchecker', $plugin_uri . 'assets/custom-codemirror-spell-checker/dist/spell-checker.debug.js', [ 'markup_markdown__sticky' ], '1.1.24', true );
-			wp_enqueue_script( 'markup_markdown__wordpress_spellchecker', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-spellchecker.debug.js', [ 'markup_markdown__codemirror_spellchecker' ], '1.0.2', true );
-			wp_enqueue_script( 'markup_markdown__wordpress_preview', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-preview.debug.js', [ 'markup_markdown__wordpress_spellchecker' ], '1.1.3', true );
-			wp_enqueue_script( 'markup_markdown__wordpress_media', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-media.debug.js', [ 'markup_markdown__wordpress_preview' ], '1.0.27', true );
-			wp_enqueue_script( 'markup_markdown__wordpress_richedit', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-easymde.debug.js', [ 'markup_markdown__wordpress_media' ], '1.6.4', true );
+			wp_enqueue_script( 'markup_markdown__codemirror_spellchecker', $plugin_uri . 'assets/custom-codemirror-spell-checker/dist/spell-checker.debug.js', [ 'markup_markdown__sticky' ], '1.1.25', true );
+			wp_enqueue_script( 'markup_markdown__wordpress_spellchecker', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-spellchecker.debug.js', [ 'markup_markdown__codemirror_spellchecker' ], '1.0.3', true );
+			wp_enqueue_script( 'markup_markdown__wordpress_preview', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-preview.debug.js', [ 'markup_markdown__wordpress_spellchecker' ], '1.1.4', true );
+			wp_enqueue_script( 'markup_markdown__wordpress_media', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-media.debug.js', [ 'markup_markdown__wordpress_preview' ], '1.0.29', true );
+			wp_enqueue_script( 'markup_markdown__wordpress_richedit', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-easymde.debug.js', [ 'markup_markdown__wordpress_media' ], '1.6.5', true );
 		elseif ( defined( 'WP_DEBUG' ) && WP_DEBUG ) :
-			wp_enqueue_script( 'markup_markdown__jsengine_editor', $plugin_uri . 'assets/easy-markdown-editor/dist/easymde.min.js', [], '2.18.1010', true );
-			wp_enqueue_script( 'markup_markdown__prism_core', $plugin_uri . 'assets/prism/v1/compoments/prism-core.min.js', [ 'markup_markdown__jsengine_editor' ], '1.30.0', true );
+			wp_enqueue_script( 'markup_markdown__jsengine_editor', $plugin_uri . 'assets/easy-markdown-editor/dist/easymde.min.js', [], '2.18.1011', true );
+			wp_enqueue_script( 'markup_markdown__prism_core', $plugin_uri . 'assets/prism/v1/components/prism-core.min.js', [ 'markup_markdown__jsengine_editor' ], '1.30.0', true );
 			wp_enqueue_script( 'markup_markdown__prism_autoloader', $plugin_uri . 'assets/prism/v1/plugins/autoloader/prism-autoloader.min.js', [ 'markup_markdown__prism_core' ], '1.30.0', true );
 			wp_enqueue_script( 'markup_markdown__waypoints', $plugin_uri . 'assets/jquery-waypoints/lib/jquery.waypoints.min.js', [ 'markup_markdown__jsengine_editor' ], '4.0.1', true );
 			wp_enqueue_script( 'markup_markdown__sticky', $plugin_uri . 'assets/jquery-waypoints/lib/shortcuts/sticky.min.js', [ 'markup_markdown__waypoints' ], '4.0.1', true );
-			wp_enqueue_script( 'markup_markdown__codemirror_spellchecker', $plugin_uri . 'assets/custom-codemirror-spell-checker/dist/spell-checker.min.js', [ 'markup_markdown__sticky' ], '1.1.24', true );
-			wp_enqueue_script( 'markup_markdown__wordpress_spellchecker', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-spellchecker.min.js', [ 'markup_markdown__codemirror_spellchecker' ], '1.0.2', true );
-			wp_enqueue_script( 'markup_markdown__wordpress_preview', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-preview.min.js', [ 'markup_markdown__wordpress_spellchecker' ], '1.1.3', true );
-			wp_enqueue_script( 'markup_markdown__wordpress_media', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-media.min.js', [ 'markup_markdown__wordpress_preview' ], '1.0.27', true );
-			wp_enqueue_script( 'markup_markdown__wordpress_richedit', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-easymde.min.js', [ 'markup_markdown__wordpress_media' ], '1.6.4', true );
+			wp_enqueue_script( 'markup_markdown__codemirror_spellchecker', $plugin_uri . 'assets/custom-codemirror-spell-checker/dist/spell-checker.min.js', [ 'markup_markdown__sticky' ], '1.1.25', true );
+			wp_enqueue_script( 'markup_markdown__wordpress_spellchecker', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-spellchecker.min.js', [ 'markup_markdown__codemirror_spellchecker' ], '1.0.3', true );
+			wp_enqueue_script( 'markup_markdown__wordpress_preview', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-preview.min.js', [ 'markup_markdown__wordpress_spellchecker' ], '1.1.4', true );
+			wp_enqueue_script( 'markup_markdown__wordpress_media', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-media.min.js', [ 'markup_markdown__wordpress_preview' ], '1.0.29', true );
+			wp_enqueue_script( 'markup_markdown__wordpress_richedit', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-easymde.min.js', [ 'markup_markdown__wordpress_media' ], '1.6.5', true );
 		else :
-			wp_enqueue_script( 'markup_markdown__wordpress_richedit', $plugin_uri . 'assets/markup-markdown/js/builder.min.js', [], '1.1.10', true );
+			wp_enqueue_script( 'markup_markdown__wordpress_richedit', $plugin_uri . 'assets/markup-markdown/js/builder.min.js', [], '1.1.12', true );
 		endif;
 		wp_localize_script( 'markup_markdown__wordpress_richedit', 'mmd_wpr_vars', array(
 			'mmd_pipe'            => esc_html__( 'Pipe', 'markup-markdown' ),
@@ -312,14 +308,14 @@ final class EngineEasyMDE {
 		$js .= "wp.pluginMarkupMarkdown = wp.pluginMarkupMarkdown || {};\n";
 		$js .= "wp.pluginMarkupMarkdown.homeURL = \"" . $home_url . "\";\n";
 		$json = mmd()->conf_blog_prefix . 'conf_easymde_toolbar.json';
-		if ( ! file_exists( $json ) ) :
+		if ( ! mmd()->exists( $json ) ) :
 			$toolbarSetup = mmd()->plugin_dir . "/MarkupMarkdown/Addons/Released/Media/ToolbarEasyMDE.php";
-			if ( file_exists( $toolbarSetup ) ) :
+			if ( mmd()->exists( $toolbarSetup ) ) :
 				require_once $toolbarSetup; # Dummy init to generate the json file
 				$my_toolbar = new \MarkupMarkdown\Addons\Released\Media\ToolbarEasyMDE( $json );
 			endif;
 		endif;
-		$toolbarButtons = json_decode( preg_replace( "#[^a-z0-9-_\,\:\"\{\}\[\]]#", "", file_get_contents( $json ) ) );
+		$toolbarButtons = json_decode( preg_replace( "#[^a-z0-9-_\,\:\"\{\}\[\]]#", "", mmd()->get_contents( $json ) ), false );
 		$js .= "wp.pluginMarkupMarkdown.primaryArea = " . ( defined( 'MMD_SUPPORT_ENABLED' ) && MMD_SUPPORT_ENABLED ? '1' : '0' ) . ";\n";
 		$js .= "wp.pluginMarkupMarkdown.toolbarButtons = [ \"" . implode( "\",\"", str_replace( '_', '-', $toolbarButtons->my_buttons ) ) . "\" ];\n";
 		if ( defined( 'WP_MMD_MEDIA_UPLOADER' ) && ! WP_MMD_MEDIA_UPLOADER ) :

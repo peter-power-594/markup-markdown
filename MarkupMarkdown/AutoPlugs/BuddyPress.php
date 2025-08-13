@@ -32,7 +32,7 @@ class BuddyPress {
 
 
 	public function __construct() {
-		if ( file_exists( WP_PLUGIN_DIR . '/buddypress/bp-loader.php' ) ) :
+		if ( mmd()->exists( WP_PLUGIN_DIR . '/buddypress/bp-loader.php' ) ) :
 			if ( class_exists( 'BuddyPress' ) ) :
 				define( 'MMD_BUDDYPRESS_PLUG', true );
 			endif;
@@ -88,7 +88,7 @@ class BuddyPress {
 	 * @return Boolean TRUE if the edit form view was triggered or FALSE
 	 */
 	public function load_edit_mmdform() {
-		if ( ! function_exists( 'bp_is_current_action' ) || ! function_exists( 'is_buddypress' ) ) :
+		if ( ! mmd()->exists( 'bp_is_current_action' ) || ! function_exists( 'is_buddypress' ) ) :
 			return false;
 		endif;
 		if ( ! is_admin() ) :

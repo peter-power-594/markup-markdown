@@ -3,10 +3,10 @@
 defined( 'ABSPATH' ) || exit;
 
 $blog_conf_file = mmd()->conf_blog_prefix . 'conf.php';
-if ( file_exists( $blog_conf_file ) ) :
+if ( mmd()->exists( $blog_conf_file ) ) :
 	printf( '<div id="mmd_debug_settings">' );
 	printf( '<h3>%s</h3>', esc_html( 'Below is the summary of the settings used for the current blog:' ) );
-	$blog_conf = file_get_contents( $blog_conf_file );
+	$blog_conf = mmd()->get_contents( $blog_conf_file );
 	$blog_conf = str_replace( [ '<?php', '?>', 'define(', ')', '[', ']' ], '', $blog_conf );
 	$blog_conf = preg_replace( '#defined.*?;#', '', $blog_conf );
 	$blog_conf = str_replace( array( '\',', '\'', ';' ), ' | ', $blog_conf );
@@ -27,7 +27,7 @@ if ( file_exists( $blog_conf_file ) ) :
 		. ' | ' . esc_html( 'Values', 'markup-markdown' ) . ' |'
 		. "\n" . '| ---- | ---- |' . "\n" . $blog_conf . "\n";
 	$blog_conf = preg_replace( '#\n+#', "\n", $blog_conf );
-	printf( '%s', str_replace( '<table>', '<table class="wp-list-table widefat fixed striped table-view-list">', mmd()->markdown2html( $blog_conf ) ) );	
+	printf( '%s', wp_kses( str_replace( '<table>', '<table class="wp-list-table widefat fixed striped table-view-list">', mmd()->markdown2html( $blog_conf ) ), array( 'table' => array( 'class' => true ), 'thead' => array(), 'tbody' => array(), 'tr' => array(), 'th' => array(), 'td' => array(), 'br' => array() ) ) );	
 	printf( '</div>' );
 endif;
 
@@ -44,7 +44,7 @@ foreach ( $apl as $p ) :
 	if ( isset( $plugins[ $p ] ) ) :
 		$blog_plugins .= '| ';
 		if ( isset( $plugins[ $p ][ 'PluginURI' ] ) && ! empty( $plugins[ $p ][ 'PluginURI' ] ) ) :
-		$blog_plugins .= '[' . $plugins[ $p ][ 'Name' ] . '](' .  $plugins[ $p ][ 'PluginURI' ] . ')';
+			$blog_plugins .= '[' . $plugins[ $p ][ 'Name' ] . '](' .  $plugins[ $p ][ 'PluginURI' ] . ')';
 		else :
 			$blog_plugins .= $plugins[ $p ][ 'Name' ];
 		endif;
@@ -52,7 +52,7 @@ foreach ( $apl as $p ) :
 		$blog_plugins .= ' | ' . $plugins[ $p ][ 'Description' ] . ' |' . "\n";
 	endif;
 endforeach;
-printf( '%s', str_replace( '<table>', '<table class="wp-list-table widefat fixed striped table-view-list">', mmd()->markdown2html( $blog_plugins ) ) );	
+printf( '%s', wp_kses( str_replace( '<table>', '<table class="wp-list-table widefat fixed striped table-view-list">', mmd()->markdown2html( $blog_plugins ) ), array( 'table' => array( 'class' => true ), 'thead' => array(), 'tbody' => array(), 'tr' => array(), 'th' => array(), 'td' => array(), 'br' => array(), 'a' => array( 'href' => array() ) ) ) );	
 printf( '</div>' );
 
 printf( '<h2>%s</h2>', esc_html( 'Information to attach to the support ticket if need be:' ) );

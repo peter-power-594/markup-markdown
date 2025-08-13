@@ -114,30 +114,31 @@
 		mediaUploader = _self.mediaUploader();
 		// Build the toolbar
 		var toolbar = [], defActions = {
-			'mmd_bold': { action: EasyMDE.toggleBold, className: 'fa fa-bold' },
-			'mmd_italic': { action: EasyMDE.toggleItalic, className: 'fa fa-italic' },
-			'mmd_strikethrough': { action: EasyMDE.toggleStrikethrough, className: 'fa fa-strikethrough' },
-			'mmd_heading': { action: EasyMDE.toggleHeadingSmaller, className: 'fa fa-header fa-heading' },
-			'mmd_heading-smaller': { action: EasyMDE.toggleHeadingSmaller, className: 'fa fa-header fa-heading' },
-			'mmd_heading-bigger': { action: EasyMDE.toggleHeadingBigger, className: 'fa fa-lg fa-header fa-heading' },
-			'mmd_heading-1': { action: EasyMDE.toggleHeading1, className: 'fa fa-header fa-heading header-1' },
-			'mmd_heading-2': { action: EasyMDE.toggleHeading2, className: 'fa fa-header fa-heading header-2' },
-			'mmd_heading-3': { action: EasyMDE.toggleHeading3, className: 'fa fa-header fa-heading header-3' },
-			'mmd_code': { action: EasyMDE.toggleCodeBlock, className: 'fa fa-code' },
-			'mmd_quote': { action: EasyMDE.toggleBlockquote, className: 'fa fa-quote-left' },
-			'mmd_unordered-list': { action: EasyMDE.toggleUnorderedList, className: 'fa fa-list-ul' },
-			'mmd_ordered-list': { action: EasyMDE.toggleOrderedList, className: 'fa fa-list-ol' },
-			'mmd_clean-block': { action: EasyMDE.cleanBlock, className: 'fa fa-eraser' },
-			'mmd_link': { action: EasyMDE.drawLink, className: 'fa fa-link' },
-			'mmd_image': { action: EasyMDE.drawImage, className: 'fa fa-picture-o' },
-			'mmd_upload-image': { action: EasyMDE.drawUploadedImage, className: 'fa fa-image' },
-			'mmd_table': { action: EasyMDE.drawTable, className: 'fa fa-table' },
-			'mmd_horizontal-rule': { action: EasyMDE.drawHorizontalRule, className: 'fa fa-minus' },
-			'mmd_preview': { action: EasyMDE.togglePreview, className: 'fa fa-eye no-disable' },
-			'mmd_side-by-side': { action: EasyMDE.toggleSideBySide, className: 'fa fa-columns no-disable no-mobile' },
-			'mmd_fullscreen': { action: EasyMDE.toggleFullScreen, className: 'fa fa-arrows-alt no-disable no-mobile' },
-			'mmd_undo': { action: EasyMDE.undo, className: 'fa fa-undo' },
-			'mmd_redo': { action: EasyMDE.redo, className: 'fa fa-redo' }
+			'mmd_bold': { action: EasyMDE.toggleBold, className: 'mmd_fa mmd_fa-bold' },
+			'mmd_italic': { action: EasyMDE.toggleItalic, className: 'mmd_fa mmd_fa-italic' },
+			'mmd_strikethrough': { action: EasyMDE.toggleStrikethrough, className: 'mmd_fa mmd_fa-strikethrough' },
+			'mmd_heading': { action: EasyMDE.toggleHeadingSmaller, className: 'mmd_fa mmd_fa-header mmd_fa-heading' },
+			'mmd_heading-smaller': { action: EasyMDE.toggleHeadingSmaller, className: 'mmd_fa mmd_fa-header mmd_fa-heading' },
+			'mmd_heading-bigger': { action: EasyMDE.toggleHeadingBigger, className: 'mmd_fa mmd_fa-lg mmd_fa-header mmd_fa-heading' },
+			'mmd_heading-1': { action: EasyMDE.toggleHeading1, className: 'mmd_fa mmd_fa-header mmd_fa-heading header-1' },
+			'mmd_heading-2': { action: EasyMDE.toggleHeading2, className: 'mmd_fa mmd_fa-header mmd_fa-heading header-2' },
+			'mmd_heading-3': { action: EasyMDE.toggleHeading3, className: 'mmd_fa mmd_fa-header mmd_fa-heading header-3' },
+			'mmd_code': { action: EasyMDE.toggleCodeBlock, className: 'mmd_fa mmd_fa-code' },
+			'mmd_quote': { action: EasyMDE.toggleBlockquote, className: 'mmd_fa mmd_fa-quote-left' },
+			'mmd_unordered-list': { action: EasyMDE.toggleUnorderedList, className: 'mmd_fa mmd_fa-list-ul' },
+			'mmd_ordered-list': { action: EasyMDE.toggleOrderedList, className: 'mmd_fa mmd_fa-list-ol' },
+			'mmd_clean-block': { action: EasyMDE.cleanBlock, className: 'mmd_fa mmd_fa-eraser' },
+			'mmd_link': { action: EasyMDE.drawLink, className: 'mmd_fa mmd_fa-link' },
+			'mmd_image': { action: EasyMDE.drawImage, className: 'mmd_fa mmd_fa-picture-o' },
+			'mmd_upload-image': { action: EasyMDE.drawUploadedImage, className: 'mmd_fa mmd_fa-image' },
+			'mmd_table': { action: EasyMDE.drawTable, className: 'mmd_fa mmd_fa-table' },
+			'mmd_horizontal-rule': { action: EasyMDE.drawHorizontalRule, className: 'mmd_fa mmd_fa-minus' },
+			'mmd_preview': { action: EasyMDE.togglePreview, className: 'mmd_fa mmd_fa-eye no-disable' },
+			'mmd_side-by-side': { action: EasyMDE.toggleSideBySide, className: 'mmd_fa mmd_fa-columns no-disable no-mobile' },
+			'mmd_fullscreen': { action: EasyMDE.toggleFullScreen, className: 'mmd_fa mmd_fa-arrows-alt no-disable no-mobile' },
+			'mmd_undo': { action: EasyMDE.undo, className: 'mmd_fa mmd_fa-undo' },
+			'mmd_redo': { action: EasyMDE.redo, className: 'mmd_fa mmd_fa-redo' },
+			'mmd_guide': { action: function() { return window.open( 'https://www.markdownguide.org/basic-syntax/', '_blank' ); }, className: 'mmd_fa mmd_fa-question-circle' }
 		};
 		EasyMDE.wpsImage = function( editor ) {
 			activeWidget = _self;
@@ -203,8 +204,8 @@
 				'&mmd_dir=' + targetLangDir
 			].join( '' );
 		};
-		defActions.mmd_rtltextdir = { action: EasyMDE.switchHTMLDir, className: 'fa' + ( langDir === 'rtl' ? 's' : 'r' ) + ' fa-caret-square-left' };
-		defActions.mmd_ltrtextdir = { action: EasyMDE.switchHTMLDir, className: 'fa' + ( langDir === 'ltr' ? 's' : 'r' ) + ' fa-caret-square-right' };
+		defActions.mmd_rtltextdir = { action: EasyMDE.switchHTMLDir, className: 'mmd_fa' + ( langDir === 'rtl' ? 's' : 'r' ) + ' mmd_fa-caret-square-left' };
+		defActions.mmd_ltrtextdir = { action: EasyMDE.switchHTMLDir, className: 'mmd_fa' + ( langDir === 'ltr' ? 's' : 'r' ) + ' mmd_fa-caret-square-right' };
 		// Build the toolbar
 		for ( var b = 0, slug = '', targetAction = '', buttons = _self.toolbarButtons; b < buttons.length; b++ ) {
 			slug = buttons[ b ];
@@ -221,7 +222,7 @@
 					toolbar.push({
 						name: "wpsimage",
 						action: EasyMDE.wpsImage,
-						className: "fa fa-images",
+						className: "mmd_fa mmd_fa-images",
 						title: mmd_wpr_vars && mmd_wpr_vars.wpsimage ? mmd_wpr_vars.wpsimage : "Image"
 					});
 				}
@@ -250,8 +251,15 @@
 			var minimalToolbar = [];
 			if ( /desc|acf|bbp/.test( $textarea.attr( 'name' ) || '' ) ) {
 				// Description field, super tiny version
-				for ( var c = 0; c < toolbar.length; c++ ) {
-					if ( /\||bold|italic|pipe|list|link|image|preview|guide/.test( toolbar[ c ].name || toolbar[ c ] || '' ) ) {
+				for ( var c = 0, isPipe = false; c < toolbar.length; c++ ) {
+					if ( toolbar[ c ] && toolbar[ c ].name && /bold|italic|pipe|list|link|image|preview|guide/.test( toolbar[ c ].name || '' ) ) {
+						isPipe = false;
+						minimalToolbar.push( toolbar[ c ] );
+					} else if ( toolbar[ c ] === '|' ) {
+						if ( isPipe ) {
+							continue;
+						}
+						isPipe = true;
 						minimalToolbar.push( toolbar[ c ] );
 					}
 				}				

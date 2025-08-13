@@ -102,7 +102,7 @@ final class Mermaid {
 	 * @return Void
 	 */
 	public function add_tabmenu() {
-		echo "\t\t\t\t\t\t<li><a href=\"#tab-mermaid\" class=\"mmd-ico ico-chart\">" . __( 'Mermaid', 'markup-markdown' ) . "</a></li>\n";
+		echo "\t\t\t\t\t\t<li><a href=\"#tab-mermaid\" class=\"mmd-ico ico-chart\">" . esc_html__( 'Mermaid', 'markup-markdown' ) . "</a></li>\n";
 	}
 
 
@@ -116,11 +116,11 @@ final class Mermaid {
 	 */
 	public function add_tabcontent() {
 		$conf_file = mmd()->conf_blog_prefix . 'conf.php';
-		if ( file_exists( $conf_file ) ) :
+		if ( mmd()->exists( $conf_file ) ) :
 			require_once $conf_file;
 		endif;
 		$my_tmpl = mmd()->plugin_dir . '/MarkupMarkdown/Addons/Released/Templates/MermaidForm.php';
-		if ( file_exists( $my_tmpl ) ) :
+		if ( mmd()->exists( $my_tmpl ) ) :
 			mmd()->clear_cache( $my_tmpl );
 			include $my_tmpl;
 		endif;
