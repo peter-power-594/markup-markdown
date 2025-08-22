@@ -21,6 +21,17 @@ final class Layout {
 	private $toolbar_conf = '';
 
 
+	/**
+	 * Post ID to use for the lightbox gallery
+	 *
+	 * @since 3.20.9
+	 * @access private
+	 *
+	 * @var Integer
+	 */
+	private $post_ID = 0;
+
+
 	public function __construct() {
 		mmd()->default_conf = array( 'MMD_USE_LIGHTBOX' => 1 );
 		mmd()->default_conf = array( 'MMD_USE_IMAGESLOADED' => 1 );
@@ -41,7 +52,10 @@ final class Layout {
 		else :
 			add_filter( 'addon_markdown2html', array( $this, 'render_lightbox_masonry' ) );
 			if ( defined( 'MMD_USE_BLOCKSTYLES' ) && MMD_USE_BLOCKSTYLES ) :
+				# New theme using Gutenberg blocks need the hooks to be triggered earlier
 				add_filter( 'addon_markdown2html', array( $this, 'render_gutenberg_basics' ), 12, 1 );
+				add_filter( 'gallery_style', array( $this, 'gallery_style_filter' ), 11, 1 );
+				add_filter( 'wp_get_attachment_link_attributes', array( $this, 'attachment_link_attributes_filter' ), 11, 2 );
 			endif;
 			add_action( 'wp_enqueue_scripts', array( $this, 'my_plugin_assets' ), 11 );
 		endif;
@@ -68,7 +82,7 @@ final class Layout {
 	 *
 	 * @return Void
 	 */
-	public function update_config( $my_cnf ) {
+	final public function update_config( $my_cnf ) {
 		$my_cnf[ 'goodvibes' ] = filter_input( INPUT_POST, 'mmd_goodvibes', FILTER_VALIDATE_INT );
 		$my_cnf[ 'lightbox' ] = filter_input( INPUT_POST, 'mmd_lightbox', FILTER_VALIDATE_INT );
 		$my_cnf[ 'imagesloaded' ] = filter_input( INPUT_POST, 'mmd_imagesloaded', FILTER_VALIDATE_INT );
@@ -89,7 +103,7 @@ final class Layout {
 		$my_cnf[ 'super_backslash' ] = filter_input( INPUT_POST, 'mmd_superbackslash', FILTER_VALIDATE_INT );
 		return $my_cnf;
 	}
-	public function create_const( $my_cnf ) {
+	final public function create_const( $my_cnf ) {
 		$my_cnf[ 'MMD_USE_LIGHTBOX' ] = isset( $my_cnf[ 'lightbox' ] ) ? $my_cnf[ 'lightbox' ] : 0;
 		unset( $my_cnf[ 'lightbox' ] );
 		$my_cnf[ 'MMD_USE_IMAGESLOADED' ] = isset( $my_cnf[ 'imagesloaded' ] ) ? $my_cnf[ 'imagesloaded' ] : 0;
@@ -112,7 +126,7 @@ final class Layout {
 	}
 
 
-	public function load_layout_assets( $hook ) {
+	final public function load_layout_assets( $hook ) {
 		if ( 'settings_page_markup-markdown-admin' === $hook ) :
 			add_action( 'mmd_tabmenu_options', array( $this, 'add_tabmenu' ) );
 			add_action( 'mmd_tabcontent_options', array( $this, 'add_tabcontent' ) );
@@ -128,7 +142,7 @@ final class Layout {
 	 *
 	 * @return Void
 	 */
-	public function add_tabmenu() {
+	final public function add_tabmenu() {
 		echo "\t\t\t\t\t\t<li><a href=\"#tab-layout\" class=\"mmd-ico ico-layout\">" . esc_html__( 'Layout', 'markup-markdown' ) . "</a></li>\n";
 	}
 
@@ -141,7 +155,7 @@ final class Layout {
 	 *
 	 * @return Void
 	 */
-	public function add_tabcontent() {
+	final public function add_tabcontent() {
 		$conf_file = mmd()->conf_blog_prefix . 'conf.php';
 		if ( mmd()->exists( $conf_file ) ) :
 			require_once $conf_file;
@@ -165,7 +179,7 @@ final class Layout {
 	 *
 	 * @return \HTML_node The updated html code
 	 */
-	public function gallery_style_filter( $gallery_style ) {
+	final public function gallery_style_filter( $gallery_style ) {
 		$this->gal++;
 		return $gallery_style;
 	}
@@ -178,13 +192,13 @@ final class Layout {
 	 * @access public
 	 *
 	 * @param Array $attributes The current link
-	 * @param Integer $post_ID The post ID
+	 * @param Integer $attach_ID The post ID (Attchment ID)
 	 *
 	 * @return Array The updated link attributes
 	 */
-	public function attachment_link_attributes_filter( $attributes, $post_ID ) {
+	final public function attachment_link_attributes_filter( $attributes, $attach_ID ) {
 		if ( isset( $attributes[ 'href' ] ) && strpos( $attributes[ 'href' ], 'attachment' ) === FALSE ) :
-			$attributes[ 'data-lightbox' ] = 'gallery' . $post_ID . '-' . $this->gal;
+			$attributes[ 'data-lightbox' ] = 'gallery' . $this->post_ID . '-' . $this->gal;
 		endif;
 		return $attributes;
 	}
@@ -205,6 +219,7 @@ final class Layout {
 			wp_deregister_script( 'jquery-lightbox' );
 			wp_enqueue_style( 'lightbox', $plugin_uri . 'assets/lightbox2/css/lightbox.min.css', [], '2.11.4' );
 			wp_enqueue_script( 'lightbox', $plugin_uri . 'assets/lightbox2/js/lightbox.min.js', [ 'jquery' ], '2.11.4', true );
+			# Old themes
 			add_filter( 'gallery_style', array( $this, 'gallery_style_filter' ), 11, 1 );
 			add_filter( 'wp_get_attachment_link_attributes', array( $this, 'attachment_link_attributes_filter' ), 11, 2 );
 			return 1;
@@ -258,9 +273,7 @@ final class Layout {
 		endif;
 		wp_enqueue_script( 'masonry' );
 		wp_enqueue_script( 'jquery-masonry' );
-		if ( $lightbox_used > 0 ) :
-			wp_add_inline_style(  'lightbox', '.lightbox-set { margin: 0 -8px } .grid-sizer, .grid-item { margin: 0 8px 16px 8px; width: calc(50% - 16px) } .grid-item a, .grid-item a img { display: block }' );
-		endif;
+		wp_add_inline_style( $lightbox_used > 0 ? 'lightbox' : 'mansory', '.lightbox-set { margin: 0 -8px } .grid-sizer, .grid-item { margin: 0 8px 16px 8px; width: calc(50% - 16px) } .grid-item a, .grid-item a img { display: block }' );
 		wp_add_inline_script( 'masonry', 'jQuery( document ).ready(function() { jQuery( \'.grid\' ).each(function() { var $grid = jQuery( this ); $grid.imagesLoaded().progress(function() { $grid.masonry( \'layout\' ); }); }); });' );
 		return TRUE;
 	}
@@ -274,7 +287,7 @@ final class Layout {
 	 *
 	 * @return Void
 	 */
-	public function my_plugin_assets() {
+	final public function my_plugin_assets() {
 		$config = mmd()->conf_blog_prefix . 'conf.php';
 		if ( ! mmd()->exists( $config ) ) :
 			return FALSE;
@@ -297,23 +310,27 @@ final class Layout {
 	 *
 	 * @return Void
 	 */
-	public function render_lightbox_masonry( $content = '' ) {
+	final public function render_lightbox_masonry( $content = '' ) {
+		$allowed_medias = "jpg|JPG|jpeg|JPEG|gif|GIF|png|PNG|apng|APNG|webp|WEBP|tiff|TIFF|avif|AVIF";
 		$replacers = array(
 			# Adjust lightbox for image sets with masonry
 			# Old versions with no *figure* and *figcaption* tags
-			[ "#<li><a href=\"(/wp-content/.*?\.(jpg|jpeg|gif|png))\" title=\"(myset[0-9_]+)\s(.*?)</li>#u", "<div class=\"grid-item\"><a data-lightbox=\"$3\" href=\"$1\" title=\"$4</div>" ],
-			[ "#<ul>\n<div class=\"grid-item\"><a data-lightbox=\"(.*?)\" href=\"(.*?)\"#u", "<div id=\"$1\" class=\"grid lightbox-set\" data-masonry='{ \"itemSelector\": \".grid-item\", \"columnWidth\": \".grid-sizer\", \"percentPosition\": true }'>\n<div class=\"grid-sizer\"></div>\n<div class=\"grid-item\"><a data-lightbox=\"$1\" href=\"$2\"" ],
+			[ "#<li><a href=\"(/wp-content/.*?\.(" . $allowed_medias . "))\" title=\"(myset[0-9_]+)\s(.*?)</li>#u", "<div class=\"grid-item\"><a data-lightbox=\"$3\" href=\"$1\" title=\"$4</div>" ],
+			[ "#<ul>\n*<div class=\"grid-item\"><a data-lightbox=\"(.*?)\" href=\"(.*?)\"#u", "<div id=\"$1\" class=\"grid lightbox-set\" data-masonry='{ \"itemSelector\": \".grid-item\", \"columnWidth\": \".grid-sizer\", \"percentPosition\": true }'>\n<div class=\"grid-sizer\"></div>\n<div class=\"grid-item\"><a data-lightbox=\"$1\" href=\"$2\"" ],
 			# New version with *figure* and *figcaption*
-			[ "#<li><figure([^>]+)><a href=\"(/wp-content/.*?\.(jpg|jpeg|gif|png))\" title=\"(myset[0-9_]+)\s(.*?)</li>#u", "<div class=\"grid-item\"><figure$1><a data-lightbox=\"$4\" href=\"$2\" title=\"$5</div>" ],
-			[ "#<ul>\n<div class=\"grid-item\"><figure id\=\"(.*?)\"([^>]+)><a data-lightbox=\"(.*?)\" href=\"(.*?)\"#u", "<div id=\"$1\" class=\"grid lightbox-set\" data-masonry='{ \"itemSelector\": \".grid-item\", \"columnWidth\": \".grid-sizer\", \"percentPosition\": true }'>\n<div class=\"grid-sizer\"></div>\n<div class=\"grid-item\"><figure id=\"$1\"$2><a data-lightbox=\"$3\" href=\"$4\"" ],
+			[ "#<li>\n*<figure([^>]+)><a href=\"(/wp-content/.*?\.(" . $allowed_medias . "))\" title=\"(myset[0-9_]+)\s(.*?)\n*</li>#u", "<div class=\"grid-item\"><figure$1><a data-lightbox=\"$4\" href=\"$2\" title=\"$5</div>" ],
+			[ "#<ul>\n*<div class=\"grid-item\"><figure id\=\"(.*?)\"([^>]+)><a data-lightbox=\"(.*?)\" href=\"(.*?)\"#u", "<div id=\"$1\" class=\"grid lightbox-set\" data-masonry='{ \"itemSelector\": \".grid-item\", \"columnWidth\": \".grid-sizer\", \"percentPosition\": true }'>\n<div class=\"grid-sizer\"></div>\n<div class=\"grid-item\"><figure id=\"$1\"$2><a data-lightbox=\"$3\" href=\"$4\"" ],
 			# Safety clean
-			[ "#</div>\n</ul>#u", "</div>\n</div>" ],
+			[ "#</div>\n*</ul>#u", "</div>\n</div>" ],
 			# Adjust lightbox for single images
-			[ "#<a href=\"(/wp-content/.*?\.(jpg|jpeg|gif|png))\"#u", "<a href=\"$1\" data-lightbox=\"mygallery\"" ],
+			[ "#<a href=\"(/wp-content/.*?\.(" . $allowed_medias . "))\"#u", "<a href=\"$1\" data-lightbox=\"mygallery\"" ],
 		);
 		foreach( $replacers as $regexp ) :
 			$content = preg_replace( $regexp[ 0 ], $regexp[ 1 ], $content );
 		endforeach;
+		if ( is_singular() && ! $this->post_ID ) :
+			$this->post_ID = get_the_ID();
+		endif;
 		return $content;
 	}
 
@@ -325,7 +342,7 @@ final class Layout {
 	 *
 	 * @return Void
 	 */
-	public function render_gutenberg_basics( $content ) {
+	final public function render_gutenberg_basics( $content ) {
 		# <h2 class="has-text-align-center"> => <h2 class="wp-block-heading has-text-align-center">
 		# <h2 id="peter" class="has-text-align-center"> => <h2 d="peter" class="wp-block-heading has-text-align-center">
 		$content = preg_replace( "#<h(\d)(.*?)class=\"#u", "<h$1$2class=\"wp-block-heading ", $content );

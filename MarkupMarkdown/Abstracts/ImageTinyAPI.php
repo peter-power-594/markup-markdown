@@ -133,6 +133,23 @@ abstract class ImageTinyAPI {
 	}
 
 
+
+
+	/**
+	 * Check the class attribute extracted from the HTML image if available
+	 * 
+	 * @since 3.20
+	 * @access protected
+	 * 
+	 * @param String
+	 * @return Array class attribute
+	 */
+	protected function check_class_attribute( $classnames = '' ) {
+		$classnames = trim( preg_replace( '#align([a-z]+)#', '', $classnames ) );
+		return ! empty( $classnames ) ? [ 'class' => $classnames ] : [];
+	}
+
+
 	/**
 	 * Check the width value extracted from the HTML image's width attribute if available
 	 * 
@@ -215,13 +232,20 @@ abstract class ImageTinyAPI {
 			$img_caption = trim( $img_attrs[ 'caption' ] );
 			unset( $img_attrs[ 'caption' ] );
 		endif;
+		$img_class = '';
+		if ( isset( $img_attrs[ 'class' ] ) && ! empty( $img_attrs[ 'class' ] ) ) :
+			$img_class = ' ' . $img_attrs[ 'class' ];
+			if ( defined( 'MMD_USE_BLOCKSTYLES' ) && MMD_USE_BLOCKSTYLES ) :
+				$img_attrs[ 'class' ] = 'wp-image-' . $img_id;
+			endif;
+		endif;
 		$img_html = \wp_get_attachment_image( $img_id, $img_size, false, $img_attrs );
 		if ( ( ! isset( $img_html ) || ! $img_html || empty( $img_html ) ) && ( isset( $img_fallback ) && ! empty( $img_fallback ) ) ) :
 			$img_html = function_exists( 'wp_kses_post' ) ? wp_kses_post( $img_fallback ) : '';
 		endif;
 		return '<figure id="attachment_mmd_' . $img_id . '" '
 			. ( ! empty( $img_caption ) ? 'aria-describedby="caption-attachment-mmd' . $img_id . '" class="wp-block-image wp-caption ' : 'class="wp-block-image ' )
-			. ( isset( $img_attrs[ 'align' ] ) ? 'align' . $img_attrs[ 'align' ] : '' )
+			. ( isset( $img_attrs[ 'align' ] ) ? 'align' . $img_attrs[ 'align' ] : '' ) . $img_class
 			. '">' . $img_html
 			. ( ! empty( $img_caption ) ? '<figcaption id="caption-attachment-mmd' . $img_id . '" class="wp-caption-text wp-element-caption">' . trim( $img_caption ) . '</figcaption>' : '' )
 			. '</figure>';
@@ -258,6 +282,10 @@ abstract class ImageTinyAPI {
 		# Check for a height value
 		preg_match( '#height="(.*?)"#', $img_html, $tmp_args );
 		$img_attrs = array_merge( $img_attrs, $this->check_height_attribute( $tmp_args, $img_src ) );
+		# Check for custom classnames
+		if ( preg_match( '#class="([a-z\s]+)"#', $img_html, $tmp_args ) === 1 ) :
+			$img_attrs = array_merge( $img_attrs, $this->check_class_attribute( $tmp_args[ 1 ] ) );
+		endif;
 		$new_img = $this->wrap_image( $img_id, $img_attrs, $img_html );
 		return preg_replace( '#<img[^>]+>#', $new_img, $img_html );
 	}

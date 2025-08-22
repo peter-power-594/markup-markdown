@@ -53,13 +53,17 @@ final class Image extends \MarkupMarkdown\Abstracts\ImageTinyAPI {
 	}
 
 
-	public function load_image_block_assets() {
+	final public function load_image_block_assets() {
 		if ( $this->gutenberg > 0 ) : # Already loaded
 			return FALSE;
 		endif;
 		$this->gutenberg = 1;
-		wp_enqueue_style( 'wp-block-image', '/wp-includes/blocks/image/style.min.css', array(), get_bloginfo( 'version' ) );
-		wp_enqueue_style( 'wp-block-embed', '/wp-includes/blocks/embed/style.min.css', array(), get_bloginfo( 'version' ) );
+		$blog_version = get_bloginfo( 'version' );
+		wp_enqueue_style( 'wp-block-image', '/wp-includes/blocks/image/style.min.css', array(), $blog_version );
+		wp_enqueue_style( 'wp-block-embed', '/wp-includes/blocks/embed/style.min.css', array(), $blog_version );
+		wp_enqueue_style( 'wp-block-gallery', '/wp-includes/blocks/gallery/style.min.css', array(), $blog_version );
+		wp_enqueue_style( 'mmd-block-gallery', mmd()->plugin_uri . '/assets/markup-markdown/css/gallery-compatibility.min.css', array(), $blog_version );
+		add_filter( 'the_content', array( $this, 'render_gutenberg_html4_galleries' ), 19, 1 );
 		return TRUE;
 	}
 
@@ -105,7 +109,7 @@ final class Image extends \MarkupMarkdown\Abstracts\ImageTinyAPI {
 	 * @params string $content The html generated from the markdown
 	 * @return string $content The modified html code
 	 */
-	public function render_responsive_images( $content = '' ) {
+	final public function render_responsive_images( $content = '' ) {
 		if ( defined( 'MMD_USE_BLOCKSTYLES' ) && MMD_USE_BLOCKSTYLES ) :
 			$this->load_image_block_assets();
 		endif;
@@ -123,6 +127,28 @@ final class Image extends \MarkupMarkdown\Abstracts\ImageTinyAPI {
 		endif;
 		# Cleanup HTML
 		return $this->clean_html( $this->parse_img_tags( $content ) );
+	}
+
+
+	/**
+	 * Format the gallery classnames generated from the shortcode
+	 *
+	 * @access public
+	 * @since 3.20.7
+	 *
+	 * @param String $content The html generated
+	 * @return String $content The modified html code
+	 */
+	final public function render_gutenberg_html4_galleries( $content = '' ) {
+		preg_match_all( '#<' . 'div id\=[\"|\']{1}gallery-\d*[\"|\']{1} class\=[\"|\']{1}(gallery galleryid-\d* gallery-columns-\d* gallery-size-[a-z]+)' . '[\"|\']{1}>#', $content, $html4_galleries );
+		if ( ! isset( $html4_galleries ) || ! isset( $html4_galleries[ 0 ] ) || ! is_array( $html4_galleries[ 0 ] ) ) :
+			return $content;
+		endif;
+		foreach( $html4_galleries[ 0 ] as $idx => $gal_opener ) :
+				$content = str_replace( $html4_galleries[ 0 ][ $idx ], str_replace( $html4_galleries[ 1 ][ $idx ], $html4_galleries[ 1 ][ $idx ] . ' ' . str_replace( 'gallery', 'wp-block-gallery', $html4_galleries[ 1 ][ $idx ] ) . ' has-nested-images columns-default is-cropped is-layout-flex wp-block-gallery-is-layout-flex', $html4_galleries[ 0 ][ $idx ] ), $content );
+		endforeach;
+		$content = preg_replace( '#figure class\=[\"|\']{1}gallery-item[\"|\']{1}#', 'figure class="gallery-item wp-block-image"', $content );
+		return $content;
 	}
 
 

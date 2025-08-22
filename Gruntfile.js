@@ -12,6 +12,7 @@ module.exports = function(grunt) {
 					'assets/easy-markdown-editor/dist/easymde.min.css': 'AA_src/easy-markdown-editor/css/easymde.scss',
 					'assets/markup-markdown/css/wordpress_richedit-easymde.min.css': 'AA_src/markup-markdown/css/wordpress_richedit-easymde.scss',
 					'assets/markup-markdown/css/plugin_options.min.css': 'AA_src/markup-markdown/css/plugin_options.scss',
+					'assets/markup-markdown/css/gallery-compatibility.min.css': 'AA_src/markup-markdown/css/gallery-compatibility.scss',
 					'assets/acf-frontend-form-element/css/field.min.css': 'AA_src/acf-frontend-form-element/css/field.scss',
 					'assets/advanced-custom-fields/css/field.min.css': 'AA_src/advanced-custom-fields/css/field.scss',
 					'assets/bbpress/css/field.min.css': 'AA_src/bbpress/css/field.scss',

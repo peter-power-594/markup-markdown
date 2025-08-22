@@ -50,12 +50,12 @@
 			</tr>
 			<tr class="site-use-blocks">
 				<th scope="row">
-					<?php esc_html_e( 'Use Gutenberg blocks styles', 'markup-markdown' ); ?>
+					<?php esc_html_e( 'Keep blocks features', 'markup-markdown' ); ?>
 				</th>
 				<td>
 					<label for="mmd_goodvibes">
 						<input type="checkbox" name="mmd_goodvibes" id="mmd_goodvibes" value="1" <?php echo (int)$my_cnf[ 'goodvibes' ] > 0 ? 'checked="checked"' : ''; ?> />
-						<?php esc_html_e( 'Keep a minimum of assets active if your theme was designed to be used with Gutenberg. Can avoid broken layout in case styles are missing.', 'markup-markdown' ); ?>
+						<?php esc_html_e( 'Keep the bare minimum of assets and features from Gutenberg active if your theme was designed to be used with the official WordPress blocks editor. Not perfect but can avoid broken layout in case styles are missing.', 'markup-markdown' ); ?>
 					</label>
 				</td>
 			</tr>

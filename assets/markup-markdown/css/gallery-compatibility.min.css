@@ -1,0 +1,39 @@
+figure.wp-block-image {
+  --wp--style--unstable-gallery-gap: var( --wp--style--gallery-gap-default, var( --gallery-block--gutter-size, var( --wp--style--block-gap, 0.5em ) ) );
+  gap: var(--wp--style--gallery-gap-default, var(--gallery-block--gutter-size, var(--wp--style--block-gap, 0.5em)));
+}
+
+.gallery .gallery-item,
+.wp-block-gallery.wp-block-gallery-columns-1.has-nested-images figure.wp-block-image:not(#individual-image) {
+  width: 100%;
+}
+
+@media (min-width: 600px) {
+  .wp-block-gallery.wp-block-gallery-columns-1.has-nested-images figure.wp-block-image:not(#individual-image) {
+    width: 100%;
+  }
+  .wp-block-gallery.wp-block-gallery-columns-2.has-nested-images figure.wp-block-image:not(#individual-image) {
+    width: calc(50% - var(--wp--style--unstable-gallery-gap, 16px) / 2);
+  }
+  .wp-block-gallery.wp-block-gallery-columns-3.has-nested-images figure.wp-block-image:not(#individual-image) {
+    width: calc(33.33333% - var(--wp--style--unstable-gallery-gap, 16px) * 0.66667);
+  }
+  .wp-block-gallery.wp-block-gallery-columns-4.has-nested-images figure.wp-block-image:not(#individual-image) {
+    width: calc(25% - var(--wp--style--unstable-gallery-gap, 16px) * 0.75);
+  }
+  .wp-block-gallery.wp-block-gallery-columns-5.has-nested-images figure.wp-block-image:not(#individual-image) {
+    width: calc(20% - var(--wp--style--unstable-gallery-gap, 16px) * 0.8);
+  }
+  .wp-block-gallery.wp-block-gallery-columns-6.has-nested-images figure.wp-block-image:not(#individual-image) {
+    width: calc(16.66667% - var(--wp--style--unstable-gallery-gap, 16px) * 0.83333);
+  }
+  .wp-block-gallery.wp-block-gallery-columns-7.has-nested-images figure.wp-block-image:not(#individual-image) {
+    width: calc(14.28571% - var(--wp--style--unstable-gallery-gap, 16px) * 0.85714);
+  }
+  .wp-block-gallery.wp-block-gallery-columns-8.has-nested-images figure.wp-block-image:not(#individual-image) {
+    width: calc(12.5% - var(--wp--style--unstable-gallery-gap, 16px) * 0.875);
+  }
+  .wp-block-gallery.wp-block-gallery-columns-9.has-nested-images figure.wp-block-image:not(#individual-image) {
+    width: calc(11.1111% - var(--wp--style--unstable-gallery-gap, 16px) * 0.88888);
+  }
+}

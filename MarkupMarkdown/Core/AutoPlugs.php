@@ -19,7 +19,8 @@ final class AutoPlugs {
 		'O2' => [ 0, 'https://github.com/Automattic/o2', 'o2' ],
 		'QTranslateXT' => [ 0, 'https://github.com/qtranslate/qtranslate-xt', 'qTranslate-XT' ],
 		'Woocommerce' => [ 0, 'https://wordpress.org/plugins/woocommerce/', 'WooCommerce' ],
-		'WPCodeBlocks' => [ 0, 'https://wordpress.org/plugins/wp-codemirror-block/', 'CodeMirror Blocks' ]
+		'WPCodeBlocks' => [ 0, 'https://wordpress.org/plugins/wp-codemirror-block/', 'CodeMirror Blocks' ],
+		'WPGeshi' => [ 0, 'https://plugins.svn.wordpress.org/wp-geshi-highlight/trunk/', 'WP-GeSHi-Highlight (Legacy)' ]
 	);
 
 
