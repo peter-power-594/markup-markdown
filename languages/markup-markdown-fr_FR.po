@@ -4,15 +4,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Markup Markdown 3.7.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/markup-markdown\n"
-"POT-Creation-Date: 2025-08-16T06:05:48+00:00\n"
-"PO-Revision-Date: 2025-08-16 15:31+0900\n"
+"POT-Creation-Date: 2025-08-31T13:24:07+00:00\n"
+"PO-Revision-Date: 2025-08-31 22:28+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.2.2\n"
 "X-Domain: markup-markdown\n"
 
 #. Plugin Name of the plugin
@@ -397,13 +397,13 @@ msgid "Easily type and render math formulas inside your post."
 msgstr ""
 "Écriver et afficher vos formules mathématique depuis l'éditeur Markdown."
 
-#: MarkupMarkdown/Addons/Released/Layout.php:55
-#: MarkupMarkdown/Addons/Released/Layout.php:132
+#: MarkupMarkdown/Addons/Released/Layout.php:70
+#: MarkupMarkdown/Addons/Released/Layout.php:147
 #: MarkupMarkdown/Addons/Released/Templates/LayoutForm.php:4
 msgid "Layout"
 msgstr "Gabarit"
 
-#: MarkupMarkdown/Addons/Released/Layout.php:57
+#: MarkupMarkdown/Addons/Released/Layout.php:72
 msgid ""
 "A few tools to help you enhancing your layout. (Lightbox, Masonry, etc...)"
 msgstr ""
@@ -893,9 +893,9 @@ msgid ""
 "If you activate more than one dictionary, you have to pick up one as the "
 "default. Then in the editor, new buttons for the alternative languages will "
 "be shown in the toolbar so you can select the text and flag it as a "
-"different language. The code in your content is gonna look like this: "
-"&lt;span lang=\"XXX\"&gt;My text in another language&lt;/span&gt; where XXX "
-"is the code of the language as listed below. It might not be the easiest "
+"different language. The code in your content is gonna look like this: &lt;"
+"span lang=\"XXX\"&gt;My text in another language&lt;/span&gt; where XXX is "
+"the code of the language as listed below. It might not be the easiest "
 "approach, regards accessibilities specifications you should already define "
 "the language in case you are using multiple languages on the same page!"
 msgstr ""
@@ -1009,16 +1009,15 @@ msgid "Addons used"
 msgstr "Modules utilisés"
 
 #: MarkupMarkdown/Core/Settings.php:298
-msgid "You can manually activate or desactivate specific addons."
+msgid "You can manually activate or deactivate specific addons."
 msgstr ""
 "Vous pouvez activer ou désactiver globalement les modules de la liste "
 "suivante."
 
 #: MarkupMarkdown/Core/Settings.php:298
-msgid "Addons marked with <sup>*</sup> should be used with caution."
+msgid "Addons marked with * should be used with caution."
 msgstr ""
-"Les modules marqués d'une astérix <sup>*</sup> sont à utiliser avec "
-"précaution."
+"Les modules marqués d'une astérisque * sont à utiliser avec précaution."
 
 #~ msgid "Use Gutenberg blocks styles"
 #~ msgstr "Conserver les styles Gutenberg"

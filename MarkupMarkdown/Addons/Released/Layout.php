@@ -56,6 +56,7 @@ final class Layout {
 				add_filter( 'addon_markdown2html', array( $this, 'render_gutenberg_basics' ), 12, 1 );
 				add_filter( 'gallery_style', array( $this, 'gallery_style_filter' ), 11, 1 );
 				add_filter( 'wp_get_attachment_link_attributes', array( $this, 'attachment_link_attributes_filter' ), 11, 2 );
+				add_filter( 'body_class', array( $this, 'gutenberg_body_classes' ) );
 			endif;
 			add_action( 'wp_enqueue_scripts', array( $this, 'my_plugin_assets' ), 11 );
 		endif;
@@ -334,6 +335,7 @@ final class Layout {
 		return $content;
 	}
 
+
 	/**
 	 * Format the html so gutenberg block styles can be applied
 	 *
@@ -349,6 +351,24 @@ final class Layout {
 		# <h2> => <h2 class="wp-block-heading">
 		$content = preg_replace( "#<h(\d)>#u", "<h$1 class=\"wp-block-heading\">", $content );
 		return $content;
+	}
+
+
+	/**
+	 * Add the missing classes used by Gutenbenberg rendering tools
+	 *
+	 * @since 3.20.10
+	 * @access public
+	 *
+	 * @param Array $classes Current body classnames
+	 *
+	 * @return Array $classes the modified body classnames
+	 */
+	public function gutenberg_body_classes( $classes = [] ) {
+		if ( in_array( 'wp-embed-responsive', $classes ) === false ) :
+			$classes[] = 'wp-embed-responsive';
+		endif;
+		return $classes;
 	}
 
 

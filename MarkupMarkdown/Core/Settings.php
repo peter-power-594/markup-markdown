@@ -295,7 +295,7 @@ final class Settings {
 		$html = '<fieldset class="metabox-prefs">';
 		$html .= '<legend>' . esc_html__( 'Addons used', 'markup-markdown' ) . '</legend>';
 		$html .= '<style>.dashicons-mmd-helpers{margin:5px 0 0 5px}.mmd-addon-helper{display:inline}</style>';
-		$html .= '<p>' . esc_html__( 'You can manually activate or desactivate specific addons.', 'markup-markdown' ) . ' ' . esc_html__( 'Addons marked with <sup>*</sup> should be used with caution.', 'markup-markdown' ) . '</p>';
+		$html .= '<p>' . esc_html__( 'You can manually activate or deactivate specific addons.', 'markup-markdown' ) . ' ' . str_replace( '*', '<sup>*</sup>', esc_html__( 'Addons marked with * should be used with caution.', 'markup-markdown' ) ) . '</p>';
 		$html .= '<ul>';
 		foreach ( $this->addons->setup as $slug ) :
 			if ( ! $this->addons->inst[ $slug ] ) :

@@ -19,6 +19,8 @@ final class Parser {
 
 	public $post_cache_dir = '';
 
+	private $allowed_html = array();
+
 	public function __construct() {
 		if ( MMD_SUPPORT_ENABLED > 0 ) :
 			# Add the filter so the markdown can be parsed and the html generated properly on the frontend
@@ -30,6 +32,8 @@ final class Parser {
 		endif;
 		add_filter( 'post_markdown2html', array( $this, 'format_mmd2html' ), 10, 2 );
 		add_filter( 'field_markdown2html', array( $this, 'final_html' ), 10, 1 );
+		add_filter( 'post_markdown2html', array( $this, 'html_sanitizer' ), 20, 1 );
+		add_filter( 'field_markdown2html', array( $this, 'html_sanitizer' ), 20, 1 );
 	}
 
 
@@ -124,6 +128,30 @@ final class Parser {
 			return $this->static_html( $field_content );
 		else :
 			return $this->live_html( $field_content );
+		endif;
+	}
+
+
+	/**
+	 * Quick filter to force escaping the content
+	 *
+	 * @access public
+	 * @since 3.20.10
+	 *
+	 * @param String $field_content the HTML content
+	 *
+	 * @return String $content The modified HTML content
+	 */
+	public function html_sanitizer( $field_content ) {
+		if ( ! $this->mmd_allowed ) :
+			# Markdown has been disabled on the main content
+			return $field_content;
+		else:
+			if ( ! isset( $this->allowed_html ) || ! is_array( $this->allowed_html ) || ! count( $this->allowed_html ) ) :
+				$this->allowed_html = wp_kses_allowed_html( 'post' );
+				$this->allowed_html[ 'iframe' ] = array( 'src' => true, 'height' => true, 'width' => true, 'id' => true, 'class' => true, 'title' => true, 'frameborder' => true, 'allow' => true, 'allowfullscreen' => true );
+			endif;
+			return wp_kses( $field_content, $this->allowed_html );
 		endif;
 	}
 

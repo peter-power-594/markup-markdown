@@ -86,8 +86,21 @@ abstract class OEmbedTinyAPI {
 	protected function wrap_iframe( $body, $provider_name = '' ) {
 		$html = '<figure class="mmd-block-embed wp-block-embed is-type-video is-provider-' . $provider_name . ' wp-block-embed-' . $provider_name;
 		if ( isset( $body->width ) && (int)$body->width > 0 && isset( $body->height ) && (int)$body->height > 0 ) :
-			if ( number_format( $body->width / $body->height, 1 ) === '1.8' ) :
+			$my_ratio = number_format( $body->width / $body->height, 1 );
+			if ( $my_ratio === '2.3' ) :
+				$html .= ' wp-embed-aspect-21-9 wp-has-aspect-ratio';
+			elseif ( $my_ratio === '2' ) :
+				$html .= ' wp-embed-aspect-18-9 wp-has-aspect-ratio';
+			elseif ( $my_ratio === '1.8' ) :
 				$html .= ' wp-embed-aspect-16-9 wp-has-aspect-ratio';
+			elseif ( $my_ratio === '1.3' ) :
+				$html .= ' wp-embed-aspect-4-3 wp-has-aspect-ratio';
+			elseif ( $my_ratio === '1.0' ) :
+				$html .= ' wp-embed-aspect-1-1 wp-has-aspect-ratio';
+			elseif ( $my_ratio === '0.6' ) :
+				$html .= ' wp-embed-aspect-9-16 wp-has-aspect-ratio';
+			elseif ( $my_ratio === '0.5' ) :
+				$html .= ' wp-embed-aspect-1-2 wp-has-aspect-ratio';
 			endif;
 		endif;
 		$html .= '"><div class="wp-block-embed__wrapper">' . $body->html . '</div></figure>';
@@ -130,20 +143,20 @@ abstract class OEmbedTinyAPI {
 			return '';
 		endif;
 		$standalone_iframes = [];
-		preg_match_all( '#</.*?>[\n]*(<iframe.*?src\=\".*?' . $provider_name . '.*?></iframe>)#', $content, $standalone_iframes );
+		preg_match_all( '#</.*?>[\n]*(<iframe.*?src\=\"(.*?' . ( isset( $provider_name ) && ! empty( $provider_name ) ? $provider_name . '.*?' : '' ) . ')\".*?></iframe>)#', $content, $standalone_iframes );
 		if ( ! isset( $standalone_iframes ) || ! is_array( $standalone_iframes ) || ! isset( $standalone_iframes[ 1 ] ) ) :
 			return $content;
 		endif;
-		foreach( $standalone_iframes[ 1 ] as $iframe ) :
-			$my_iframe = [ 'html' => $iframe ];
-			$tmp_args = [];
-			if ( preg_match( '#width\=\"(.*?)\"#', $iframe, $tmp_args ) === 1 ) :
+		foreach( $standalone_iframes[ 1 ] as $iframe_idx => $iframe_html ) :
+			$tmp_args = []; $my_iframe = array( 'html' => $iframe_html );
+			if ( preg_match( '#width\=\"(.*?)\"#', $iframe_html, $tmp_args ) === 1 ) :
 				$my_iframe[ 'width' ] = $tmp_args[ 1 ];
 			endif;
-			if ( preg_match( '#height\=\"(.*?)\"#', $iframe, $tmp_args ) === 1 ) :
+			if ( preg_match( '#height\=\"(.*?)\"#', $iframe_html, $tmp_args ) === 1 ) :
 				$my_iframe[ 'height' ] = $tmp_args[ 1 ];
 			endif;
-			$content = preg_replace( '#' . preg_quote( $iframe ) . '#', $this->wrap_iframe( (object)$my_iframe, $provider_name ), $content );
+			$my_provider = empty( $provider_name ) ? $this->guess_provider( $standalone_iframes[ 2 ][ $iframe_idx ] ) : $provider_name;
+			$content = preg_replace( '#' . preg_quote( $iframe_html ) . '#', $this->wrap_iframe( (object)$my_iframe, $my_provider ), $content );
 		endforeach;
 		return $content;
 	}
@@ -175,6 +188,32 @@ abstract class OEmbedTinyAPI {
 			endif;
 		endforeach;
 		return defined( 'MMD_USE_BLOCKSTYLES' ) && MMD_USE_BLOCKSTYLES ? $this->format_standalone_iframes( $my_content ) : $my_content;
+	}
+
+
+	/**
+	 * Extract the provider slug from a movie url
+	 * 
+	 * @since 3.20.10
+	 * @access protected
+	 * 
+	 * @param String $movie_url The iframe source attribute value
+	 * @return String the provider slug used within the domain
+	 */
+	protected function guess_provider( $movie_url ) {
+		if ( ! isset( $movie_url ) || ! $movie_url || empty( $movie_url ) ) :
+			return 'auto';
+		endif;
+		$provider_slug = array();
+		preg_match( '#^[a-z\:]*\/\/(.*?)\/#', $movie_url, $provider_slug );
+		if ( ! isset( $provider_slug ) || ! is_array( $provider_slug ) || ! count( $provider_slug ) ) :
+			return 'auto';
+		endif;
+		$provider_parts = explode( '.', $provider_slug[ 1 ] );
+		if ( count( $provider_parts ) < 2 ) :
+			return 'auto';
+		endif;
+		return $provider_parts[ count( $provider_parts ) - 2 ];
 	}
 
 

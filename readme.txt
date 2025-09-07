@@ -1,7 +1,7 @@
 === Markup Markdown ===
 Tags: Editor, Markdown
-Stable Tag: 3.20.9
-Version: 3.20.9
+Stable Tag: 3.20.10
+Version: 3.20.10
 Requires at least: 4.9
 Tested up to: 6.8
 Requires PHP: 5.6.0
@@ -13,9 +13,9 @@ Disable Wordpress's native Gutenberg or TinyMCE editor in favor of a Markdown ed
 
 == Description ==
 
-This plugin replaces the Gutenberg block editor (or the classic TinyMCE) on the edit screen with [EasyMDE](https://github.com/Ionaru/easy-markdown-editor), a markdown editor based on CodeMirror.
+This plugin replaces the Gutenberg block editor (or the classic TinyMCE) on the edit screen with [EasyMDE](https://github.com/Ionaru/easy-markdown-editor), a markdown editor based on CodeMirror, fine-tuned to work smoothly with the WordPress admin panels.
 
-The content is saved with the markdown syntax in the database and is rendered on the frontend via wordpress native filters thanks to the [Parsedown](https://parsedown.org) PHP library.
+The content is saved with the markdown syntax in the database and is rendered on the frontend thanks to the [Parsedown](https://parsedown.org) PHP library after being sanitized via WordPress native filters.
 
 That's pretty all you should know. It's under active development, keep in touch and feel free [to drop a line on the forum](https://wordpress.org/support/plugin/markup-markdown/), [to let a rating](https://wordpress.org/support/plugin/markup-markdown/reviews/) or even support me by buying a coffee !
 
@@ -68,6 +68,12 @@ The current version is based on components that are not compatible with assistiv
 
 
 == Changelog ==
+
+= 3.20.10 =
+
+Bug fixes:
+- Adding `wp_kses` with post_content related filters as well to prevent XSS attacks
+- Updating medias related filters for reponsive movies with themes built for gutenberg
 
 = 3.20.9 =
 
