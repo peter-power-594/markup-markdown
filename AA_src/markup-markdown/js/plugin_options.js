@@ -7,6 +7,7 @@
 			_self.toolbarButtons();
 			_self.toggleButtons();
 			_self.blogDebugInfo();
+			_self.blogCodeHighlightThemes();
 		});
 	}
 
@@ -86,6 +87,18 @@
 			});
 		});
 		$( '#mmd_debug_info' ).html( JSON.stringify( myInfo, null, 4 ) );
+	};
+
+
+	MarkupMarkdownApp.prototype.blogCodeHighlightThemes = function() {
+		$( 'tr.site-use-codehighlighter' ).on( 'click', function() {
+			setTimeout(function() {
+				var engineSlug = $( 'input[name="mmd_usecodehighlighter"]:checked' ).val(),
+					$themePullDown = $( '#code_highlighter_theme' );
+				$themePullDown.find( 'optgroup[class!="' + engineSlug + '"]' ).css( 'display', 'none' ).find( 'option:selected' ).removeAttr( 'selected' );
+				$themePullDown.find( 'optgroup[class="' + engineSlug + '"]' ).removeAttr( 'style' );
+			}, 150);
+		}).trigger( 'click' );
 	};
 
 

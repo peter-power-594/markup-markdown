@@ -588,7 +588,16 @@ final class Support {
 			$excerpt = true;
 		endif;
 		if ( $excerpt ) :
-			$my_post_content = apply_filters( 'field_markdown2html', isset( $my_post->post_excerpt ) && ! empty( $my_post->post_excerpt ) ? $my_post->post_excerpt :  get_the_excerpt( $my_post ) );
+			if ( isset( $my_post->post_excerpt ) && ! empty( $my_post->post_excerpt ) ) :
+				$my_post_content = apply_filters( 'field_markdown2html', $my_post->post_excerpt );
+			else :
+				$my_post->post_content = apply_filters( 'field_markdown2html', $my_post->post_content );
+				if ( preg_match( '#<!--\s*more\s*-->#', $my_post->post_content ) ) :
+					$my_post_content = preg_replace( "#<!--\s*more\s*-->.*#s", '', $my_post->post_content );
+				else :
+					$my_post_content = apply_filters( 'get_the_excerpt', '', $my_post );
+				endif;
+			endif;
 		else :
 			$my_post_content = apply_filters( 'field_markdown2html', $my_post->post_content );
 		endif;
@@ -596,7 +605,18 @@ final class Support {
 			$my_post_content = $this->filter_backslash( $my_post_content );
 		endif;
 		if ( $excerpt ) :
-			$my_post_content =  wp_kses( $my_post_content, array( 'br' => array(), 'p' => array( 'class' => array(), 'id' => array() ) ) );
+			$excerpt_allowed_html = array(
+				'br' => array(),
+				'h2' => array( 'class' => array(), 'id' => array() ),
+				'h3' => array( 'class' => array(), 'id' => array() ),
+				'h4' => array( 'class' => array(), 'id' => array() ),
+				'p' => array( 'class' => array(), 'id' => array() ),
+				'a' => array( 'class' => array(), 'id' => array(), 'href' => array() )
+			);
+			$my_post_content =  wp_kses( $my_post_content, $excerpt_allowed_html );
+			if ( isset( $block[ 'attrs' ] ) && isset( $block[ 'attrs' ][ 'moreText' ] ) && ! empty( $block[ 'attrs' ][ 'moreText' ] ) ) :
+				$my_post_content .= wp_kses( '<p class="wp-block-post-excerpt__more-text"><a class="wp-block-post-excerpt__more-link" href="' . get_permalink( $my_post_ID ) . '">' . esc_attr( $block[ 'attrs' ][ 'moreText' ] ) . '</a></p>', $excerpt_allowed_html );
+			endif;
 		endif;
 		return '<div' . $my_block_content[ 1 ][ 0 ] . '>' . $my_post_content . '</div>';
 	}

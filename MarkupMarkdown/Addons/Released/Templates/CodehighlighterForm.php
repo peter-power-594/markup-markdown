@@ -28,14 +28,15 @@
 					<?php esc_html_e( 'Rendering engine', 'markup-markdown' ); ?>
 				</th>
 				<td>
-					<label for="mmd_usecodehighlighter0">
-						<input type="radio" name="mmd_usecodehighlighter" id="mmd_usecodehighlighter0" value="none" <?php echo ! isset( $my_cnf[ 'code_highlighter' ] ) || $my_cnf[ 'code_highlighter' ] === 'none' ? 'checked="checked"' : ''; ?> />
-						<?php esc_html_e( 'None', 'markup-markdown' ); ?>
-					</label>&nbsp;&nbsp;
 					<label for="mmd_usecodehighlighter1">
-						<input type="radio" name="mmd_usecodehighlighter" id="mmd_usecodehighlighter1" value="prism" <?php echo isset( $my_cnf[ 'code_highlighter' ] ) && $my_cnf[ 'code_highlighter' ] === 'prism' ? 'checked="checked"' : ''; ?> />
-						<?php esc_html_e( 'Prism.js rendering', 'markup-markdown' ); ?>
+						<input type="radio" name="mmd_usecodehighlighter" id="mmd_usecodehighlighter1" value="prism" <?php echo ! isset( $my_cnf[ 'code_highlighter' ] ) && $my_cnf[ 'code_highlighter' ] === 'prism' ? 'checked="checked"' : ''; ?> />
+						<?php esc_html_e( 'Prism.js rendering (Default)', 'markup-markdown' ); ?>
 					</label>&nbsp;&nbsp;
+					<label for="mmd_usecodehighlighter2">
+						<input type="radio" name="mmd_usecodehighlighter" id="mmd_usecodehighlighter2" value="highlight" <?php echo isset( $my_cnf[ 'code_highlighter' ] ) && $my_cnf[ 'code_highlighter' ] === 'highlight' ? 'checked="checked"' : ''; ?> />
+						<?php esc_html_e( 'Highlight.js rendering', 'markup-markdown' ); ?>
+					</label>&nbsp;&nbsp;<br />
+					<em><?php esc_html_e( 'Dark mode not supported on the backend, Visual Studio based theme is setup by default for the admin screen and the built-in preview.' ); ?></em>
 				</td>
 			</tr>
 			<tr class="site-load-front">
@@ -45,7 +46,8 @@
 				<td>
 					<label for="code_highlighter_front">
 						<input type="checkbox" name="mmd_codehighlighter_front" id="code_highlighter_front" value="1" <?php echo isset( $my_cnf[ 'code_highlighter_front' ] ) && (int)$my_cnf[ 'code_highlighter_front' ] > 0 ? 'checked="checked"' : ''; ?> />
-						<?php esc_html_e( 'Activate syntax highlighting on the frontend. (Loaded only on the edit screen by default)', 'markup-markdown' ); ?>
+						<?php esc_html_e( 'Activate syntax highlighting on the frontend as well (Disabled by default)', 'markup-markdown' ); ?><br />
+						<em><?php esc_html_e( 'Useful if your theme does not support by default syntax highlighting for code snippets.', 'markup-markdown' ); ?></em>
 					</label>
 				</td>
 			</tr>
@@ -55,13 +57,25 @@
 				</th>
 				<td>
 					<select name="mmd_codehighlighter_theme" id="code_highlighter_theme">
-						<option value="vs"><?php esc_html_e( 'Please select a skin', 'markup-markdown' ); ?></option>
+						<option value="#"><?php esc_html_e( 'Please select a theme', 'markup-markdown' ); ?></option>
 					<?php
-						foreach( $my_themes as $theme_slug => $theme_label ) :
+					if ( ! preg_match( '#^(prism|hl)-#', $my_theme ) ) :
+						$my_theme = 'prism-' . $my_theme;
+					endif;
+					foreach( $my_themes as $engine_slug => $engine_themes ) :
+						$engine_slug = str_replace( 'js', '', $engine_slug );
+						printf( '<optgroup label="%s" class="%s">', esc_attr( strtoupper( $engine_slug ) ), esc_attr( $engine_slug ) );
+						foreach( $engine_themes as $theme_slug => $theme_label ) :
 							printf( '<option value="%s"%s>%s</option>', esc_attr( $theme_slug ), $theme_slug === $my_theme ? ' selected="selected"' : '', esc_html( $theme_label ) );
 						endforeach;
+						printf( '</optgroup>' );
+					endforeach;
 					?>
-					</select> <a href="https://github.com/PrismJS/prism-themes" target="_blank" rel="nofollow"><?php esc_html_e( 'Preview of skins' ); ?></a>
+					</select>
+					<br>
+					<em><?php esc_html_e( 'Dark themes are available, the selected theme will only be applied to the frontend when activated.', 'markup-markdown' ); ?></em><br>
+					<a href="https://github.com/PrismJS/prism-themes" target="_blank" rel="nofollow"><?php esc_html_e( 'View the previews of Prism.js themes' ); ?></a> /
+					<a href="https://highlightjs.org/demo" target="_blank" rel="nofollow"><?php esc_html_e( 'Test in live Highlight.js themes' ); ?></a>
 				</td>
 			</tr>
 		</tbody>

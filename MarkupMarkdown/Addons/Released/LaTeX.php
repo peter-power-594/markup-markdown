@@ -143,7 +143,7 @@ final class Latex {
 		if ( ! isset( $this->prop[ 'engine' ] ) || empty( $this->prop[ 'engine' ] ) || $this->prop[ 'engine' ] === 'none' ) :
 			# Do nothing
 		elseif ( $this->prop[ 'engine' ] === 'katex' ) :
-			wp_enqueue_style( 'markup_markdown__latex_katex', $this->plugin_uri . 'assets/katex/katex.min.css', is_admin() ? [ 'markup_markdown__wordpress_richedit' ] : [], '0.16.11' );
+			wp_enqueue_style( 'markup_markdown__latex_katex', $this->plugin_uri . 'assets/katex/katex.min.css', is_admin() ? [ 'markup_markdown__wordpress_richedit' ] : [], '0.16.22' );
 		elseif ( $this->prop[ 'engine' ] === 'mathml' ) :
 			# Do nothing
 		endif;
@@ -162,7 +162,7 @@ final class Latex {
 		if ( ! isset( $this->prop[ 'engine' ] ) || empty( $this->prop[ 'engine' ] ) || $this->prop[ 'engine' ] === 'none' ) :
 			# Do nothing
 		elseif ( $this->prop[ 'engine' ] === 'katex' ) :
-			wp_enqueue_script( 'markup_markdown__latex_katex', $this->plugin_uri . 'assets/katex/katex.min.js', [ 'markup_markdown__wordpress_richedit' ], '0.16.11', true );
+			wp_enqueue_script( 'markup_markdown__latex_katex', $this->plugin_uri . 'assets/katex/katex.min.js', [ 'markup_markdown__wordpress_richedit' ], '0.16.22', true );
 		elseif ( $this->prop[ 'engine' ] === 'mathjax' ) :
 			wp_enqueue_script( 'markup_markdown__latex_mathjax', $this->plugin_uri . 'assets/mathjax/es5/tex-svg.js', [ 'markup_markdown__wordpress_richedit' ], '3.2.2', true );
 		endif;
@@ -181,8 +181,8 @@ final class Latex {
 		if ( ! isset( $this->prop[ 'engine' ] ) || empty( $this->prop[ 'engine' ] ) || $this->prop[ 'engine' ] === 'none' ) :
 			# Do nothing
 		elseif ( $this->prop[ 'engine' ] === 'katex' ) :
-			wp_enqueue_script( 'markup_markdown__latex_katex', $this->plugin_uri . 'assets/katex/katex.min.js', array(), '0.16.11', true );
-			wp_enqueue_script( 'markup_markdown__latex_katex_render', $this->plugin_uri . 'assets/katex/contrib/auto-render.min.js', array( 'markup_markdown__latex_katex' ), '0.16.11', true );
+			wp_enqueue_script( 'markup_markdown__latex_katex', $this->plugin_uri . 'assets/katex/katex.min.js', array(), '0.16.22', true );
+			wp_enqueue_script( 'markup_markdown__latex_katex_render', $this->plugin_uri . 'assets/katex/contrib/auto-render.min.js', array( 'markup_markdown__latex_katex' ), '0.16.22', true );
 			wp_add_inline_script( 'markup_markdown__latex_katex_render', $this->add_inline_katex_conf() );
 		elseif ( $this->prop[ 'engine' ] === 'mathjax' ) :
 			wp_enqueue_script( 'markup_markdown__latex_mathjax_render', $this->plugin_uri . 'assets/mathjax/es5/tex-svg.js', array(), '3.2.2', true  );

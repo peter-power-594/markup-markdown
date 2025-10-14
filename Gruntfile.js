@@ -108,7 +108,7 @@ module.exports = function(grunt) {
 			}
 		},
 		concat: {
-			dist: {
+			prism: {
 				src: [
 					'assets/easy-markdown-editor/dist/easymde.min.js',
 					'assets/prism/v1/components/prism-core.min.js',
@@ -121,7 +121,21 @@ module.exports = function(grunt) {
 					'assets/markup-markdown/js/wordpress_richedit-media.min.js',
 					'assets/markup-markdown/js/wordpress_richedit-easymde.min.js'
 				],
-				dest: 'assets/markup-markdown/js/builder.min.js'
+				dest: 'assets/markup-markdown/js/builder_prism.min.js'
+			},
+			hl: {
+				src: [
+					'assets/easy-markdown-editor/dist/easymde.min.js',
+					'assets/highlightjs/highlight.min.js',
+					'assets/jquery-waypoints/lib/jquery.waypoints.min.js',
+					'assets/jquery-waypoints/lib/shortcuts/sticky.min.js',
+					'assets/custom-codemirror-spell-checker/dist/spell-checker.min.js',
+					'assets/markup-markdown/js/wordpress_richedit-spellchecker.min.js',
+					'assets/markup-markdown/js/wordpress_richedit-preview.min.js',
+					'assets/markup-markdown/js/wordpress_richedit-media.min.js',
+					'assets/markup-markdown/js/wordpress_richedit-easymde.min.js'
+				],
+				dest: 'assets/markup-markdown/js/builder_hl.min.js'
 			}
 		},
 		watch: {

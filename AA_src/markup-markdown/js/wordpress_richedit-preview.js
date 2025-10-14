@@ -836,7 +836,7 @@
 	/**
 	 * Code Snippets rendering
 	 *
-	 * @param {String} wpCodeFences The code fences html will be rendered by Prismjs
+	 * @param {String} wpCodeFences The code fences html will be rendered by Prismjs or HighlightJS
 	 * @param {Integer} formularNumber The number used for the snippet ID in the HTML document
 	 *
 	 * @returns {Boolean} TRUE in case of success or FALSE
@@ -861,7 +861,7 @@
 		}
 		var retryhighLight = 0,
 			saveHighlighting = function() {
-				if ( ! snippetNode || ! window.Prism ) {
+				if ( ! snippetNode || ( ! window.Prism && ! window.hljs ) ) {
 					return false;
 				}
 				if ( ! snippetNode.firstChild || ! ( snippetNode.firstChild.className || '' ).length ) {

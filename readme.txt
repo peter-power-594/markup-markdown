@@ -1,7 +1,7 @@
 === Markup Markdown ===
 Tags: Editor, Markdown
-Stable Tag: 3.20.10
-Version: 3.20.10
+Stable Tag: 3.21.0
+Version: 3.21.0
 Requires at least: 4.9
 Tested up to: 6.8
 Requires PHP: 5.6.0
@@ -69,6 +69,24 @@ The current version is based on components that are not compatible with assistiv
 
 == Changelog ==
 
+= 3.21.0 =
+
+Improvement:
+- Adding Highlight.js as engine for code highlighting
+
+= 3.20.12 =
+
+Bug fix:
+- Fixing the filter to render the "Read more" link on the archive template with themes built for Gutenberg
+
+Improvement:
+- Keeping the use of "<!--more-->" or "<!-- more -->" tag with themes built for Gutenberg
+
+= 3.20.11 =
+
+Maintenance release:
+- Bumping a few dependencies (EasyMDE, Typo.js, Katex)
+
 = 3.20.10 =
 
 Bug fixes:
@@ -80,7 +98,7 @@ Bug fixes:
 Bug fix:
 - Image sets for gallery fixed
 
-All _gallery shortcodes_ `[gallery ...]` with legacy or standard themes should trigger properly the _lightbox_ option if enabled with the proper set number.  
+All _gallery shortcodes_ `[gallery ...]` with legacy or standard themes should trigger properly the _lightbox_ option if enabled with the proper set number.
 Any list of images will be converted to a 2 columns layout if the _masonry_ option is enabled AND the post format is set to _gallery_.
 
 = 3.20.8 =
@@ -206,7 +224,7 @@ Bug fix :
 = 3.15.1 =
 
 Bug fix :
-- Patch error when saving settings with no selected plugs 
+- Patch error when saving settings with no selected plugs
 
 = 3.15.0 =
 
@@ -231,12 +249,12 @@ Bug fix:
 = 3.14.4 =
 
 Bug fix:
-- Filter modified to trigger markdown rendering for themes that don't use loops inside single post templates 
+- Filter modified to trigger markdown rendering for themes that don't use loops inside single post templates
 
 = 3.14.3 =
 
 Bug fix:
-- Patching a filter for theme designed for non-block editors when Gutenberg would be loaded instead of Markdown with the 'post-new.php' hook 
+- Patching a filter for theme designed for non-block editors when Gutenberg would be loaded instead of Markdown with the 'post-new.php' hook
 
 = 3.14.2 =
 
@@ -293,7 +311,7 @@ Improvements:
 = 3.9.1 =
 
 Bug fix:
-- Solved heading levels upper than 2 rendered as bullet list when heading level 1 was disabled 
+- Solved heading levels upper than 2 rendered as bullet list when heading level 1 was disabled
 
 = 3.9.0 =
 
@@ -305,7 +323,7 @@ Various tiny bug fixes
 = 3.8.2 =
 
 Bug fix:
-- Solved heading levels upper than 2 not working when heading level 1 was disabled 
+- Solved heading levels upper than 2 not working when heading level 1 was disabled
 
 = 3.8.1 =
 
@@ -400,8 +418,8 @@ One unique event *CodeMirrorDictionariesReady* will be dispatched once all the d
 Improvement:
 - Primary scripts now minified as a unique bundle file
 
-By default _builder.min.js_ is loaded.  
-If _WP_DEBUG_ is enabled, separate minified module scripts will be used.  
+By default _builder.min.js_ is loaded.
+If _WP_DEBUG_ is enabled, separate minified module scripts will be used.
 If _SCRIPT_DEBUG_ or _MMD_SCRIPT_DEBUG_ is turned on, the unminified version available of a module will be loaded when available
 
 = 3.5.0 =

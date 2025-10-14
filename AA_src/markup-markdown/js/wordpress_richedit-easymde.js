@@ -1,4 +1,5 @@
-/* global wp, mmd_wpr_vars, EasyMDE, Prism */
+
+/* global wp, mmd_wpr_vars, EasyMDE, Prism, hljs */
 
 /**
  * @preserve The Markup Markdown's EasyMDE Primary Module
@@ -138,7 +139,7 @@
 			'mmd_fullscreen': { action: EasyMDE.toggleFullScreen, className: 'mmd_fa mmd_fa-arrows-alt no-disable no-mobile' },
 			'mmd_undo': { action: EasyMDE.undo, className: 'mmd_fa mmd_fa-undo' },
 			'mmd_redo': { action: EasyMDE.redo, className: 'mmd_fa mmd_fa-redo' },
-			'mmd_guide': { action: function() { return window.open( 'https://www.markdownguide.org/basic-syntax/', '_blank' ); }, className: 'mmd_fa mmd_fa-question-circle' }
+			'mmd_guide': { action: function() { return window.open( 'https://www.markup-markdown.com/wordpress-tutorials/', '_blank' ); }, className: 'mmd_fa mmd_fa-question-circle' }
 		};
 		EasyMDE.wpsImage = function( editor ) {
 			activeWidget = _self;
@@ -289,6 +290,11 @@
 					mediaPreview.runQueue();
 					if ( window.Prism && typeof window.Prism.highlightAll === 'function' ) {
 						Prism.highlightAll();
+					} else if ( window.hljs && typeof window.hljs.highlightAll === 'function' ) {
+						$( '.editor-preview-side pre code:not([data-highlighted="yes"]), .editor-preview-full pre code:not([data-highlighted="yes"])' ).each(function(){
+							hljs.highlightElement( this );
+							this.parentNode.className = 'highlighted-yes';
+						});
 					}
 					$( _win ).trigger( 'resize.mmd_win_sticky_toolbar' );
 				}, 10);

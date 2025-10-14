@@ -34,11 +34,11 @@
 					</label>&nbsp;&nbsp;
 					<label for="mmd_uselatex1">
 						<input type="radio" name="mmd_uselatex" id="mmd_uselatex1" value="katex" <?php echo isset( $my_cnf[ 'latex' ] ) && $my_cnf[ 'latex' ] === 'katex' ? 'checked="checked"' : ''; ?> />
-						<?php esc_html_e( 'Katex rendering', 'markup-markdown' ); ?> (HTML / MATHML)
+						<?php esc_html_e( 'Katex rendering', 'markup-markdown' ); ?> (HTML / MATHML - v0.16.22)
 					</label>&nbsp;&nbsp;
 					<label for="mmd_uselatex2">
 						<input type="radio" name="mmd_uselatex" id="mmd_uselatex2" value="mathjax" <?php echo isset( $my_cnf[ 'latex' ] ) && $my_cnf[ 'latex' ] === 'mathjax' ? 'checked="checked"' : ''; ?> />
-						<?php esc_html_e( 'Mathjax rendering', 'markup-markdown' ); ?> (SVG / MATHML)
+						<?php esc_html_e( 'Mathjax rendering', 'markup-markdown' ); ?> (SVG / MATHML - v3.2.2)
 					</label>
 				</td>
 			</tr>
