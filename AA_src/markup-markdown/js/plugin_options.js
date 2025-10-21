@@ -27,7 +27,14 @@
 			return false;
 		}
 		$( "#tabs" ).tabs({
-			active: $( hash && hash.length ? hash : '#tab-layout' ).prevAll().length - 1 
+			active: $( hash && hash.length ? hash : '#tab-layout' ).prevAll().length - 1,
+			activate: function( event, ui ) {
+				if ( $( window ).width() < 601 ) {
+					$( 'html, body' ).animate({
+						scrollTop: $( ui.newPanel ).offset().top - 5
+					}, 250 );
+				}
+			}
 		});
 		return true;
 	};

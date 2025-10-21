@@ -1,6 +1,6 @@
 <?php defined( 'ABSPATH' ) || exit; ?>
 
-<div id="tab-layout">
+<div id="tab-layout" class="vertical-rows">
 	<h2><?php esc_html_e( 'Layout', 'markup-markdown' ); ?></h2>
 	<p><?php esc_html_e( 'Here are a few settings you can change to modify the behavior of your blog posts.', 'markup-markdown' ); ?></p>
 	<table class="form-table" role="presentation">

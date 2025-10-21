@@ -152,7 +152,7 @@ final class EngineEasyMDE {
 
 
 	/**
-	 * Load step by setp the required assets
+	 * Load step by step the required assets
 	 *
 	 * @access public
 	 * @since 3.0.0
@@ -209,6 +209,7 @@ final class EngineEasyMDE {
 		wp_enqueue_media( $args );
 		wp_playlist_scripts( 'audio' );
 		wp_playlist_scripts( 'video' );
+		add_thickbox();
 		return true;
 	}
 
@@ -281,7 +282,7 @@ final class EngineEasyMDE {
 		elseif ( $this->prop[ 'hlengine' ] === 'highlight' ) :
 			wp_enqueue_script( 'markup_markdown__wordpress_richedit', $plugin_uri . 'assets/markup-markdown/js/builder_hl.min.js', [], '1.1.15', true );
 		endif;
-		wp_localize_script( 'markup_markdown__wordpress_richedit', 'mmd_wpr_vars', array(
+		$local_str = array(
 			'mmd_pipe'            => esc_html__( 'Pipe', 'markup-markdown' ),
 			'mmd_bold'            => esc_html__( 'Bold', 'markup-markdown' ),
 			'mmd_italic'          => esc_html__( 'Italic', 'markup-markdown' ),
@@ -308,7 +309,12 @@ final class EngineEasyMDE {
 			'mmd_undo'            => esc_html__( 'Undo', 'markup-markdown' ),
 			'mmd_redo'            => esc_html__( 'Redo', 'markup-markdown' ),
 			'mmd_spell-check'     => esc_html__( 'Spellchecker', 'markup-markdown' )
-		));
+		);
+		$ext_str = apply_filters( 'mmd_localized_strings', array() );
+		if ( isset( $ext_str ) && is_array( $ext_str ) && count( $ext_str ) > 0 ) :
+			$local_str = array_merge( $local_str, $ext_str );
+		endif;
+		wp_localize_script( 'markup_markdown__wordpress_richedit', 'mmd_wpr_vars', $local_str );
 		wp_add_inline_script( 'markup_markdown__wordpress_richedit', $this->add_inline_editor_conf() );
 		do_action( 'mmd_load_engine_scripts' );
 	}

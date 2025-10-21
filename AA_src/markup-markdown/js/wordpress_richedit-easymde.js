@@ -208,7 +208,7 @@
 		defActions.mmd_rtltextdir = { action: EasyMDE.switchHTMLDir, className: 'mmd_fa' + ( langDir === 'rtl' ? 's' : 'r' ) + ' mmd_fa-caret-square-left' };
 		defActions.mmd_ltrtextdir = { action: EasyMDE.switchHTMLDir, className: 'mmd_fa' + ( langDir === 'ltr' ? 's' : 'r' ) + ' mmd_fa-caret-square-right' };
 		// Build the toolbar
-		for ( var b = 0, slug = '', targetAction = '', buttons = _self.toolbarButtons; b < buttons.length; b++ ) {
+		for ( var b = 0, slug = '', targetAction = '', extAction = {}, buttons = _self.toolbarButtons; b < buttons.length; b++ ) {
 			slug = buttons[ b ];
 			if ( /pipe/.test( slug ) ) {
 				toolbar.push( "|" );
@@ -239,6 +239,17 @@
 						defActions[ targetAction ].title = mmd_wpr_vars[ targetAction ];
 					}
 					toolbar.push( defActions[ targetAction ] );
+				}
+				else if ( EasyMDE[ targetAction ] ) {
+					extAction = {
+						name: targetAction,
+						className: 'mmd_fa ' + targetAction.replace( 'mmd_', 'mmd_fa-' ),
+						action: EasyMDE[ targetAction ]
+					};
+					if ( mmd_wpr_vars && mmd_wpr_vars[ targetAction ] ) {
+						extAction.title = mmd_wpr_vars[ targetAction ];
+					}
+					toolbar.push( extAction );
 				}
 				else {
 					toolbar.push( targetAction.replace( 'mmd_', '' ) );

@@ -11,15 +11,21 @@ final class Parser {
 
 	private $parser = '';
 
+
 	private $preview = 'false';
+
 
 	private $mmd_allowed = 1;
 
+
 	public $cache_enabled = 0;
+
 
 	public $post_cache_dir = '';
 
+
 	private $allowed_html = array();
+
 
 	public function __construct() {
 		if ( MMD_SUPPORT_ENABLED > 0 ) :
@@ -146,13 +152,19 @@ final class Parser {
 		if ( ! $this->mmd_allowed ) :
 			# Markdown has been disabled on the main content
 			return $field_content;
-		else:
-			if ( ! isset( $this->allowed_html ) || ! is_array( $this->allowed_html ) || ! count( $this->allowed_html ) ) :
-				$this->allowed_html = wp_kses_allowed_html( 'post' );
-				$this->allowed_html[ 'iframe' ] = array( 'src' => true, 'height' => true, 'width' => true, 'id' => true, 'class' => true, 'title' => true, 'frameborder' => true, 'allow' => true, 'allowfullscreen' => true );
-			endif;
-			return wp_kses( $field_content, $this->allowed_html );
 		endif;
+		if ( ! isset( $this->allowed_html ) || ! is_array( $this->allowed_html ) || ! count( $this->allowed_html ) ) :
+			$this->allowed_html = wp_kses_allowed_html( 'post' );
+			$this->allowed_html[ 'iframe' ] = array( 'src' => true, 'height' => true, 'width' => true, 'id' => true, 'class' => true, 'title' => true, 'frameborder' => true, 'allow' => true, 'allowfullscreen' => true );
+		endif;
+		if ( ! isset( $this->allowed_html[ 'form' ] ) && post_password_required() ) :
+			$this->allowed_html[ 'form' ] = array( 'action' => true, 'accept' => true, 'accept-charset' => true, 'enctype' => true, 'method' => true, 'name' => true, 'target' => true );
+			$this->allowed_html[ 'input' ] = array( 'type'  => array(), 'name' => array(), 'value' => array(), 'class' => array(), 'id' => array(), 'placeholder' => array(), 'required' => array(), 'readonly' => array(), 'disabled' => array() );
+		elseif ( isset( $this->allowed_html[ 'form' ] ) ) :
+			unset( $this->allowed_html[ 'form' ] );
+			unset( $this->allowed_html[ 'input' ] );
+		endif;
+		return wp_kses( $field_content, $this->allowed_html );
 	}
 
 

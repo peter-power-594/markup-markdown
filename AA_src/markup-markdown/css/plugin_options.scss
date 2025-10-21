@@ -1,5 +1,25 @@
-@use 'font-awesome-svg.scss' as *;
+@use 'font-awesome-svg.scss';
 
+#wpcontent {
+	padding-left: 0;
+}
+#wrap {
+	padding: 0 20px;
+	p.submit {
+		margin: 0 0 0 200px;
+		padding: 0 20px 20px 20px;
+		background: #fff;
+		border-radius: 0;
+	}
+	@media screen and (max-width: 980px) {
+		h1 sup {
+			display: none;
+		}
+		p.submit {
+			margin-left: 0;
+		}
+	}
+}
 .ui-tabs-nav {
 	margin: 0;
 	padding: 16px 0;
@@ -200,6 +220,7 @@ h4.ui-widget-header + p {
 		padding: 5px;
 		border: 1px solid #C3C4C7;
 		border-radius: 4px;
+		overflow: auto;
 	}
 	li {
 		display: block;
@@ -260,4 +281,96 @@ h4.ui-widget-header + p {
 	overflow: auto;
 	background: #fff;
 	padding: 1.5em;
+}
+.vertical {
+	display: flex;
+	flex-direction: row;
+	.ui-tabs-nav {
+		margin: 0;
+		padding: 0;
+		height: 100%;
+		width: 200px;
+		min-width: 200px;
+		border: 0;
+		&:after {
+			background: transparent;
+		}
+		li {
+			border-radius: 0;
+			border-left: 0;
+			border-right: 0;
+			&:first-child {
+				border-top: 0;
+			}
+			&:last-child {
+				border-bottom: 0;
+			}
+			&.ui-state-active {
+				background: #fff;
+				padding: 0;
+			}
+			a {
+				padding: 16px;
+			}
+		}
+		li, a {
+			display: block;
+			margin: 0;
+			float: none;
+		}
+	}
+	.ui-tabs-panel {
+		overflow: hidden;
+		flex-grow: 1;
+		padding: 0 20px;
+		background: #fff;
+	}
+	.ui-tabs-panel.vertical-rows {
+		table, thead, tbody, tr, th, td {
+			display: block;
+		}
+		th {
+			margin: 0;
+			padding: 21px 0 8px 0;
+		}
+		td {
+			margin: 0;
+			padding-left: 0;
+			padding-right: 0;
+			padding-top: 0;
+		}
+	}
+	@media screen and (max-width: 980px) {
+		flex-direction: column;
+		.ui-tabs-nav {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: no-wrap;
+			width: 100%;
+			min-width: 100%;
+			max-width: 100%;
+			overflow: auto;
+			li {
+				border-top: 1px solid #c5c5c5;
+				&:first-child {
+					border-top: 1px solid #c5c5c5;					
+				}
+				&.ui-state-active {
+					border-top-color: rgba(255,255,255,0);
+					&:first-child {
+						border-top-color: rgba(255,255,255,0);						
+					}
+				}
+			}
+			@media screen and (max-width: 600px) {
+				flex-wrap: wrap;
+				overflow: visible;
+				li {
+					width: 100%;
+					flex-grow: 0;
+				}
+			}
+		}
+	}
+
 }

@@ -1,7 +1,7 @@
 <?php defined( 'ABSPATH' ) || exit; ?>
 
 
-<div id="tab-comments">
+<div id="tab-comments" class="vertical-rows">
 	<h2><?php esc_html_e( 'Comments', 'markup-markdown' ); ?></h2>
 	<p><?php esc_html_e( 'Use markdown inside your comments.', 'markup-markdown' ); ?></p>
 	<table class="form-table" role="presentation">

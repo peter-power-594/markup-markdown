@@ -1,6 +1,6 @@
 <?php defined( 'ABSPATH' ) || exit; ?>
 
-<div id="tab-mermaid">
+<div id="tab-mermaid" class="vertical-rows">
 	<h2><?php esc_html_e( 'Mermaid', 'markup-markdown' ); ?></h2>
 	<p><?php esc_html_e( 'Easily display diagrams and charts inside your post.', 'markup-markdown' ); ?></p>
 	<table class="form-table" role="presentation">

@@ -1,6 +1,6 @@
 <?php defined( 'ABSPATH' ) || exit; ?>
 
-<div id="tab-codehighlight">
+<div id="tab-codehighlight" class="vertical-rows">
 	<h2><?php esc_html_e( 'Syntax Highlighting', 'markup-markdown' ); ?></h2>
 	<p><?php esc_html_e( 'Colorful syntax highlighting for your snippets code.', 'markup-markdown' ); ?></p>
 	<table class="form-table" role="presentation">

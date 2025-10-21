@@ -1,6 +1,6 @@
 <?php defined( 'ABSPATH' ) || exit; ?>
 
-<div id="tab-latex">
+<div id="tab-latex" class="vertical-rows">
 	<h2><?php esc_html_e( 'LaTeX', 'markup-markdown' ); ?></h2>
 	<p><?php esc_html_e( 'Easily type and render math formulas inside your post.', 'markup-markdown' ); ?></p>
 	<table class="form-table" role="presentation">

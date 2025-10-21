@@ -1,10 +1,10 @@
 === Markup Markdown ===
 Tags: Editor, Markdown
-Stable Tag: 3.21.0
-Version: 3.21.0
-Requires at least: 4.9
+Stable Tag: 3.22.0
+Version: 3.22.0
+Requires at least: 6.6
 Tested up to: 6.8
-Requires PHP: 5.6.0
+Requires PHP: 7.2.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html#license-text
 Donate Link: https://buymeacoffee.com/peterpower594
@@ -68,6 +68,17 @@ The current version is based on components that are not compatible with assistiv
 
 
 == Changelog ==
+
+= 3.22.0 =
+
+PHP 5 dropped, the minimum requirement is PHP version 7.2 so Wordpress version 6.6 or upper is now required
+
+Bug fix:
+- Restore form related HTML tags when a post is protected by a password
+- Fixing a few warnings (deprecated) with PHP 8.4
+
+Improvement:
+- Mobile / Tablet layout for the settings page
 
 = 3.21.0 =
 

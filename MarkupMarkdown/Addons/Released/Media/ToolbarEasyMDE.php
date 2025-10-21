@@ -145,6 +145,10 @@ final class ToolbarEasyMDE {
 				$toolbar_conf->my_buttons[ $idx ] = "mmd_" . $button_slug;
 			endif;
 		endforeach;
+		$ext_buttons = apply_filters( 'mmd_toolbar_buttons', array() );
+		if ( isset( $ext_buttons ) && is_array( $ext_buttons ) && count( $ext_buttons ) > 0 ) :
+			$this->prop[ 'default_buttons' ] = array_merge( $this->prop[ 'default_buttons' ], $ext_buttons );
+		endif;
 		foreach ( $toolbar_conf->my_buttons as $button_slug ) :
 			if ( ! in_array( $button_slug, $this->prop[ 'active_buttons' ] ) && isset( $this->prop[ 'default_buttons' ][ $button_slug ] ) ) :
 				$this->prop[ 'active_buttons' ][] = array_merge( [ "slug" => $button_slug ], $this->prop[ 'default_buttons' ][ $button_slug ] );
@@ -223,6 +227,10 @@ final class ToolbarEasyMDE {
 		$this->i18n[ 'mmd_rtltextdir' ][ 'label' ] = esc_html__( 'Right to Left text direction', 'markup-markdown' );
 		$this->i18n[ 'mmd_ltrtextdir' ][ 'tooltip' ] = esc_html__( 'Switch text direction to left', 'markup-markdown' );
 		$this->i18n[ 'mmd_ltrtextdir' ][ 'label' ] = esc_html__( 'Left to Right text direction', 'markup-markdown' );
+		$ext_translations = apply_filters( 'mmd_button_translations', array() );
+		if ( isset( $ext_translations ) && is_array( $ext_translations ) && count( $ext_translations ) > 0 ) :
+			$this->i18n = array_merge( $this->i18n, $ext_translations );
+		endif;
 		return true;
 	}
 

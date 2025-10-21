@@ -131,7 +131,7 @@ final class Settings {
 				printf( esc_html__( 'Most of the following settings are related to addons. You can globally enable or disable addons from the %1$s screen options %2$s panel.', 'markup-markdown' ), '<a href="#show-settings-link" class="toggler">', '</a>' );
 			?></p>
 			<form method="post">
-				<div id="tabs">
+				<div id="tabs" class="vertical">
 					<ul>
 <?php do_action( 'mmd_tabmenu_options' ); ?>
 					</ul>
@@ -325,12 +325,12 @@ final class Settings {
 	 */
 	public function enqueue_setting_scripts() {
 		$plugin_uri = mmd()->plugin_uri;
-		wp_enqueue_style( 'markup_markdown-options', $plugin_uri . '/assets/markup-markdown/css/plugin_options.min.css', [], '1.0.7' );
+		wp_enqueue_style( 'markup_markdown-options', $plugin_uri . '/assets/markup-markdown/css/plugin_options.min.css', [], '1.0.8' );
 		wp_enqueue_style( 'markup_markdown-easymde_editor',  $plugin_uri . 'assets/easy-markdown-editor/dist/easymde.min.css', [], '2.19.1011' );
 		foreach ( [ 'core', 'tabs', 'draggable', 'droppable', 'sortable', 'button' ] as $jq_component ) :
 			wp_enqueue_script( 'jquery-ui-' . $jq_component );
 		endforeach;
-		wp_enqueue_script( 'markup_markdown-options', $plugin_uri . '/assets/markup-markdown/js/plugin_options.min.js', [ 'jquery-ui-tabs' ], '1.0.7', true );
+		wp_enqueue_script( 'markup_markdown-options', $plugin_uri . '/assets/markup-markdown/js/plugin_options.min.js', [ 'jquery-ui-tabs' ], '1.0.8', true );
 	}
 
 
