@@ -1,7 +1,7 @@
 === Markup Markdown ===
 Tags: Editor, Markdown
-Stable Tag: 3.22.0
-Version: 3.22.0
+Stable Tag: 3.22.1
+Version: 3.22.1
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 7.2.0
@@ -68,6 +68,11 @@ The current version is based on components that are not compatible with assistiv
 
 
 == Changelog ==
+
+= 3.22.1 =
+
+Bug fix:
+- Patching unselectable radio box on the settings page
 
 = 3.22.0 =
 

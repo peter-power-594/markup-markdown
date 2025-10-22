@@ -29,7 +29,7 @@
 				</th>
 				<td>
 					<label for="mmd_usecodehighlighter1">
-						<input type="radio" name="mmd_usecodehighlighter" id="mmd_usecodehighlighter1" value="prism" <?php echo ! isset( $my_cnf[ 'code_highlighter' ] ) && $my_cnf[ 'code_highlighter' ] === 'prism' ? 'checked="checked"' : ''; ?> />
+						<input type="radio" name="mmd_usecodehighlighter" id="mmd_usecodehighlighter1" value="prism" <?php echo ! isset( $my_cnf[ 'code_highlighter' ] ) || $my_cnf[ 'code_highlighter' ] === 'prism' ? 'checked="checked"' : ''; ?> />
 						<?php esc_html_e( 'Prism.js rendering (Default)', 'markup-markdown' ); ?>
 					</label>&nbsp;&nbsp;
 					<label for="mmd_usecodehighlighter2">
