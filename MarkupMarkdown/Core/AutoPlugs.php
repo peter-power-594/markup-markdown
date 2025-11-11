@@ -56,7 +56,7 @@ final class AutoPlugs {
 	 *
 	 * @return Boolean TRUE if required or FALSE
 	 */
-	public function should_load_plugs( $bool ) {
+	final public function should_load_plugs( $bool ) {
 		if ( ! defined( 'WP_MMD_PLUGS' ) ) :
 			return $bool;
 		endif;
@@ -72,7 +72,7 @@ final class AutoPlugs {
 	 *
 	 * @return Void
 	 */
-	public function update_config( $my_cnf ) {
+	final public function update_config( $my_cnf ) {
 		$fm_plugs = filter_input( INPUT_POST, 'mmd_plugs', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 		if ( ! isset( $fm_plugs ) || ! is_array( $fm_plugs ) ) :
 			$fm_plugs = [];
@@ -84,14 +84,14 @@ final class AutoPlugs {
 		$my_cnf[ 'plugs' ] = $my_plugs;
 		return $my_cnf;
 	}
-	public function create_const( $my_cnf ) {
+	final public function create_const( $my_cnf ) {
 		if ( isset( $my_cnf[ 'plugs' ] ) ) :
 			$this->sanitize_save_conf( $my_cnf[ 'plugs' ] );
 			unset( $my_cnf[ 'plugs' ] );
 		endif;
 		return $my_cnf;
 	}
-	public function sanitize_save_conf( $my_cnf = [] ) {
+	final public function sanitize_save_conf( $my_cnf = [] ) {
 		$cnf_file = mmd()->conf_blog_prefix . 'plugs.php';
 		$data = "<?php\n\tdefined( 'ABSPATH' ) || exit;";
 		$data .= "\n\tdefine( \"MMD_AUTOPLUGS\", ";
@@ -118,7 +118,7 @@ final class AutoPlugs {
 	 *
 	 * @return Boolean TRUE in case series of plugs should be loaded or FALSE
 	 */
-	public function load_autoplugs( $auto = true ) {
+	final public function load_autoplugs( $auto = true ) {
 		if ( ! $auto ) :
 			return false;
 		endif;
@@ -181,7 +181,7 @@ final class AutoPlugs {
 	 *
 	 * @return Void
 	 */
-	public function prepare_autoplugs_tab( $hook ) {
+	final public function prepare_autoplugs_tab( $hook ) {
 		if ( 'settings_page_markup-markdown-admin' === $hook ) :
 			add_action( 'mmd_tabmenu_options', array( $this, 'add_tabmenu' ), 99, 1 );
 			add_action( 'mmd_tabcontent_options', array( $this, 'add_tabcontent' ), 99, 1 );
@@ -197,7 +197,7 @@ final class AutoPlugs {
 	 *
 	 * @return Void
 	 */
-	public function add_tabmenu() {
+	final public function add_tabmenu() {
 		echo "\t\t\t\t\t\t<li><a href=\"#tab-plugs\" class=\"mmd-ico ico-plug\">" . esc_html__( 'Autoplugs', 'markup-markdown' ) . "</a></li>\n";
 	}
 
@@ -210,7 +210,7 @@ final class AutoPlugs {
 	 *
 	 * @return Void
 	 */
-	public function add_tabcontent() {
+	final public function add_tabcontent() {
 		$conf_file = mmd()->conf_blog_prefix . 'plugs.php';
 		if ( mmd()->exists( $conf_file ) ) :
 			require_once $conf_file;
@@ -223,4 +223,8 @@ final class AutoPlugs {
 		endif;
 	}
 
+
 }
+
+
+return new \MarkupMarkdown\Core\AutoPlugs();

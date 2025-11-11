@@ -1,7 +1,7 @@
 === Markup Markdown ===
 Tags: Editor, Markdown
-Stable Tag: 3.22.1
-Version: 3.22.1
+Stable Tag: 3.24.0
+Version: 3.24.0
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 7.2.0
@@ -68,6 +68,22 @@ The current version is based on components that are not compatible with assistiv
 
 
 == Changelog ==
+
+= 3.24.0 =
+
+Improvement:
+- Adding native basic support for TODO list items
+
+= 3.23.0 =
+
+Bug fixes:
+- Broken links in footnotes
+- TODO list with the O2 Plug
+
+Improvements:
+- Adding steam and macappstores in protocols
+- Adding `WP_MMD_UNFILTERED_HTML` to force disable the HTML sanitizer feature (at your own risk)
+- Updating addons / autoplugs loader
 
 = 3.22.1 =
 

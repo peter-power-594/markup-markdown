@@ -18,7 +18,7 @@ class WPGeshi {
 	}
 
 
-	public function mmd_wp_geshi_plug() {
+	final public function mmd_wp_geshi_plug() {
 		# Just in case make sure one of the wp geshi core function is available
 		if ( function_exists( 'wp_geshi_filter_replace_code' ) ) :
 			global $wp_geshi_used_languages;
@@ -32,7 +32,7 @@ class WPGeshi {
 	}
 
 
-	public function trigger_wp_geshi( $content ) {
+	final public function trigger_wp_geshi( $content ) {
 		# Replace <pre><code class="language-php">...</code></pre> by <pre lang="php">...</pre>
 		$pre_friendly = preg_replace(
 			"#<pre><code class=\"lang-([a-z0-9]+).*?\">#",
@@ -60,7 +60,7 @@ class WPGeshi {
 	}
 
 
-	public function load_wp_geshi_stylesheets() {
+	final public function load_wp_geshi_stylesheets() {
 		if ( ! is_singular() || empty( $this->mmd_geshi_css_code ) ) :
 			return false;
 		endif;

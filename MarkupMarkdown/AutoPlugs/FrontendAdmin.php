@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
  * @since 3.15.0
  *
  */
-class FrontendAdmin {
+final class FrontendAdmin {
 
 
 	private $env = array();
@@ -27,7 +27,7 @@ class FrontendAdmin {
 	}
 
 
-	public function mmd_enqueue() {
+	final public function mmd_enqueue() {
 		if ( ! is_singular() ) :
 			return false;
 		endif;
@@ -58,7 +58,7 @@ class FrontendAdmin {
 	 * 
 	 * @return Void
 	 */
-	public function allow_frontend_admin() {
+	final public function allow_frontend_admin() {
 		remove_post_type_support( 'admin_form', 'markup_markdown' );
 	}
 

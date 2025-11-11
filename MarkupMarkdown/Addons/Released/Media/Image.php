@@ -4,7 +4,12 @@ namespace MarkupMarkdown\Addons\Released\Media;
 
 defined( 'ABSPATH' ) || exit;
 
+if ( defined( 'MMD_ADDONS_LOADED' ) ) :
+	return false;
+endif;
+
 require_once mmd()->plugin_dir . '/MarkupMarkdown/Abstracts/ImageTinyAPI.php';
+
 
 final class Image extends \MarkupMarkdown\Abstracts\ImageTinyAPI {
 
@@ -153,3 +158,6 @@ final class Image extends \MarkupMarkdown\Abstracts\ImageTinyAPI {
 
 
 }
+
+
+return apply_filters( 'mmd_load_addon', 'Image', new \MarkupMarkdown\Addons\Released\Media\Image() );

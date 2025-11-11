@@ -293,7 +293,7 @@ final class Extra extends \MarkupMarkdown\Parsedown\Parsedown
                 'handler' => 'element',
                 'text' => array(
                     'name' => 'a',
-                    'attributes' => array('href' => '#fn:'.$name, 'class' => 'footnote-ref'),
+                    'attributes' => array('href' => '#fn%3A'.$name, 'class' => 'footnote-ref'),
                     'text' => $this->DefinitionData['Footnote'][$name]['number'],
                 ),
             );
@@ -417,7 +417,7 @@ final class Extra extends \MarkupMarkdown\Parsedown\Parsedown
 
             foreach ($numbers as $number)
             {
-                $backLinksMarkup .= ' <a href="#fnref'.$number.':'.$definitionId.'" rev="footnote" class="footnote-backref">&#8617;</a>';
+                $backLinksMarkup .= ' <a href="#fnref'.$number.'%3A'.$definitionId.'" rev="footnote" class="footnote-backref">&#8617;</a>';
             }
 
             $backLinksMarkup = substr($backLinksMarkup, 1);

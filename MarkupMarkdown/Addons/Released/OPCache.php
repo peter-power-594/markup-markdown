@@ -4,6 +4,10 @@ namespace MarkupMarkdown\Addons\Released;
 
 defined( 'ABSPATH' ) || exit;
 
+if ( defined( 'MMD_ADDONS_LOADED' ) ) :
+	return false;
+endif;
+
 
 final class OPCache {
 
@@ -49,3 +53,6 @@ final class OPCache {
 	}
 
 }
+
+
+return apply_filters( 'mmd_load_addon', 'nopcache', new \MarkupMarkdown\Addons\Released\OPCache() );

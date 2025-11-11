@@ -5,7 +5,7 @@ namespace MarkupMarkdown\AutoPlugs;
 defined( 'ABSPATH' ) || exit;
 
 
-class O2 {
+final class O2 {
 
 
 	public function __construct() {
@@ -29,7 +29,7 @@ class O2 {
 	 *
 	 * @return Array The modified fragment
 	 */
-	public function o2_post_fragment_filter( $fragment, $post_ID ) {
+	final public function o2_post_fragment_filter( $fragment, $post_ID ) {
 		if ( isset( $fragment[ 'contentRaw' ] ) ) :
 			$fragment[ 'contentRaw' ] = preg_replace( '#[\\\\]{1}[\#]{1}#', '#', $fragment[ 'contentRaw' ] );
 			$fragment[ 'contentRaw' ] = preg_replace( '#\t#', ' ', $fragment[ 'contentRaw' ] );
@@ -48,7 +48,7 @@ class O2 {
 	 *
 	 * @return String The modified content
 	 */
-	public function o2_parse_list_filter( $content ) {
+	final public function o2_parse_list_filter( $content ) {
 		if ( defined( 'MMD_USE_HEADINGS' ) && ! in_array( '1', MMD_USE_HEADINGS ) ) :
 			preg_match_all( '#(\t*)[\\\\]{1}[\#]{1}#', $content, $sharp_items ); # Trigger ordered list written with the sharp sign
 			if ( isset( $sharp_items ) && count( $sharp_items ) > 0 ) :

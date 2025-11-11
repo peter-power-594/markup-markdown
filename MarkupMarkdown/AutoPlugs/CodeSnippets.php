@@ -5,7 +5,7 @@ namespace MarkupMarkdown\AutoPlugs;
 defined( 'ABSPATH' ) || exit;
 
 
-class CodeSnippets {
+final class CodeSnippets {
 
 
 	public function __construct() {
@@ -15,7 +15,7 @@ class CodeSnippets {
 	}
 
 
-	public function init() {
+	private function init() {
 		if ( is_admin() ) :
 			$page = filter_input( INPUT_GET, 'page', FILTER_SANITIZE_SPECIAL_CHARS );
 			if ( isset( $page ) && in_array( $page, array( 'add-snippet', 'edit-snippet' ) ) ) :

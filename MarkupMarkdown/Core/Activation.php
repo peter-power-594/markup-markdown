@@ -9,6 +9,11 @@ defined( 'ABSPATH' ) || exit;
 final class Activation {
 
 
+	public $addons = array();
+
+
+	private $core_dir = '';
+
 	public function __construct() {
 		# Plugin Activation
 		register_activation_hook( MMD_FILE_URL, array( $this, 'plugin_activate' ) );
@@ -27,7 +32,7 @@ final class Activation {
 		if ( mmd()->exists( $addon_options ) ) :
 			require_once $addon_options;
 		endif;
-		$core_dir = mmd()->plugin_dir . '/MarkupMarkdown/Core/';
+		$this->core_dir = mmd()->plugin_dir . '/MarkupMarkdown/Core/';
 		# Load the conf.
 		$active_addons = mmd()->conf_blog_prefix . 'conf_screen.php';
 		if ( mmd()->exists( $active_addons ) ) :
@@ -35,15 +40,12 @@ final class Activation {
 			require_once $active_addons;
 		endif;
 		# Load core modules
-		require_once $core_dir . 'Support.php';
-		$mmd_cpt = new \MarkupMarkdown\Core\Support();
-		require_once $core_dir . 'Addons.php';
-		$mmd_addons = new \MarkupMarkdown\Core\Addons( $mmd_cpt );
-		require_once $core_dir . 'AutoPlugs.php';
-		$mmd_autoplugs = new \MarkupMarkdown\Core\AutoPlugs();
+		$mmd_cpt = include $this->core_dir . 'Support.php';
+		$this->addons = include $this->core_dir . 'Addons.php';
+		$mmd_plugs = include $this->core_dir . 'AutoPlugs.php';
 		do_action( 'mmd_addons_loaded' );
-		require_once $core_dir . 'Settings.php';
-		new \MarkupMarkdown\Core\Settings( $mmd_addons );
+		define( 'MMD_ADDONS_LOADED', true );
+		add_action( 'plugins_loaded', array( $this, 'enable_settings' ), 10 );
 	}
 
 
@@ -56,7 +58,7 @@ final class Activation {
 	 * @param String $domain The plugin or asset related domain
 	 * @return String $mofile The language specific translation file
 	 */
-	function plugin_textdomain( $mofile, $domain ) {
+	final public function plugin_textdomain( $mofile, $domain ) {
 		if ( 'markup-markdown' === $domain ) :
 			$locale = apply_filters( 'plugin_locale', determine_locale(), $domain );
 			$new_mofile = mmd()->plugin_dir . 'languages/' . $domain . '-' . $locale . '.mo';
@@ -77,7 +79,7 @@ final class Activation {
 	 * @param   string $file  Current page.
 	 * @return  array  $data  Modified links.
 	 */
-	public function plugin_custom_metas( $input, $file ) {
+	final public function plugin_custom_metas( $input, $file ) {
 		if ( $file !== 'markup-markdown/markup-markdown.php' ) :
 			return $input;
 		endif;
@@ -161,12 +163,12 @@ final class Activation {
 	}
 
 
-	public function plugin_activate() {
+	final public function plugin_activate() {
 		$this->prepare_cache();
 	}
 
 
-	public function plugin_patches( $upgrader_object, $options ) {
+	final public function plugin_patches( $upgrader_object, $options ) {
 		if ( $options[ 'action' ] == 'update' && $options[ 'type' ] == 'plugin' ) :
 			if ( isset( $options[ 'plugins' ] ) && is_array( $options[ 'plugins' ] ) ) :
 				foreach( $options[ 'plugins' ] as $my_plugin ) :
@@ -176,6 +178,13 @@ final class Activation {
 				endforeach;
 			endif;
 		endif;
+	}
+
+
+	final public function enable_settings() {
+		require_once $this->core_dir . 'Settings.php';
+		new \MarkupMarkdown\Core\Settings( $this->addons );
+		$this->addons = array();
 	}
 
 }

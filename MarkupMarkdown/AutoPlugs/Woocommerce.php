@@ -16,7 +16,7 @@ class Woocommerce {
 	}
 
 
-	public function mmd_woocommerce_plug() {
+	final public function mmd_woocommerce_plug() {
 		add_filter( 'woocommerce_taxonomy_archive_description_raw', array( $this, 'tax_desc_mmd2html' ), 10, 2);
 	}
 
@@ -32,9 +32,9 @@ class Woocommerce {
 	 *
 	 * @return String The modified term description
 	 */
-	 public function tax_desc_mmd2html( $term_desc, $term ) {
-		 return apply_filters( 'post_markdown2html', str_replace( [ '<p>', '</p>' ], '', $term_desc ), 0 );
-	 }
+	final public function tax_desc_mmd2html( $term_desc, $term ) {
+		return apply_filters( 'post_markdown2html', str_replace( [ '<p>', '</p>' ], '', $term_desc ), 0 );
+	}
 
 
 }

@@ -35,158 +35,45 @@ final class Addons {
 	}
 
 
-	/**
-	 * Default filter to allow or deny the plugs
-	 *
-	 * @access public
-	 * @since 3.3.0
-	 *
-	 * @param Boolean $bool TRUE in case the plugs are allowed or FALSE
-	 *
-	 * @return Boolean TRUE if required or FALSE
-	 */
-	public function should_load_plugs( $bool ) {
-		if ( ! defined( 'WP_MMD_PLUGS' ) ) :
-			return $bool;
-		endif;
-		return WP_MMD_PLUGS ? true : false;
-	}
-
-
 	private function load_addons() {
 		# Load addons modules
 		$this->addon_dir = mmd()->plugin_dir . '/MarkupMarkdown/Addons/';
-
+		add_filter( 'mmd_load_addon', array( $this, 'load_addon' ), 10, 2 );
 		# Kind of stable addons for a daily use
-		$this->load_builder_easymde();
-		$this->load_cache();
-		$this->load_layout();
-		$this->load_media_youtube();
-		$this->load_media_vimeo();
-		$this->load_media_image();
-		$this->load_code_highlighter();
-		$this->load_comments();
-		$this->load_latex();
-		$this->load_mermaid();
+		$my_buffer = include $this->addon_dir  . 'Released/EngineEasyMDE.php';
+		$my_buffer = include $this->addon_dir  . 'Released/OPCache.php';
+		$my_buffer = include $this->addon_dir  . 'Released/Layout.php';
+		$my_buffer = include $this->addon_dir  . 'Released/Media/Youtube.php';
+		$my_buffer = include $this->addon_dir  . 'Released/Media/Vimeo.php';
+		$my_buffer = include $this->addon_dir  . 'Released/Media/Image.php';
+		$my_buffer = include $this->addon_dir  . 'Released/CodeHighlighter.php';
+		$my_buffer = include $this->addon_dir  . 'Released/Comments.php';
+		$my_buffer = include $this->addon_dir  . 'Released/LaTeX.php';
+		$my_buffer = include $this->addon_dir  . 'Released/Mermaid.php';
 		# Kind of usable addons but I wouldn't bet for extensive use
-		$this->load_spellchecker();
-		$this->load_acf();
+		$my_buffer = include $this->addon_dir  . 'Unsupported/SpellChecker.php';
+		$my_buffer = include $this->addon_dir  . 'Unsupported/AdvancedCustomFields.php';
 		# End
-		$this->load_debug();
+		$my_buffer = include $this->addon_dir  . 'Released/Debug.php';
+		unset( $my_buffer );
 	}
 
 
-	private function load_builder_easymde() {
-		require_once $this->addon_dir  . 'Released/EngineEasyMDE.php';
-		$tmp_addon = new \MarkupMarkdown\Addons\Released\EngineEasyMDE();
-		$this->prop[ 'inst' ][ $tmp_addon->slug ] = $tmp_addon;
-		unset( $tmp_addon );
+	final public function load_addon( $slug, $instance ) {
+		if ( ! isset( $slug ) || ! is_string( $slug ) || empty( $slug ) ) :
+			return false; # Wrong slug
+		elseif ( in_array( $slug, $this->prop[ 'setup' ] ) !== false ) :
+			return false; # Already loaded
+		endif;
+		if ( in_array( $slug, array( 'engine__easymde', 'debug' ) ) === false) :
+			$this->prop[ 'setup' ][] = $slug;
+		endif;
+		$this->prop[ 'inst' ][ $slug ] = $instance;
+		return true;
 	}
 
-
-	private function load_cache() {
-		require_once $this->addon_dir  . 'Released/OPCache.php';
-		$tmp_addon = new \MarkupMarkdown\Addons\Released\OPCache();
-		$this->prop[ 'setup' ][] = $tmp_addon->slug;
-		$this->prop[ 'inst' ][ $tmp_addon->slug ] = $tmp_addon;
-		unset( $tmp_addon );
-	}
-
-
-	private function load_layout() {
-		require_once $this->addon_dir  . 'Released/Layout.php';
-		$tmp_addon = new \MarkupMarkdown\Addons\Released\Layout();
-		$this->prop[ 'setup' ][] = $tmp_addon->slug;
-		$this->prop[ 'inst' ][ $tmp_addon->slug ] = $tmp_addon;
-		unset( $tmp_addon );
-	}
-
-
-	private function load_media_youtube() {
-		require_once $this->addon_dir  . 'Released/Media/Youtube.php';
-		$tmp_addon = new \MarkupMarkdown\Addons\Released\Media\Youtube();
-		$this->prop[ 'setup' ][] = $tmp_addon->slug;
-		$this->prop[ 'inst' ][ $tmp_addon->slug ] = $tmp_addon;
-		unset( $tmp_addon );
-	}
-
-
-	private function load_media_vimeo() {
-		require_once $this->addon_dir  . 'Released/Media/Vimeo.php';
-		$tmp_addon = new \MarkupMarkdown\Addons\Released\Media\Vimeo();
-		$this->prop[ 'setup' ][] = $tmp_addon->slug;
-		$this->prop[ 'inst' ][ $tmp_addon->slug ] = $tmp_addon;
-		unset( $tmp_addon );
-	}
-
-
-	private function load_media_image() {
-		require_once $this->addon_dir  . 'Released/Media/Image.php';
-		$tmp_addon = new \MarkupMarkdown\Addons\Released\Media\Image();
-		$this->prop[ 'setup' ][] = $tmp_addon->slug;
-		$this->prop[ 'inst' ][ $tmp_addon->slug ] = $tmp_addon;
-		unset( $tmp_addon );
-	}
-
-
-	private function load_acf() {
-		require_once $this->addon_dir  . 'Unsupported/AdvancedCustomFields.php';
-		$tmp_addon = new \MarkupMarkdown\Addons\Unsupported\AdvancedCustomFields();
-		$this->prop[ 'setup' ][] = $tmp_addon->slug;
-		$this->prop[ 'inst' ][ $tmp_addon->slug ] = $tmp_addon;
-		unset( $tmp_addon );
-	}
-
-
-	private function load_code_highlighter() {
-		require_once $this->addon_dir  . 'Released/CodeHighlighter.php';
-		$tmp_addon = new \MarkupMarkdown\Addons\Released\CodeHighlighter();
-		$this->prop[ 'setup' ][] = $tmp_addon->slug;
-		$this->prop[ 'inst' ][ $tmp_addon->slug ] = $tmp_addon;
-		unset( $tmp_addon );
-	}
-
-
-	private function load_comments() {
-		require_once $this->addon_dir  . 'Released/Comments.php';
-		$tmp_addon = new \MarkupMarkdown\Addons\Released\Comments();
-		$this->prop[ 'setup' ][] = $tmp_addon->slug;
-		$this->prop[ 'inst' ][ $tmp_addon->slug ] = $tmp_addon;
-		unset( $tmp_addon );
-	}
-
-
-	private function load_latex() {
-		require_once $this->addon_dir  . 'Released/LaTeX.php';
-		$tmp_addon = new \MarkupMarkdown\Addons\Released\Latex();
-		$this->prop[ 'setup' ][] = $tmp_addon->slug;
-		$this->prop[ 'inst' ][ $tmp_addon->slug ] = $tmp_addon;
-		unset( $tmp_addon );
-	}
-
-
-	private function load_mermaid() {
-		require_once $this->addon_dir  . 'Released/Mermaid.php';
-		$tmp_addon = new \MarkupMarkdown\Addons\Released\Mermaid();
-		$this->prop[ 'setup' ][] = $tmp_addon->slug;
-		$this->prop[ 'inst' ][ $tmp_addon->slug ] = $tmp_addon;
-		unset( $tmp_addon );
-	}
-
-
-	private function load_spellchecker() {
-		require_once $this->addon_dir  . 'Unsupported/SpellChecker.php';
-		$tmp_addon = new \MarkupMarkdown\Addons\Unsupported\SpellChecker();
-		$this->prop[ 'setup' ][] = $tmp_addon->slug;
-		$this->prop[ 'inst' ][ $tmp_addon->slug ] = $tmp_addon;
-		unset( $tmp_addon );
-	}
-
-
-	private function load_debug() {
-		require_once $this->addon_dir  . 'Released/Debug.php';
-		$tmp_addon = new \MarkupMarkdown\Addons\Released\Debug();
-		unset( $tmp_addon );
-	}
 
 }
+
+
+return new \MarkupMarkdown\Core\Addons();

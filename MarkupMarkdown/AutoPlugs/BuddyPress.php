@@ -5,7 +5,7 @@ namespace MarkupMarkdown\AutoPlugs;
 defined( 'ABSPATH' ) || exit;
 
 
-class BuddyPress {
+final class BuddyPress {
 
 
 	/**
@@ -41,7 +41,7 @@ class BuddyPress {
 	}
 
 
-	public function init() {
+	private function init() {
 		add_filter( 'mmd_proxy_filters', array( $this, 'get_buddypress_content_filters' ), 10, 1 );
 		if ( is_admin() ) :
 			add_action( 'admin_enqueue_scripts', array( $this, 'load_edit_mmdform' ) );
@@ -55,7 +55,7 @@ class BuddyPress {
 	}
 
 
-	public function get_buddypress_content_filters( $arr = [] ) {
+	final public function get_buddypress_content_filters( $arr = [] ) {
 		return array_merge(
 			$arr,
 			array(
@@ -72,7 +72,7 @@ class BuddyPress {
 	}
 
 
-	public function grant_buddypress_hooks( $current_screen ) {
+	final public function grant_buddypress_hooks( $current_screen ) {
 		if ( isset( $current_screen->id ) && in_array( $current_screen->id, $this->allowed_hooks ) !== false ) :
 			add_filter( 'mmd_backend_enabled', '__return_true', 11 );
 		endif;
@@ -87,7 +87,7 @@ class BuddyPress {
 	 * 
 	 * @return Boolean TRUE if the edit form view was triggered or FALSE
 	 */
-	public function load_edit_mmdform() {
+	final public function load_edit_mmdform() {
 		if ( ! mmd()->exists( 'bp_is_current_action' ) || ! function_exists( 'is_buddypress' ) ) :
 			return false;
 		endif;
@@ -109,12 +109,12 @@ class BuddyPress {
 	}
 
 
-	public function load_engine_stylesheets() {
+	final public function load_engine_stylesheets() {
 		wp_enqueue_style( 'markup_markdown__bp_editor', $this->plugin_uri . 'assets/buddypress/css/field.min.css', array( 'markup_markdown__wordpress_richedit' ), buddypress()->version );
 	}
 
 
-	public function load_engine_scripts() {
+	final public function load_engine_scripts() {
 		wp_enqueue_script( 'markup_markdown__bp_editor', $this->plugin_uri . 'assets/buddypress/js/field.min.js', array( 'markup_markdown__wordpress_richedit' ), buddypress()->version, true );
 	}
 

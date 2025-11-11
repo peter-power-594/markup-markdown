@@ -93,6 +93,8 @@ final class Support {
 			# Priority should be greater than the previous prepare_markdown_editor. Go for 12
 			add_action( 'wp_head', array( $this, 'set_content_filters' ), 12 );
 		endif;
+		# Below should run before init
+		add_filter( 'kses_allowed_protocols', array( $this, 'custom_allowed_protocols' ), 20, 1 );
 	}
 
 
@@ -106,7 +108,7 @@ final class Support {
 	 *
 	 * @return Boolean TRUE if enabled or FALSE if disabed
 	 */
-	public function current_hook_allowed( $hook = 'unknown.php' ) {
+	final public function current_hook_allowed( $hook = 'unknown.php' ) {
 		if ( in_array( $hook, $this->allowed_hooks ) !== false ) :
 			return true;
 		endif;
@@ -124,7 +126,7 @@ final class Support {
 	 *
 	 * @return Boolean TRUE if enabled or FALSE if disabed
 	 */
-	public function current_template_allowed( $bool = false ) {
+	final public function current_template_allowed( $bool = false ) {
 		return $bool;
 	}
 
@@ -137,7 +139,7 @@ final class Support {
 	 *
 	 * @return Void
 	 */
-	public function add_markdown_support() {
+	final public function add_markdown_support() {
 		# Custom Post Type support
 		$post_types = get_post_types( array( 'public' => true, '_builtin' => false ) );
 		if ( ! $post_types ) :
@@ -192,6 +194,26 @@ final class Support {
 
 
 	/**
+	 * Add a few more protocols for HTML links
+	 *
+	 * @access public
+	 * @since 3.3.0
+	 *
+	 * @params Array $protocols List of protocols allowed
+	 * @return Array Modified list of protocols usable with <a> tags
+	 */
+	final public function custom_allowed_protocols( $protocols ) {
+		$new_protocols = array( 'steam', 'macappstores' );
+		foreach( $new_protocols as $my_protocol ) :
+			if ( in_array( $my_protocol, $protocols ) === false ) :
+				$protocols[] = $my_protocol;
+			endif;
+		endforeach;
+		return $protocols;
+	}
+
+
+	/**
 	 * Output the rendering of markdown
 	 *
 	 * @since 3.3.4
@@ -199,7 +221,7 @@ final class Support {
 	 *
 	 * @return Void
 	 */
-	public function whitelist_wp_api() {
+	final public function whitelist_wp_api() {
 		if ( ! wp_is_rest_endpoint() ) :
 			return false;
 		endif;
@@ -225,7 +247,7 @@ final class Support {
 	 *
 	 * @return Boolean TRUE if markdown can be used with the target post type, FALSE otherwise
 	 */
-	public function post_type_support_markdown( $my_post_type = '' ) {
+	final public function post_type_support_markdown( $my_post_type = '' ) {
 		if ( ! isset( $my_post_type ) || empty( $my_post_type ) ) :
 			return false;
 		elseif ( ! post_type_supports( $my_post_type, 'markup-markdown' ) && ! post_type_supports( $my_post_type, 'markup_markdown' ) ) :
@@ -243,7 +265,7 @@ final class Support {
 	 *
 	 * @return Boolean TRUE if Markdown was activated of FALSE if disabled
 	 */
-	public function prepare_markdown_editor() {
+	final public function prepare_markdown_editor() {
 		if ( ! $this->mmd_syntax ) :
 			return false;
 		endif;
@@ -290,7 +312,7 @@ final class Support {
 	}
 
 
-	public function clear_post_cache( $post_ID, $post, $update ) {
+	final public function clear_post_cache( $post_ID, $post, $update ) {
 		# If a modification was made, we must clear the cache to refresh it
 		$cache_content = mmd()->cache_blog_prefix . $post_ID . '.html';
 		if ( mmd()->exists( $cache_content ) && function_exists( 'wp_delete_file' ) ) :
@@ -408,7 +430,7 @@ final class Support {
 	 *
 	 * @return String the filtered content
 	 */
-	public function post_content_mmd2html( $post_content ) {
+	final public function post_content_mmd2html( $post_content ) {
 		return $this->content_data( $post_content, 1 );
 	}
 
@@ -423,7 +445,7 @@ final class Support {
 	 *
 	 * @return String the filtered content
 	 */
-	public function post_excerpt_mmd2html( $post_excerpt ) {
+	final public function post_excerpt_mmd2html( $post_excerpt ) {
 		return $this->content_data( $post_excerpt, 0 );
 	}
 
@@ -438,7 +460,7 @@ final class Support {
 	 *
 	 * @return String the filtered content
 	 */
-	public function extra_field_mmd2html( $extra_content ) {
+	final public function extra_field_mmd2html( $extra_content ) {
 		$this->load_parser();
 		return apply_filters( 'post_markdown2html', $extra_content, false );
 	}
@@ -474,7 +496,7 @@ final class Support {
 	 *
 	 * @return \WP_REST_Response The updated response object
 	 */
-	public function prepare_desc_field( $response, $item, $request ) {
+	final public function prepare_desc_field( $response, $item, $request ) {
 		if ( isset( $response ) && isset( $response->data ) && isset( $response->data[ 'description' ] ) ) :
 			$response->data[ 'description' ] = $this->description_field_mmd2html( $response->data[ 'description' ] );
 		endif;
@@ -490,7 +512,7 @@ final class Support {
 	 *
 	 * @return String the content with the backslash used as escaped character for HTML tags and shortcodes	
 	 */
-	public function filter_backslash( $content ) {
+	final public function filter_backslash( $content ) {
 		$content = str_replace( array( '\&lt;', '\<' ), '&lt;', $content );
 		$content = str_replace( array( '\&gt;', '\>' ), '&gt;', $content );
 		$content = str_replace( array( '\&lsqb;', '\[' ), '&lsqb;', $content );
@@ -507,7 +529,7 @@ final class Support {
 	 *
 	 * @return Void
 	 */
-	public function prepare_proxy_filters() {
+	final public function prepare_proxy_filters() {
 		add_filter( 'the_content', array( $this, 'post_content_mmd2html' ), 9, 1 );
 		add_filter( 'the_excerpt', array( $this, 'post_excerpt_mmd2html' ), 9, 1 );
 		add_filter( 'category_description', array( $this, 'description_field_mmd2html' ), 9, 1 );
@@ -525,7 +547,7 @@ final class Support {
 	 *
 	 * @return Void
 	 */
-	public function prepare_post_parser_filters() {
+	final public function prepare_post_parser_filters() {
 		if ( is_singular() ) :
 			$this->show_post_id = (int)get_the_ID();
 		endif;
@@ -549,7 +571,7 @@ final class Support {
 	 * @param \WP_Bloc $instance The block instance.
 	 * 
 	 */
-	public function filter_render_block( $block_content, $block, $instance ) {
+	final public function filter_render_block( $block_content, $block, $instance ) {
 		if ( ! isset( $block ) || ! isset( $block[ 'blockName' ] ) ) :
 			return $block_content;
 		elseif ( strpos( $block[ 'blockName' ], 'content' ) === false && strpos( $block[ 'blockName' ], 'excerpt' ) === false ) :
@@ -622,12 +644,12 @@ final class Support {
 	}
 
 
-	public function push_proxy_filters( $arr ) {
+	final public function push_proxy_filters( $arr ) {
 		return is_array( $arr ) ? $arr : array();
 	}
 
 
-	public function add_extra_proxy_filters() {
+	final public function add_extra_proxy_filters() {
 		$extra_filters = apply_filters( 'mmd_proxy_filters', array(), 10, 1 );
 		if ( isset( $extra_filters ) && is_array( $extra_filters ) ) :
 			foreach( $extra_filters as $custom_filter ) :
@@ -667,7 +689,7 @@ final class Support {
 	 *
 	 * @return Void
 	 */
-	public function set_content_filters() {
+	final public function set_content_filters() {
 		if ( defined( 'WP_MMD_RAW_DATA' ) && WP_MMD_RAW_DATA ) :
 			define( 'MMD_SUPPORT_ENABLED', 0 );
 			# Disable default content filters if WP_MMD_RAW_DATA defined and set to 1
@@ -683,3 +705,6 @@ final class Support {
 
 
 }
+
+
+return new \MarkupMarkdown\Core\Support();

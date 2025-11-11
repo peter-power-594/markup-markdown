@@ -4,6 +4,11 @@ namespace MarkupMarkdown\Addons\Unsupported;
 
 defined( 'ABSPATH' ) || exit;
 
+if ( defined( 'MMD_ADDONS_LOADED' ) ) :
+	return false;
+endif;
+
+
 class SpellChecker {
 
 
@@ -137,12 +142,12 @@ class SpellChecker {
 	 *
 	 * @return Void
 	 */
-	public function update_config( $my_cnf ) {
+	final public function update_config( $my_cnf ) {
 		$my_cnf[ 'spell_check' ] = filter_input( INPUT_POST, 'mmd_spell_check', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 		$my_cnf[ 'def_lang' ] = filter_input( INPUT_POST, 'mmd_default_spell_checker', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 		return $my_cnf;
 	}
-	public function create_const( $my_cnf ) {
+	final public function create_const( $my_cnf ) {
 		$my_cnf[ 'spell_check' ] = isset( $my_cnf[ 'spell_check' ] ) && is_array( $my_cnf[ 'spell_check' ] ) ? $my_cnf[ 'spell_check' ] : [];
 		if ( isset( $my_cnf[ 'def_lang' ] ) && ! empty( $my_cnf[ 'def_lang' ] ) ) :
 			$pos = array_search( $my_cnf[ 'def_lang' ], $my_cnf[ 'spell_check' ] );
@@ -157,7 +162,7 @@ class SpellChecker {
 	}
 
 
-	public function load_spellchecker_assets( $hook ) {
+	final public function load_spellchecker_assets( $hook ) {
 		if ( 'post.php' === $hook || 'post-new.php' === $hook ) :
 			add_action( 'admin_footer', array( $this, 'load_engine_assets' ) );
 		elseif ( 'settings_page_markup-markdown-admin' === $hook ) :
@@ -177,7 +182,7 @@ class SpellChecker {
 	 *
 	 * @return Void
 	 */
-	public function load_engine_assets() {
+	final public function load_engine_assets() {
 		wp_add_inline_script( 'markup_markdown__wordpress_richedit', $this->add_inline_editor_conf() );
 	}
 
@@ -239,7 +244,7 @@ class SpellChecker {
 	 *
 	 * @return string inline easymde configuration tool
 	 */
-	public function add_inline_editor_conf() {
+	final public function add_inline_editor_conf() {
 		$my_dict = $this->check_dict_preferences( defined( 'MMD_SPELL_CHECK' ) ? MMD_SPELL_CHECK : [] );
 		$js = ''; $n = 0;
 		$dict_base_uri = str_replace( '/plugins/markup-markdown/', '/mmd-dict/', mmd()->plugin_uri );
@@ -286,7 +291,7 @@ class SpellChecker {
 	 *
 	 * @return Boolean TRUE if the new dictionary were renamed or FALSE
 	 */
-	public function check_for_older_names( $dict_name = '' ) {
+	final public function check_for_older_names( $dict_name = '' ) {
 		if ( empty( $dict_name ) ) :
 			return false;
 		endif;
@@ -329,7 +334,7 @@ class SpellChecker {
 	 * @return Boolean TRUE if the new dictionary was installed
 	 * or FALSE if nothing was installed or the target dictionary already exists
 	 */
-	public function install_spell_checker() {
+	final public function install_spell_checker() {
 		$nonce = filter_input( INPUT_GET, '_mmd_sc_nonce', FILTER_SANITIZE_SPECIAL_CHARS );
 		if ( ! $nonce || empty( $nonce ) ) :
 			# Empty or unavailable nonce, nothing to do from here
@@ -433,7 +438,7 @@ class SpellChecker {
 	 *
 	 * @return Void
 	 */
-	public function add_tabmenu() {
+	final public function add_tabmenu() {
 		echo "\t\t\t\t\t\t<li><a href=\"#tab-spellchecker\" class=\"mmd-ico ico-spellcheck\">" . esc_html__( 'Spell Checker', 'markup-markdown' ) . "</a></li>\n";
 	}
 
@@ -446,7 +451,7 @@ class SpellChecker {
 	 *
 	 * @return Void
 	 */
-	public function add_tabcontent() {
+	final public function add_tabcontent() {
 		$my_cnf[ 'spellcheck' ] = defined( 'MMD_SPELL_CHECK' ) ? MMD_SPELL_CHECK : [];
 ?>
 					<div id="tab-spellchecker">
@@ -555,3 +560,6 @@ class SpellChecker {
 
 
 }
+
+
+return apply_filters( 'mmd_load_addon', 'hungspellchecker', new \MarkupMarkdown\Addons\Unsupported\SpellChecker() );

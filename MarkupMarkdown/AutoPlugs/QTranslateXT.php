@@ -5,7 +5,7 @@ namespace MarkupMarkdown\AutoPlugs;
 defined( 'ABSPATH' ) || exit;
 
 
-class QTranslateXT {
+final class QTranslateXT {
 
 
 	/**
@@ -28,14 +28,14 @@ class QTranslateXT {
 	}
 
 
-	public function init() {
+	private function init() {
 		if ( is_admin() ) :
 			add_action( 'mmd_load_engine_scripts', array( $this, 'load_qtranslate_scripts' ) );
 		endif;
 	}
 
 
-	public function load_qtranslate_scripts() {
+	final public function load_qtranslate_scripts() {
 		$my_bridge = mmd()->plugin_uri . 'assets/qtranslate-xt/js/bridge.';
 		if ( ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) || ( defined( 'MMD_SCRIPT_DEBUG' ) && MMD_SCRIPT_DEBUG ) || ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ) :
 			$my_bridge .= 'debug';

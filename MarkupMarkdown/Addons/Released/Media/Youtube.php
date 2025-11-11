@@ -4,6 +4,10 @@ namespace MarkupMarkdown\Addons\Released\Media;
 
 defined( 'ABSPATH' ) || exit;
 
+if ( defined( 'MMD_ADDONS_LOADED' ) ) :
+	return false;
+endif;
+
 require_once mmd()->plugin_dir . '/MarkupMarkdown/Abstracts/OEmbedTinyAPI.php';
 
 
@@ -59,3 +63,7 @@ final class Youtube extends \MarkupMarkdown\Abstracts\OEmbedTinyAPI {
 
 
 }
+
+
+return apply_filters( 'mmd_load_addon', 'youtube', new \MarkupMarkdown\Addons\Released\Media\Youtube() );
+

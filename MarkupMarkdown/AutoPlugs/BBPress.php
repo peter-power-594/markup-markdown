@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
  * @since 3.9.0
  *
  */
-class BBPress {
+final class BBPress {
 
 
 	/**
@@ -36,7 +36,7 @@ class BBPress {
 	}
 
 
-	public function get_bbpress_filters( $arr = [] ) {
+	final public function get_bbpress_filters( $arr = [] ) {
 		return array_merge(
 			$arr,
 			array(
@@ -56,7 +56,7 @@ class BBPress {
 	 * 
 	 * @return Boolean TRUE if the edit form view was triggered or FALSE
 	 */
-	public function load_edit_mmdform() {
+	final public function load_edit_mmdform() {
 		if ( ! function_exists( 'bbp_use_wp_editor' ) || ! function_exists( 'is_bbpress' ) ) :
 			return false;
 		endif;
@@ -71,12 +71,12 @@ class BBPress {
 	}
 
 
-	public function load_engine_stylesheets() {
+	final public function load_engine_stylesheets() {
 		wp_enqueue_style( 'markup_markdown__bbpress_editor', $this->plugin_uri . 'assets/bbpress/css/field.min.css', array( 'markup_markdown__wordpress_richedit' ), bbpress()->version );
 	}
 
 
-	public function load_engine_scripts() {
+	final public function load_engine_scripts() {
 		wp_enqueue_script( 'markup_markdown__bbpress_editor', $this->plugin_uri . 'assets/bbpress/js/field.min.js', array( 'markup_markdown__wordpress_richedit' ), bbpress()->version, true );
 	}
 

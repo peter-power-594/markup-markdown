@@ -5,7 +5,7 @@ namespace MarkupMarkdown\AutoPlugs;
 defined( 'ABSPATH' ) || exit;
 
 
-class BuddyPressDocs {
+final class BuddyPressDocs {
 
 
 	/**
@@ -28,7 +28,7 @@ class BuddyPressDocs {
 	}
 
 
-	public function init() {
+	private function init() {
 		if ( ! is_admin() ) :
 			add_action( 'bp_enqueue_scripts', array( $this, 'load_edit_mmdform' ) );
 		endif;
@@ -43,7 +43,7 @@ class BuddyPressDocs {
 	 * 
 	 * @return Boolean TRUE if the edit form view was triggered or FALSE
 	 */
-	public function load_edit_mmdform() {
+	final public function load_edit_mmdform() {
 		if ( ! function_exists( 'bp_docs_is_doc_create' ) || ! function_exists( 'bp_docs_is_doc_edit' ) ) :
 			return false;
 		endif;
@@ -64,12 +64,12 @@ class BuddyPressDocs {
 	}
 
 
-	public function load_engine_stylesheets() {
+	final public function load_engine_stylesheets() {
 		wp_enqueue_style( 'markup_markdown__bp_editor', $this->plugin_uri . 'assets/buddypress-docs/css/field.min.css', array( 'markup_markdown__wordpress_richedit' ), buddypress()->version );
 	}
 
 
-	public function load_engine_scripts() {
+	final public function load_engine_scripts() {
 		wp_enqueue_script( 'markup_markdown__bp_editor', $this->plugin_uri . 'assets/buddypress-docs/js/field.min.js', array( 'markup_markdown__wordpress_richedit' ), buddypress()->version, true );
 	}
 

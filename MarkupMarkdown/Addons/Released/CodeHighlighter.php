@@ -4,6 +4,10 @@ namespace MarkupMarkdown\Addons\Released;
 
 defined( 'ABSPATH' ) || exit;
 
+if ( defined( 'MMD_ADDONS_LOADED' ) ) :
+	return false;
+endif;
+
 
 final class CodeHighlighter {
 
@@ -74,7 +78,7 @@ final class CodeHighlighter {
 		$my_cnf[ 'code_highlighter_theme' ] = filter_input( INPUT_POST, 'mmd_codehighlighter_theme', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 		return $my_cnf;
 	}
-	public function create_const( $my_cnf ) {
+	final public function create_const( $my_cnf ) {
 		$my_cnf[ 'MMD_USE_CODEHIGHLIGHT' ] = [
 			isset( $my_cnf[ 'code_highlighter_active' ] ) && (int)$my_cnf[ 'code_highlighter_active' ] > 0  ? 1 : 0
 		];
@@ -91,7 +95,7 @@ final class CodeHighlighter {
 	}
 
 
-	public function load_layout_assets( $hook ) {
+	final public function load_layout_assets( $hook ) {
 		if ( 'settings_page_markup-markdown-admin' === $hook ) :
 			add_action( 'mmd_tabmenu_options', array( $this, 'add_tabmenu' ) );
 			add_action( 'mmd_tabcontent_options', array( $this, 'add_tabcontent' ) );
@@ -107,7 +111,7 @@ final class CodeHighlighter {
 	 *
 	 * @return Void
 	 */
-	public function add_tabmenu() {
+	final public function add_tabmenu() {
 		echo "\t\t\t\t\t\t<li><a href=\"#tab-codehighlight\" class=\"mmd-ico ico-highlight\">" . esc_html__( 'Syntax Highlighting', 'markup-markdown' ) . "</a></li>\n";
 	}
 
@@ -120,7 +124,7 @@ final class CodeHighlighter {
 	 *
 	 * @return Void
 	 */
-	public function add_tabcontent() {
+	final public function add_tabcontent() {
 		$conf_file = mmd()->conf_blog_prefix . 'conf.php';
 		if ( mmd()->exists( $conf_file ) ) :
 			require_once $conf_file;
@@ -145,7 +149,7 @@ final class CodeHighlighter {
 	 *
 	 * @return Void
 	 */
-	public function load_front_highlighter_stylesheets() {
+	final public function load_front_highlighter_stylesheets() {
 		if ( ! isset( $this->prop[ 'engine' ] ) || empty( $this->prop[ 'engine' ] ) || $this->prop[ 'engine' ] === 'none' ) :
 			# Do nothing
 		elseif ( $this->prop[ 'engine' ] === 'prism' ) :
@@ -168,7 +172,7 @@ final class CodeHighlighter {
 	 *
 	 * @return Void
 	 */
-	public function load_front_highlighter_scripts() {
+	final public function load_front_highlighter_scripts() {
 		$plugin_uri = mmd()->plugin_uri;
 		if ( ! isset( $this->prop[ 'engine' ] ) || empty( $this->prop[ 'engine' ] ) || $this->prop[ 'engine' ] === 'none' ) :
 			# Do nothing
@@ -191,7 +195,7 @@ final class CodeHighlighter {
 	 *
 	 * @return Void
 	 */
-	public function add_inline_prism_conf() {
+	final public function add_inline_prism_conf() {
 		return 'Prism.plugins.autoloader.languages_path = "' . mmd()->plugin_uri . '/assets/prism/v1/components/";';
 	}
 
@@ -204,12 +208,12 @@ final class CodeHighlighter {
 	 *
 	 * @return Void
 	 */
-	public function add_inline_hl_conf() {
+	final public function add_inline_hl_conf() {
 		return 'hljs.highlightAll();';
 	}
 
 
-	public function get_themes() {
+	final public function get_themes() {
 		if ( count( $this->themes ) > 0 ) :
 			return false;
 		endif;
@@ -522,3 +526,6 @@ final class CodeHighlighter {
 
 
 }
+
+
+return apply_filters( 'mmd_load_addon', 'codehighlighter', new \MarkupMarkdown\Addons\Released\CodeHighlighter() );

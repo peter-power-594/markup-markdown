@@ -4,6 +4,11 @@ namespace MarkupMarkdown\Addons\Unsupported;
 
 defined( 'ABSPATH' ) || exit;
 
+if ( defined( 'MMD_ADDONS_LOADED' ) ) :
+	return false;
+endif;
+
+
 /**
  * Registration logic for the new ACF field type.
  */
@@ -41,7 +46,7 @@ final class AdvancedCustomFields {
 	}
 
 
-	public function mmd_include_acf_field_markdown() {
+	final public function mmd_include_acf_field_markdown() {
 		if ( ! function_exists( 'acf_register_field_type' ) ) :
 			return;
 		endif;
@@ -64,7 +69,7 @@ final class AdvancedCustomFields {
 	 *
 	 * @return Boolean TRUE if backend related or FALSE if frontend related
 	 */
-	public function mmd_frontend_filters() {
+	final public function mmd_frontend_filters() {
 		# Action triggered by acf_form_head()
 		add_action( 'acf/input/admin_head', function() {
 			add_filter( 'mmd_frontend_enabled', '__return_true' );
@@ -87,3 +92,6 @@ final class AdvancedCustomFields {
 
 
 }
+
+
+return apply_filters( 'mmd_load_addon', 'acf', new \MarkupMarkdown\Addons\Unsupported\AdvancedCustomFields() );

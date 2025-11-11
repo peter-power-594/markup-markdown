@@ -4,6 +4,10 @@ namespace MarkupMarkdown\Addons\Released;
 
 defined( 'ABSPATH' ) || exit;
 
+if ( defined( 'MMD_ADDONS_LOADED' ) ) :
+	return false;
+endif;
+
 
 final class Latex {
 
@@ -65,14 +69,14 @@ final class Latex {
 	 *
 	 * @return Void
 	 */
-	public function update_config( $my_cnf ) {
+	final public function update_config( $my_cnf ) {
 		$my_cnf[ 'latex_engine' ] = filter_input( INPUT_POST, 'mmd_uselatex', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 		$my_cnf[ 'latex_active' ] = isset( $my_cnf[ 'latex_engine' ] ) && in_array( $my_cnf[ 'latex_engine' ], [ 'katex', 'mathjax' ] ) ? 1 : 0;
 		$my_cnf[ 'latex_front' ] = filter_input( INPUT_POST, 'mmd_latex_front', FILTER_VALIDATE_INT );
 		$my_cnf[ 'latex_front_id' ] = filter_input( INPUT_POST, 'mmd_latex_front_id', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 		return $my_cnf;
 	}
-	public function create_const( $my_cnf ) {
+	final public function create_const( $my_cnf ) {
 		$my_cnf[ 'MMD_USE_LATEX' ] = [
 			isset( $my_cnf[ 'latex_active' ] ) && (int)$my_cnf[ 'latex_active' ] > 0  ? 1 : 0
 		];
@@ -89,7 +93,7 @@ final class Latex {
 	}
 
 
-	public function load_layout_assets( $hook ) {
+	final public function load_layout_assets( $hook ) {
 		if ( 'settings_page_markup-markdown-admin' === $hook ) :
 			add_action( 'mmd_tabmenu_options', array( $this, 'add_tabmenu' ) );
 			add_action( 'mmd_tabcontent_options', array( $this, 'add_tabcontent' ) );
@@ -105,7 +109,7 @@ final class Latex {
 	 *
 	 * @return Void
 	 */
-	public function add_tabmenu() {
+	final public function add_tabmenu() {
 		echo "\t\t\t\t\t\t<li><a href=\"#tab-latex\" class=\"mmd-ico ico-square\">" . esc_html__( 'LaTeX', 'markup-markdown' ) . "</a></li>\n";
 	}
 
@@ -118,7 +122,7 @@ final class Latex {
 	 *
 	 * @return Void
 	 */
-	public function add_tabcontent() {
+	final public function add_tabcontent() {
 		$conf_file = mmd()->conf_blog_prefix . 'conf.php';
 		if ( mmd()->exists( $conf_file ) ) :
 			require_once $conf_file;
@@ -139,7 +143,7 @@ final class Latex {
 	 *
 	 * @return Void
 	 */
-	public function load_latex_stylesheets() {
+	final public function load_latex_stylesheets() {
 		if ( ! isset( $this->prop[ 'engine' ] ) || empty( $this->prop[ 'engine' ] ) || $this->prop[ 'engine' ] === 'none' ) :
 			# Do nothing
 		elseif ( $this->prop[ 'engine' ] === 'katex' ) :
@@ -158,7 +162,7 @@ final class Latex {
 	 *
 	 * @return Void
 	 */
-	public function load_admin_latex_scripts() {
+	final public function load_admin_latex_scripts() {
 		if ( ! isset( $this->prop[ 'engine' ] ) || empty( $this->prop[ 'engine' ] ) || $this->prop[ 'engine' ] === 'none' ) :
 			# Do nothing
 		elseif ( $this->prop[ 'engine' ] === 'katex' ) :
@@ -177,7 +181,7 @@ final class Latex {
 	 *
 	 * @return Void
 	 */
-	public function load_front_latex_scripts() {
+	final public function load_front_latex_scripts() {
 		if ( ! isset( $this->prop[ 'engine' ] ) || empty( $this->prop[ 'engine' ] ) || $this->prop[ 'engine' ] === 'none' ) :
 			# Do nothing
 		elseif ( $this->prop[ 'engine' ] === 'katex' ) :
@@ -199,7 +203,7 @@ final class Latex {
 	 *
 	 * @return Void
 	 */
-	public function add_inline_katex_conf() {
+	final public function add_inline_katex_conf() {
 		$js = 'document.addEventListener("DOMContentLoaded",function(){renderMathInElement(';
 		if ( isset( MMD_USE_LATEX[ 3 ] ) && ! empty( MMD_USE_LATEX[ 3 ] ) ) :
 			$js .= 'document.getElementById("' . MMD_USE_LATEX[ 3 ] . '")';
@@ -212,8 +216,6 @@ final class Latex {
 	}
 
 
-
-
 	/**
 	 * Mathjax specific inline config for the frontend
 	 *
@@ -222,7 +224,7 @@ final class Latex {
 	 *
 	 * @return Void
 	 */
-	public function add_inline_mathjax_conf() {
+	final public function add_inline_mathjax_conf() {
 		$js = 'window.MathJax={tex:{inlineMath:[[\'$\',\'$\']]},svg:{fontCache:\'global\'},options:{skipHtmlTags:[\'code\',\'pre\']}};';
 		$js .= '(function(_d){var s=_d.createElement(\'script\');s.src="' . $this->plugin_uri . 'assets/mathjax/es5/tex-svg.js";s.async=true;_d.head.appendChild(s);})(window.document);';
 		return $js;
@@ -230,3 +232,6 @@ final class Latex {
 
 
 }
+
+
+return apply_filters( 'mmd_load_addon', 'latex', new \MarkupMarkdown\Addons\Released\Latex() );

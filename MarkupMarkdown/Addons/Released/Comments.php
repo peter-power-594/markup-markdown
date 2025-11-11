@@ -4,6 +4,11 @@ namespace MarkupMarkdown\Addons\Released;
 
 defined( 'ABSPATH' ) || exit;
 
+if ( defined( 'MMD_ADDONS_LOADED' ) ) :
+	return false;
+endif;
+
+
 final class Comments {
 
 
@@ -44,7 +49,7 @@ final class Comments {
 	 *
 	 * @return Void
 	 */
-	public function update_config( $my_cnf ) {
+	final public function update_config( $my_cnf ) {
 		$comment_tag_names = filter_input( INPUT_POST, 'comment_tag', FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY );
 		if ( ! isset( $comment_tag_names ) || ! is_array( $comment_tag_names ) ) :
 			return $my_cnf;
@@ -59,7 +64,7 @@ final class Comments {
 		unset( $comment_tags );
 		return $my_cnf;
 	}
-	public function create_json( $my_cnf ) {
+	final public function create_json( $my_cnf ) {
 		if ( isset( $my_cnf[ 'comment_tags' ] ) && is_array( $my_cnf[ 'comment_tags' ] ) && count( $my_cnf[ 'comment_tags' ] ) > 0 ) :
 			mmd()->put_contents( $this->comments_tags_conf, json_encode( $my_cnf[ 'comment_tags' ] ) );
 		endif;
@@ -68,7 +73,7 @@ final class Comments {
 	}
 
 
-	public function load_layout_assets( $hook ) {
+	final public function load_layout_assets( $hook ) {
 		if ( 'settings_page_markup-markdown-admin' === $hook ) :
 			add_action( 'mmd_tabmenu_options', array( $this, 'add_tabmenu' ) );
 			add_action( 'mmd_tabcontent_options', array( $this, 'add_tabcontent' ) );
@@ -84,7 +89,7 @@ final class Comments {
 	 *
 	 * @return Void
 	 */
-	public function add_tabmenu() {
+	final public function add_tabmenu() {
 		echo "\t\t\t\t\t\t<li><a href=\"#tab-comments\" class=\"mmd-ico ico-dialog\">" . esc_html__( 'Comments', 'markup-markdown' ) . "</a></li>\n";
 	}
 
@@ -97,7 +102,7 @@ final class Comments {
 	 *
 	 * @return Void
 	 */
-	public function add_tabcontent() {
+	final public function add_tabcontent() {
 		$conf_file = mmd()->conf_blog_prefix . 'conf.php';
 		if ( mmd()->exists( $conf_file ) ) :
 			require_once $conf_file;
@@ -119,7 +124,7 @@ final class Comments {
 	 *
 	 * @return Void
 	 */
-	public function mmd_comments_text( $text = '', $comment = null ) {
+	final public function mmd_comments_text( $text = '', $comment = null ) {
 		if ( ! isset( $comment ) || ! is_object( $comment ) || ! isset( $comment->comment_content ) ) :
 			return $text;
 		endif;
@@ -148,3 +153,6 @@ final class Comments {
 
 
 }
+
+
+return apply_filters( 'mmd_load_addon', 'comments', new \MarkupMarkdown\Addons\Released\Comments() );

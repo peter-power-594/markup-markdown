@@ -4,6 +4,10 @@ namespace MarkupMarkdown\Addons\Released;
 
 defined( 'ABSPATH' ) || exit;
 
+if ( defined( 'MMD_ADDONS_LOADED' ) ) :
+	return false;
+endif;
+
 
 final class Mermaid {
 
@@ -63,13 +67,13 @@ final class Mermaid {
 	 *
 	 * @return Void
 	 */
-	public function update_config( $my_cnf ) {
+	final public function update_config( $my_cnf ) {
 		$my_cnf[ 'mermaid_engine' ] = filter_input( INPUT_POST, 'mmd_usemermaid', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 		$my_cnf[ 'mermaid_active' ] = isset( $my_cnf[ 'mermaid_engine' ] ) && in_array( $my_cnf[ 'mermaid_engine' ], [ 'mermaid' ] ) ? 1 : 0;
 		$my_cnf[ 'mermaid_front' ] = filter_input( INPUT_POST, 'mermaid_front', FILTER_VALIDATE_INT );
 		return $my_cnf;
 	}
-	public function create_const( $my_cnf ) {
+	final public function create_const( $my_cnf ) {
 		$my_cnf[ 'MMD_USE_MERMAID' ] = [
 			isset( $my_cnf[ 'mermaid_active' ] ) && (int)$my_cnf[ 'mermaid_active' ] > 0  ? 1 : 0
 		];
@@ -85,7 +89,7 @@ final class Mermaid {
 	}
 
 
-	public function load_layout_assets( $hook ) {
+	final public function load_layout_assets( $hook ) {
 		if ( 'settings_page_markup-markdown-admin' === $hook ) :
 			add_action( 'mmd_tabmenu_options', array( $this, 'add_tabmenu' ) );
 			add_action( 'mmd_tabcontent_options', array( $this, 'add_tabcontent' ) );
@@ -101,7 +105,7 @@ final class Mermaid {
 	 *
 	 * @return Void
 	 */
-	public function add_tabmenu() {
+	final public function add_tabmenu() {
 		echo "\t\t\t\t\t\t<li><a href=\"#tab-mermaid\" class=\"mmd-ico ico-chart\">" . esc_html__( 'Mermaid', 'markup-markdown' ) . "</a></li>\n";
 	}
 
@@ -114,7 +118,7 @@ final class Mermaid {
 	 *
 	 * @return Void
 	 */
-	public function add_tabcontent() {
+	final public function add_tabcontent() {
 		$conf_file = mmd()->conf_blog_prefix . 'conf.php';
 		if ( mmd()->exists( $conf_file ) ) :
 			require_once $conf_file;
@@ -135,7 +139,7 @@ final class Mermaid {
 	 *
 	 * @return Void
 	 */
-	public function load_admin_mermaid_scripts() {
+	final public function load_admin_mermaid_scripts() {
 		if ( ! isset( $this->prop[ 'engine' ] ) || empty( $this->prop[ 'engine' ] ) || $this->prop[ 'engine' ] === 'none' ) :
 			# Do nothing
 		elseif ( $this->prop[ 'engine' ] === 'mermaid' ) :
@@ -152,7 +156,7 @@ final class Mermaid {
 	 *
 	 * @return Void
 	 */
-	public function load_front_mermaid_scripts() {
+	final public function load_front_mermaid_scripts() {
 		if ( ! isset( $this->prop[ 'engine' ] ) || empty( $this->prop[ 'engine' ] ) || $this->prop[ 'engine' ] === 'none' ) :
 			# Do nothing
 		elseif ( $this->prop[ 'engine' ] === 'mermaid' ) :
@@ -170,10 +174,13 @@ final class Mermaid {
 	 *
 	 * @return Void
 	 */
-	public function add_inline_mermaid_conf() {
+	final public function add_inline_mermaid_conf() {
 		$js = 'mermaid.initialize({ startOnLoad: true });';
 		return $js;
 	}
 
 
 }
+
+
+return apply_filters( 'mmd_load_addon', 'mermaid', new \MarkupMarkdown\Addons\Released\Mermaid() );

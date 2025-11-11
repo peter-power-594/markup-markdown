@@ -5,7 +5,7 @@ namespace MarkupMarkdown\AutoPlugs;
 defined( 'ABSPATH' ) || exit;
 
 
-class CodeBlocks {
+final class CodeBlocks {
 
 
 	public function __construct() {
@@ -16,7 +16,7 @@ class CodeBlocks {
 	}
 
 
-	public function mmd_wp_codemirror_plug() {
+	final public function mmd_wp_codemirror_plug() {
 		add_filter( 'addon_markdown2html', array( $this, 'trigger_wp_codemirror' ), 11, 1 );
 		if ( ! is_admin() ) :
 			add_action( 'wp_enqueue_scripts', array( $this, 'trigger_wp_codemirror_scripts' ) );
@@ -30,7 +30,7 @@ class CodeBlocks {
 	 * @param {String} $content The html rendered from markdown 
 	 * @return {String} The modified html content
 	 */
-	public function trigger_wp_codemirror( $content ) {
+	final public function trigger_wp_codemirror( $content ) {
 		if ( ! class_exists( 'CodeMirror_Blocks\CodeMirror_Blocks' ) ) :
 			return $content;
 		endif;
@@ -70,7 +70,7 @@ class CodeBlocks {
 	}
 
 
-	public function trigger_wp_codemirror_scripts() {
+	final public function trigger_wp_codemirror_scripts() {
 		if ( ! class_exists( 'CodeMirror_Blocks\CodeMirror_Blocks' ) ) :
 			return false;
 		endif;

@@ -4,6 +4,10 @@ namespace MarkupMarkdown\Addons\Released;
 
 defined( 'ABSPATH' ) || exit;
 
+if ( defined( 'MMD_ADDONS_LOADED' ) ) :
+	return false;
+endif;
+
 
 final class Layout {
 
@@ -373,3 +377,6 @@ final class Layout {
 
 
 }
+
+
+return apply_filters( 'mmd_load_addon', 'layout', new \MarkupMarkdown\Addons\Released\Layout() );

@@ -4,6 +4,10 @@ namespace MarkupMarkdown\Addons\Released;
 
 defined( 'ABSPATH' ) || exit;
 
+if ( defined( 'MMD_ADDONS_LOADED' ) ) :
+	return false;
+endif;
+
 
 final class EngineEasyMDE {
 
@@ -80,7 +84,7 @@ final class EngineEasyMDE {
 	 * @since 2.5.2
 	 * @access public
 	 */
-	public function save_mmd_edit_options() {
+	final public function save_mmd_edit_options() {
 		check_ajax_referer( 'mmdeditoptions', 'mmdeditoptionsnonce' );
 		$user = wp_get_current_user();
 		if ( ! $user ) {
@@ -111,7 +115,7 @@ final class EngineEasyMDE {
 	 * @param \WP_Screen $screen The current screen settings objet.
 	 * @return String The modified HTML code for the current panel
 	 */
-	public function mmd_post_screen_options_settings( $panel, $screen ) {
+	final public function mmd_post_screen_options_settings( $panel, $screen ) {
 		$is_sticky = get_user_meta( get_current_user_id(), '_mmd_sticky_toolbar', true );
 		$sticky_options = array(
 			'<fieldset class="mmd-easymde-prefs">',
@@ -135,7 +139,7 @@ final class EngineEasyMDE {
 	 *
 	 * @return Boolean TRUE if we need to load the assets or FALSE
 	 */
-	public function prepare_editor_assets() {
+	final public function prepare_editor_assets() {
 		if ( $this->is_admin ) : # Backend called earlier in the *init* hook or similar
 			# We don't have access to the edit screen property yet so the check will be made in the next hook
 			add_action( 'admin_enqueue_scripts', array( $this, 'load_assets' ) );
@@ -161,7 +165,7 @@ final class EngineEasyMDE {
 	 *
 	 * @return Void
 	 */
-	public function load_assets( $hook = 'unknown.php' ) {
+	final public function load_assets( $hook = 'unknown.php' ) {
 		if ( $this->is_admin ) : # Backend
 			$this->backend_enabled = apply_filters( 'mmd_backend_enabled', $hook, false );
 			if ( ! $this->backend_enabled ) :
@@ -197,7 +201,7 @@ final class EngineEasyMDE {
 	 *
 	 * @return Boolean TRUE if the WP Native media upload libraries are queued or FALSE if disabled
 	 */
-	public function load_engine_media() {
+	final public function load_engine_media() {
 		if ( defined( 'WP_MMD_MEDIA_UPLOADER' ) && ! WP_MMD_MEDIA_UPLOADER ) :
 			return false;
 		endif;
@@ -223,7 +227,7 @@ final class EngineEasyMDE {
 	 *
 	 * @return Void
 	 */
-	public function load_engine_stylesheets() {
+	final public function load_engine_stylesheets() {
 		$plugin_uri = mmd()->plugin_uri;
 		wp_enqueue_style( 'markup_markdown__cssengine_editor',  $plugin_uri . 'assets/easy-markdown-editor/dist/easymde.min.css', [], '2.20.1000' );
 		if ( $this->prop[ 'hlengine' ] === 'prism' ) :
@@ -244,7 +248,7 @@ final class EngineEasyMDE {
 	 *
 	 * @return Void
 	 */
-	public function load_engine_scripts() {
+	final public function load_engine_scripts() {
 		$plugin_uri = mmd()->plugin_uri;
 		# Debug / Minified version introduced since 3.6
 		if ( ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) || ( defined( 'MMD_SCRIPT_DEBUG' ) && MMD_SCRIPT_DEBUG ) ) :
@@ -328,7 +332,7 @@ final class EngineEasyMDE {
 	 *
 	 * @return string inline easymde configuration tool
 	 */
-	public function add_inline_editor_conf() {
+	final public function add_inline_editor_conf() {
 		$home_url = get_home_url() . '/';
 		$js = "window.wp = window.wp || {};\n"; # Just in case
 		$js .= "wp.pluginMarkupMarkdown = wp.pluginMarkupMarkdown || {};\n";
@@ -358,3 +362,7 @@ final class EngineEasyMDE {
 
 
 }
+
+
+return apply_filters( 'mmd_load_addon', 'engine__easymde', new \MarkupMarkdown\Addons\Released\EngineEasyMDE() );
+
