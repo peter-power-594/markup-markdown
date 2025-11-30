@@ -223,8 +223,10 @@ final class Parser {
 			$this->custom_parser();
 		endif;
 		$content = isset( $content ) ? $content : '';
+		# Cleaning / Indenting wrong formatted HTML code
 		$safe = preg_replace( '#((<\/\w+>)(<\w+))#', "$2\n$3", $content );
 		$safe = preg_replace( '#\n([^<]+)(<\w+>)#', "\n$1\n$2", $safe );
+		$safe = preg_replace( '#\n<(strong|b|em|i|u|spana|abbr|b|bdi|bdo|br|button|cite|code|dfn|em|i|img|input|kbd|label|mark|q|s|samp|script|select|small|span|strong|sub|sup|textarea|time|u|var)>#', "<$1>", $safe );
 		if ( defined( 'MMD_SUPER_BACKSLASH' ) && MMD_SUPER_BACKSLASH ) :
 			$safe = preg_replace( '#\\\\<#', "{-BACKSLASHLT-}", $safe );
 			$safe = preg_replace( '#\\\\>#', "{-BACKSLASHGT-}", $safe );

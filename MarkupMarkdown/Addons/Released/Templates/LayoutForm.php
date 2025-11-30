@@ -12,6 +12,7 @@
 		'imagesloaded' => defined( 'MMD_USE_IMAGESLOADED' ) ? MMD_USE_IMAGESLOADED : 1,
 		'goodvibes' => defined( 'MMD_USE_BLOCKSTYLES' ) ? MMD_USE_BLOCKSTYLES : 0,
 		'headings' => defined( 'MMD_USE_HEADINGS' ) && count( MMD_USE_HEADINGS ) > 1 ? MMD_USE_HEADINGS : [ 1, 2, 3, 4, 5, 6 ],
+		'indent' => defined( 'MMD_USE_INDENT' ) && count( MMD_USE_INDENT ) === 2 ? MMD_USE_INDENT : [ 'tabs', 2 ],
 		'keepspaces' => defined( 'MMD_KEEP_SPACES' ) ? MMD_KEEP_SPACES : 0,
 		'superbackslash' => defined( 'MMD_SUPER_BACKSLASH' ) ? MMD_SUPER_BACKSLASH : 0
 	);
@@ -103,6 +104,26 @@
 	<h3><?php esc_html_e( 'Extra Option', 'markup-markdown' ); ?></h3>
 	<table class="form-table" role="presentation">
 		<tbody>
+			<tr class="site-keep-spaces">
+				<th scope="row">
+					<?php esc_html_e( 'Indent Setup', 'markup-markdown' ); ?>
+				</th>
+				<td>
+					<?php esc_html_e( 'Character: ', 'markup-markdown' ); ?>
+					<label for="mmd_indent_char1">
+						<input type="radio" name="mmd_indent_char" id="mmd_indent_char1" value="tabs" <?php echo $my_cnf[ 'indent' ][ 0 ] === 'tabs' ? 'checked="checked"' : ''; ?> /> <?php esc_html_e( 'Tab', 'markup-markdown' ); ?>
+					</label> &nbsp;
+					<label for="mmd_indent_char2">
+						<input type="radio" name="mmd_indent_char" id="mmd_indent_char2" value="spaces" <?php echo $my_cnf[ 'indent' ][ 0 ] === 'spaces' ? 'checked="checked"' : ''; ?> /> <?php esc_html_e( 'Space', 'markup-markdown' ); ?>
+					</label> &nbsp; | &nbsp; <?php esc_html_e( 'Size: ', 'markup-markdown' ); ?>
+					<label for="mmd_indent_size1">
+						<input type="radio" name="mmd_indent_size" id="mmd_indent_size1" value="2" <?php echo (int)$my_cnf[ 'indent' ][ 1 ] === 2 ? 'checked="checked"' : ''; ?> /> <?php esc_html_e( '2 spaces', 'markup-markdown' ); ?>
+					</label> &nbsp;
+					<label for="mmd_indent_size2">
+						<input type="radio" name="mmd_indent_size" id="mmd_indent_size2" value="4" <?php echo (int)$my_cnf[ 'indent' ][ 1 ] === 4 ? 'checked="checked"' : ''; ?> /> <?php esc_html_e( '4 spaces', 'markup-markdown' ); ?>
+					</label>
+				</td>
+			</tr>
 			<tr class="site-keep-spaces">
 				<th scope="row">
 					<?php esc_html_e( 'Preserve spaces', 'markup-markdown' ); ?>

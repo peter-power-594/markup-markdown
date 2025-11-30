@@ -66,6 +66,7 @@ final class Image extends \MarkupMarkdown\Abstracts\ImageTinyAPI {
 		$blog_version = get_bloginfo( 'version' );
 		wp_enqueue_style( 'wp-block-image', '/wp-includes/blocks/image/style.min.css', array(), $blog_version );
 		wp_enqueue_style( 'wp-block-embed', '/wp-includes/blocks/embed/style.min.css', array(), $blog_version );
+		wp_enqueue_style( 'wp-block-table', '/wp-includes/blocks/embed/table.min.css', array(), $blog_version );
 		wp_enqueue_style( 'wp-block-gallery', '/wp-includes/blocks/gallery/style.min.css', array(), $blog_version );
 		wp_enqueue_style( 'mmd-block-gallery', mmd()->plugin_uri . '/assets/markup-markdown/css/gallery-compatibility.min.css', array(), $blog_version );
 		add_filter( 'the_content', array( $this, 'render_gutenberg_html4_galleries' ), 19, 1 );
@@ -101,6 +102,9 @@ final class Image extends \MarkupMarkdown\Abstracts\ImageTinyAPI {
 		endif;
 		if ( preg_match( '#</figure></p>#', $content ) ) :
 			$content = str_replace( [ '<p><figure', '</figure></p>' ], [ '<figure', '</figure>' ], $content );
+		endif;
+		if ( preg_match( '#<table>#', $content ) && defined( 'MMD_USE_BLOCKSTYLES' ) && MMD_USE_BLOCKSTYLES ) :
+			$content = preg_replace( '#<table>#', '<figure class="wp-block-table"><table class="has-fixed-layout">', str_replace( '</table>', '</table></figure>', $content ) );
 		endif;
 		return $content;
 	}

@@ -229,7 +229,7 @@ final class EngineEasyMDE {
 	 */
 	final public function load_engine_stylesheets() {
 		$plugin_uri = mmd()->plugin_uri;
-		wp_enqueue_style( 'markup_markdown__cssengine_editor',  $plugin_uri . 'assets/easy-markdown-editor/dist/easymde.min.css', [], '2.20.1000' );
+		wp_enqueue_style( 'markup_markdown__cssengine_editor',  $plugin_uri . 'assets/easy-markdown-editor/dist/easymde.min.css', [], '2.20.1001' );
 		if ( $this->prop[ 'hlengine' ] === 'prism' ) :
 			wp_enqueue_style( 'markup_markdown__highlight_theme', $plugin_uri . 'assets/prism/v1/themes/prism-vs.min.css', [ 'markup_markdown__cssengine_editor' ], '1.30.1001' );
 		elseif ( $this->prop[ 'hlengine' ] === 'highlight' ) :
@@ -252,7 +252,7 @@ final class EngineEasyMDE {
 		$plugin_uri = mmd()->plugin_uri;
 		# Debug / Minified version introduced since 3.6
 		if ( ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) || ( defined( 'MMD_SCRIPT_DEBUG' ) && MMD_SCRIPT_DEBUG ) ) :
-			wp_enqueue_script( 'markup_markdown__jsengine_editor', $plugin_uri . 'assets/easy-markdown-editor/dist/easymde.debug.js', [], '2.20.1000', true );
+			wp_enqueue_script( 'markup_markdown__jsengine_editor', $plugin_uri . 'assets/easy-markdown-editor/dist/easymde.debug.js', [], '2.20.1001', true );
 			if ( $this->prop[ 'hlengine' ] === 'prism' ) :
 				wp_enqueue_script( 'markup_markdown__prism_core', $plugin_uri . 'assets/prism/v1/components/prism-core.js', [ 'markup_markdown__jsengine_editor' ], '1.30.1001', true );
 				wp_enqueue_script( 'markup_markdown__prism_autoloader', $plugin_uri . 'assets/prism/v1/plugins/autoloader/prism-autoloader.js', [ 'markup_markdown__prism_core' ], '1.30.1001', true );
@@ -265,9 +265,9 @@ final class EngineEasyMDE {
 			wp_enqueue_script( 'markup_markdown__wordpress_spellchecker', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-spellchecker.debug.js', [ 'markup_markdown__codemirror_spellchecker' ], '1.0.3', true );
 			wp_enqueue_script( 'markup_markdown__wordpress_preview', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-preview.debug.js', [ 'markup_markdown__wordpress_spellchecker' ], '1.1.4', true );
 			wp_enqueue_script( 'markup_markdown__wordpress_media', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-media.debug.js', [ 'markup_markdown__wordpress_preview' ], '1.0.29', true );
-			wp_enqueue_script( 'markup_markdown__wordpress_richedit', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-easymde.debug.js', [ 'markup_markdown__wordpress_media' ], '1.6.5', true );
+			wp_enqueue_script( 'markup_markdown__wordpress_richedit', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-easymde.debug.js', [ 'markup_markdown__wordpress_media' ], '1.6.7', true );
 		elseif ( defined( 'WP_DEBUG' ) && WP_DEBUG ) :
-			wp_enqueue_script( 'markup_markdown__jsengine_editor', $plugin_uri . 'assets/easy-markdown-editor/dist/easymde.min.js', [], '2.20.1000', true );
+			wp_enqueue_script( 'markup_markdown__jsengine_editor', $plugin_uri . 'assets/easy-markdown-editor/dist/easymde.min.js', [], '2.20.1001', true );
 			if ( $this->prop[ 'hlengine' ] === 'prism' ) :
 				wp_enqueue_script( 'markup_markdown__prism_core', $plugin_uri . 'assets/prism/v1/components/prism-core.min.js', [ 'markup_markdown__jsengine_editor' ], '1.30.0', true );
 				wp_enqueue_script( 'markup_markdown__prism_autoloader', $plugin_uri . 'assets/prism/v1/plugins/autoloader/prism-autoloader.min.js', [ 'markup_markdown__prism_core' ], '1.30.1001', true );
@@ -280,11 +280,11 @@ final class EngineEasyMDE {
 			wp_enqueue_script( 'markup_markdown__wordpress_spellchecker', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-spellchecker.min.js', [ 'markup_markdown__codemirror_spellchecker' ], '1.0.3', true );
 			wp_enqueue_script( 'markup_markdown__wordpress_preview', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-preview.min.js', [ 'markup_markdown__wordpress_spellchecker' ], '1.1.4', true );
 			wp_enqueue_script( 'markup_markdown__wordpress_media', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-media.min.js', [ 'markup_markdown__wordpress_preview' ], '1.0.29', true );
-			wp_enqueue_script( 'markup_markdown__wordpress_richedit', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-easymde.min.js', [ 'markup_markdown__wordpress_media' ], '1.6.5', true );
+			wp_enqueue_script( 'markup_markdown__wordpress_richedit', $plugin_uri . 'assets/markup-markdown/js/wordpress_richedit-easymde.min.js', [ 'markup_markdown__wordpress_media' ], '1.6.7', true );
 		elseif ( $this->prop[ 'hlengine' ] === 'prism' ) :
-			wp_enqueue_script( 'markup_markdown__wordpress_richedit', $plugin_uri . 'assets/markup-markdown/js/builder_prism.min.js', [], '1.1.15', true );
+			wp_enqueue_script( 'markup_markdown__wordpress_richedit', $plugin_uri . 'assets/markup-markdown/js/builder_prism.min.js', [], '1.2.0', true );
 		elseif ( $this->prop[ 'hlengine' ] === 'highlight' ) :
-			wp_enqueue_script( 'markup_markdown__wordpress_richedit', $plugin_uri . 'assets/markup-markdown/js/builder_hl.min.js', [], '1.1.15', true );
+			wp_enqueue_script( 'markup_markdown__wordpress_richedit', $plugin_uri . 'assets/markup-markdown/js/builder_hl.min.js', [], '1.2.0', true );
 		endif;
 		$local_str = array(
 			'mmd_pipe'            => esc_html__( 'Pipe', 'markup-markdown' ),
@@ -354,6 +354,9 @@ final class EngineEasyMDE {
 		if ( defined( 'MMD_USE_HEADINGS' ) && is_array( MMD_USE_HEADINGS ) && count( MMD_USE_HEADINGS ) > 1 && count( MMD_USE_HEADINGS ) < 6 ) :
 			$js .= "wp.pluginMarkupMarkdown.headingLevels = [ " . implode( ', ', MMD_USE_HEADINGS ) . " ];\n";
 		endif;
+		if ( defined( 'MMD_USE_INDENT' ) && is_array( MMD_USE_INDENT ) && count( MMD_USE_INDENT ) === 2 ) :
+			$js .= "wp.pluginMarkupMarkdown.indentStyles = [ '" . htmlspecialchars( MMD_USE_INDENT[ 0 ] ) . "', " . (int)MMD_USE_INDENT[ 1 ] . " ];\n";
+		endif;
 		if ( $this->prop[ 'hlengine' ] === 'prism' ) :
 			$js .= "Prism.plugins.autoloader.languages_path = '" . mmd()->plugin_uri . "/assets/prism/v1/components/';\n";
 		endif;
@@ -365,4 +368,3 @@ final class EngineEasyMDE {
 
 
 return apply_filters( 'mmd_load_addon', 'engine__easymde', new \MarkupMarkdown\Addons\Released\EngineEasyMDE() );
-

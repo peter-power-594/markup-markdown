@@ -1,7 +1,7 @@
 === Markup Markdown ===
 Tags: Editor, Markdown
-Stable Tag: 3.24.0
-Version: 3.24.0
+Stable Tag: 3.25.1
+Version: 3.25.1
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 7.2.0
@@ -69,6 +69,24 @@ The current version is based on components that are not compatible with assistiv
 
 == Changelog ==
 
+=3.25.1=
+
+Bug fix:
+- Updating cleaning rules
+
+=3.25.0=
+
+Bug fix:
+- Nested lists can be generated with 2 or 4 indent spaces
+
+Improvement:
+- Possible to select the indent styles from the `Layout` settings page
+
+= 3.24.1 =
+
+Bug fix / Improvement:
+- Adding missing classnames for tables for themes using Gutenberg styles
+
 = 3.24.0 =
 
 Improvement:
@@ -82,7 +100,7 @@ Bug fixes:
 
 Improvements:
 - Adding steam and macappstores in protocols
-- Adding `WP_MMD_UNFILTERED_HTML` to force disable the HTML sanitizer feature (at your own risk)
+- Adding the boolean `WP_MMD_UNFILTERED_HTML` to force disable the HTML sanitizer feature (at your own risk)
 - Updating addons / autoplugs loader
 
 = 3.22.1 =

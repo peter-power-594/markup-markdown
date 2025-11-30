@@ -42,8 +42,10 @@ final class Layout {
 		mmd()->default_conf = array( 'MMD_USE_MASONRY' => 1 );
 		mmd()->default_conf = array( 'MMD_USE_BLOCKSTYLES' => 0 );
 		mmd()->default_conf = array( 'MMD_CUSTOM_TOOLBAR' => 0 );
+		mmd()->default_conf = array( 'MMD_USE_INDENT' => array( 'tabs', 2 ) );
 		mmd()->default_conf = array( 'MMD_KEEP_SPACES' => 0 );
-		mmd()->default_conf = array( 'MMD_USE_HEADINGS' => [ "1", "2", "3", "4", "5", "6" ] );
+		mmd()->default_conf = array( 'MMD_SUPER_BACKSLASH' => 0 );
+		mmd()->default_conf = array( 'MMD_USE_HEADINGS' => array( "1", "2", "3", "4", "5", "6" ) );
 		$this->toolbar_conf = mmd()->conf_blog_prefix . 'conf_easymde_toolbar.json';
 		if ( defined( 'MMD_ADDONS' ) && in_array( $this->prop[ 'slug' ], MMD_ADDONS ) === FALSE ) :
 			$this->prop[ 'active' ] = 0;
@@ -104,6 +106,8 @@ final class Layout {
 				$my_cnf[ 'headings' ][] = $heading;
 			endforeach;
 		endif;
+		$my_cnf[ 'indent_char' ] = filter_input( INPUT_POST, 'mmd_indent_char', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+		$my_cnf[ 'indent_size' ] = filter_input( INPUT_POST, 'mmd_indent_size', FILTER_VALIDATE_INT );
 		$my_cnf[ 'keep_spaces' ] = filter_input( INPUT_POST, 'mmd_keepspaces', FILTER_VALIDATE_INT );
 		$my_cnf[ 'super_backslash' ] = filter_input( INPUT_POST, 'mmd_superbackslash', FILTER_VALIDATE_INT );
 		return $my_cnf;
@@ -123,6 +127,11 @@ final class Layout {
 			mmd()->put_contents( $this->toolbar_conf, '{"my_buttons":' . json_encode( explode( ",", $my_cnf[ 'toolbar' ] ) ) . '}' );
 			unset( $my_cnf[ 'toolbar' ] );
 		endif;
+		$my_cnf[ 'MMD_USE_INDENT' ] = array(
+			isset( $my_cnf[ 'indent_char' ] ) && in_array( $my_cnf[ 'indent_char' ], array( 'tabs', 'spaces' ) ) !== false ? $my_cnf[ 'indent_char' ] : 'tabs',
+			isset( $my_cnf[ 'indent_size' ] ) && in_array( (int)$my_cnf[ 'indent_size' ], array( 2, 4 ) ) !== false ? (int)$my_cnf[ 'indent_size' ] : 2
+		);
+		unset( $my_cnf[ 'indent_char' ] ); unset( $my_cnf[ 'indent_size' ] );
 		$my_cnf[ 'MMD_KEEP_SPACES' ] = isset( $my_cnf[ 'keep_spaces' ] ) ? $my_cnf[ 'keep_spaces' ] : 0;
 		unset( $my_cnf[ 'keep_spaces' ] );
 		$my_cnf[ 'MMD_SUPER_BACKSLASH' ] = isset( $my_cnf[ 'super_backslash' ] ) ? $my_cnf[ 'super_backslash' ] : 0;

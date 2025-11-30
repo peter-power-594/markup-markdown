@@ -1,11 +1,10 @@
-
 /* global wp, mmd_wpr_vars, EasyMDE, Prism, hljs */
 
 /**
  * @preserve The Markup Markdown's EasyMDE Primary Module
  * @desc Core classes to handle the markdown editor inside the Wordpress admin edit screen
  * @author Pierre-Henri Lavigne <lavigne.pierrehenri@proton.me>
- * @version 1.6.4
+ * @version 1.6.7
  * @license GPL 3 - https://www.gnu.org/licenses/gpl-3.0.html#license-text
  */
 (function( $, _win, _doc ) {
@@ -215,7 +214,7 @@
 			}
 			else if ( /spell[-_]*check/.test( slug ) ) {
 				if ( ! spell_check.disabled ) {
-					$.each(spell_check, spellCheckLanguages);					
+					$.each(spell_check, spellCheckLanguages);
 				}
 			}
 			else if ( /wps[-_]*image/.test( slug ) ) {
@@ -274,7 +273,7 @@
 						isPipe = true;
 						minimalToolbar.push( toolbar[ c ] );
 					}
-				}				
+				}
 			}
 			else {
 				// Standard custom field
